@@ -1,4 +1,4 @@
-package com.greymerk;
+package com.greymerk.tweaks;
 
 import java.util.Arrays;
 import java.util.HashMap;

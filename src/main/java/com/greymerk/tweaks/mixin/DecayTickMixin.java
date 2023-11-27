@@ -1,11 +1,11 @@
-package com.greymerk.mixin;
+package com.greymerk.tweaks.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.greymerk.DecayBlocks;
+import com.greymerk.tweaks.DecayBlocks;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;

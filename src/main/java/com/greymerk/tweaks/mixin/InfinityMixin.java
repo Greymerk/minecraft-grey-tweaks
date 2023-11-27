@@ -1,4 +1,4 @@
-package com.greymerk.mixin;
+package com.greymerk.tweaks.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

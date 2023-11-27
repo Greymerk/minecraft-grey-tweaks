@@ -1,4 +1,4 @@
-package com.greymerk.mixin;
+package com.greymerk.tweaks.mixin;
 
 import java.util.ArrayList;
 import java.util.Calendar;
