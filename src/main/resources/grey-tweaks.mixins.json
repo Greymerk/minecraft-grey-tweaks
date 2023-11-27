@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "com.greymerk.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+	"VillagerMixin",
+	"CatSpawnerMixin",
+	"InfinityMixin",
+	"DecayTickMixin",
+	"PinkPetalMixin",
+	"SnowMixin",
+	"IceMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

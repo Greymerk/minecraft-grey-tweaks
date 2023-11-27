@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "grey-tweaks",
+	"version": "1.0.0",
+
+	"name": "Grey's Tweaks",
+	"description": "A small mod to tweak game elements",
+	"authors": [
+		"Greymerk"
+	],
+	"contact": {
+		"homepage": "https://mc.rivas.ca/",
+		"sources": "https://github.com/greymerk"
+	},
+	
+	"license": "CC0-1.0",
+	"icon": "assets/modid/icon.png",
+	"environment": "*",
+
+	"entrypoints": {
+		"main": [
+		]
+	},
+	"mixins": [
+		"grey-tweaks.mixins.json"
+	],
+	
+	"depends": {
+		"fabricloader": ">=0.14.22",
+		"minecraft": "~1.20.2",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
