@@ -9,7 +9,8 @@
 	"DecayTickMixin",
 	"PinkPetalMixin",
 	"SnowMixin",
-	"IceMixin"
+	"IceMixin",
+	"EquipMobMixin"
   ],
   "injectors": {
     "defaultRequire": 1
