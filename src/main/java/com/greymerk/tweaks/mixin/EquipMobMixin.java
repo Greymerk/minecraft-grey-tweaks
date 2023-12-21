@@ -25,7 +25,7 @@ public class EquipMobMixin{
 		int phase = world.getMoonPhase();
 		int diff = this.getMoonDiff(phase);
 		
-		System.out.println("phase: " + phase + " diff: " + diff);
+		//System.out.println("phase: " + phase + " diff: " + diff);
 		if(!doEquip(random, diff)) return;
 		
 		IEntity mob = new MetaEntity(entity);

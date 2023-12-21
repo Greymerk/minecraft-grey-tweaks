@@ -8,6 +8,7 @@ import com.greymerk.tweaks.monster.MonsterProfile;
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.treasure.loot.Shield;
 import com.greymerk.tweaks.treasure.loot.provider.ItemTool;
+import com.greymerk.tweaks.treasure.loot.provider.ItemWeapon;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -33,9 +34,15 @@ public class ProfileZombie implements IMonsterProfile {
 			return;
 		}
 
-		ItemStack weapon = ItemTool.getRandom(rand, level, Enchant.canEnchant(world.getDifficulty(), rand, level));
-		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
-		mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(rand));
+		if(rand.nextInt(4) == 0) {
+			ItemStack weapon = ItemWeapon.getSword(rand, level, true);
+			mob.setSlot(EquipmentSlot.MAINHAND, weapon);
+			mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(rand));
+		} else {
+			ItemStack weapon = ItemTool.getRandom(rand, level, Enchant.canEnchant(world.getDifficulty(), rand, level));
+			mob.setSlot(EquipmentSlot.MAINHAND, weapon);
+		}
+		
 		MonsterProfile.get(MonsterProfile.TALLMOB).addEquipment(world, rand, level, mob);
 		
 	}
