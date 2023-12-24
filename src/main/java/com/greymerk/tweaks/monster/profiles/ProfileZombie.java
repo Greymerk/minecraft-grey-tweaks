@@ -24,7 +24,7 @@ public class ProfileZombie implements IMonsterProfile {
 			return;
 		}
 				
-		if(rand.nextInt(40) == 0){
+		if(rand.nextInt(50) == 0){
 			MonsterProfile.get(MonsterProfile.BABY).addEquipment(world, rand, level, mob);
 			return;
 		}

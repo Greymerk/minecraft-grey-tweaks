@@ -10,7 +10,8 @@
 	"PinkPetalMixin",
 	"SnowMixin",
 	"IceMixin",
-	"EquipMobMixin"
+	"EquipSkeletonMixin",
+	"EquipZombieMixin"
   ],
   "injectors": {
     "defaultRequire": 1
