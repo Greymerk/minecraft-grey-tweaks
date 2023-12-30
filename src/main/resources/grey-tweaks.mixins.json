@@ -11,7 +11,8 @@
 	"SnowMixin",
 	"IceMixin",
 	"EquipSkeletonMixin",
-	"EquipZombieMixin"
+	"EquipZombieMixin",
+	"MobEnchantMixin"
   ],
   "injectors": {
     "defaultRequire": 1
