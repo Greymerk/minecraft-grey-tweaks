@@ -19,8 +19,8 @@ public class ProfileVillager implements IMonsterProfile {
 	@Override
 	public void addEquipment(World world, Random rand, int level, IEntity mob) {
 		mob.setMobClass(MobType.ZOMBIEVILLAGER, false);
-		ItemStack weapon = ItemTool.getRandom(rand, level, Enchant.canEnchant(world.getDifficulty(), rand, level));
-		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
+		ItemStack tool = ItemTool.getRandom(rand, level, Enchant.canEnchant(world.getDifficulty(), rand, level));
+		mob.setSlot(EquipmentSlot.MAINHAND, tool);
 		mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(rand));
 		MonsterProfile.get(MonsterProfile.TALLMOB).addEquipment(world, rand, level, mob);
 	}

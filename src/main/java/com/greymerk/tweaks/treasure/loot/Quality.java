@@ -107,7 +107,7 @@ public enum Quality{
 				weapon.add(new WeightedChoice<Quality>(IRON, 10));
 				weapon.add(new WeightedChoice<Quality>(GOLD, 5));
 				weapon.add(new WeightedChoice<Quality>(DIAMOND, 5));
-				weapon.add(new WeightedChoice<Quality>(NETHERITE, 5));
+				weapon.add(new WeightedChoice<Quality>(NETHERITE, 3));
 				break;
 			}
 			weaponQuality.put(i, weapon);
@@ -149,7 +149,7 @@ public enum Quality{
 			case 4:
 				tool.add(new WeightedChoice<Quality>(WOOD, 1));
 				tool.add(new WeightedChoice<Quality>(STONE, 1));
-				tool.add(new WeightedChoice<Quality>(IRON, 5));
+				tool.add(new WeightedChoice<Quality>(IRON, 7));
 				tool.add(new WeightedChoice<Quality>(GOLD, 3));
 				tool.add(new WeightedChoice<Quality>(DIAMOND, 4));
 				tool.add(new WeightedChoice<Quality>(NETHERITE, 2));

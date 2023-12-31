@@ -18,11 +18,6 @@ public class ProfileZombie implements IMonsterProfile {
 
 	@Override
 	public void addEquipment(World world, Random rand, int level, IEntity mob) {
-		
-		if(level > 2 && rand.nextInt(300) == 0){
-			MonsterProfile.get(MonsterProfile.EVOKER).addEquipment(world, rand, level, mob);
-			return;
-		}
 				
 		if(rand.nextInt(50) == 0){
 			MonsterProfile.get(MonsterProfile.BABY).addEquipment(world, rand, level, mob);
