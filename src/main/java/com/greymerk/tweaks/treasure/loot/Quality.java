@@ -25,7 +25,7 @@ public enum Quality{
 			switch(i){
 			case 0:
 				armour.add(new WeightedChoice<Quality>(WOOD, 100));
-				armour.add(new WeightedChoice<Quality>(STONE, 30));
+				armour.add(new WeightedChoice<Quality>(STONE, 50));
 				armour.add(new WeightedChoice<Quality>(IRON, 10));
 				armour.add(new WeightedChoice<Quality>(GOLD, 5));
 				armour.add(new WeightedChoice<Quality>(DIAMOND, 1));
@@ -33,8 +33,8 @@ public enum Quality{
 				break;
 			case 1:
 				armour.add(new WeightedChoice<Quality>(WOOD, 50));
-				armour.add(new WeightedChoice<Quality>(STONE, 30));
-				armour.add(new WeightedChoice<Quality>(IRON, 30));
+				armour.add(new WeightedChoice<Quality>(STONE, 50));
+				armour.add(new WeightedChoice<Quality>(IRON, 80));
 				armour.add(new WeightedChoice<Quality>(GOLD, 5));
 				armour.add(new WeightedChoice<Quality>(DIAMOND, 1));
 				armour.add(new WeightedChoice<Quality>(NETHERITE, 1));
@@ -42,25 +42,25 @@ public enum Quality{
 			case 2:
 				armour.add(new WeightedChoice<Quality>(WOOD, 30));
 				armour.add(new WeightedChoice<Quality>(STONE, 30));
-				armour.add(new WeightedChoice<Quality>(IRON, 50));
+				armour.add(new WeightedChoice<Quality>(IRON, 80));
 				armour.add(new WeightedChoice<Quality>(GOLD, 10));
 				armour.add(new WeightedChoice<Quality>(DIAMOND, 5));
 				armour.add(new WeightedChoice<Quality>(NETHERITE, 1));
 				break;
 			case 3:
 				armour.add(new WeightedChoice<Quality>(WOOD, 5));
-				armour.add(new WeightedChoice<Quality>(STONE, 10));
-				armour.add(new WeightedChoice<Quality>(IRON, 40));
+				armour.add(new WeightedChoice<Quality>(STONE, 30));
+				armour.add(new WeightedChoice<Quality>(IRON, 60));
 				armour.add(new WeightedChoice<Quality>(GOLD, 10));
 				armour.add(new WeightedChoice<Quality>(DIAMOND, 10));
 				armour.add(new WeightedChoice<Quality>(NETHERITE, 1));
 				break;
 			case 4:
 				armour.add(new WeightedChoice<Quality>(WOOD, 1));
-				armour.add(new WeightedChoice<Quality>(STONE, 5));
-				armour.add(new WeightedChoice<Quality>(IRON, 30));
-				armour.add(new WeightedChoice<Quality>(GOLD, 10));
-				armour.add(new WeightedChoice<Quality>(DIAMOND, 5));
+				armour.add(new WeightedChoice<Quality>(STONE, 10));
+				armour.add(new WeightedChoice<Quality>(IRON, 50));
+				armour.add(new WeightedChoice<Quality>(GOLD, 20));
+				armour.add(new WeightedChoice<Quality>(DIAMOND, 10));
 				armour.add(new WeightedChoice<Quality>(NETHERITE, 1));
 				break;
 			}
@@ -69,17 +69,17 @@ public enum Quality{
 			WeightedRandomizer<Quality> weapon = new WeightedRandomizer<Quality>();
 			switch(i){
 			case 0:
-				weapon.add(new WeightedChoice<Quality>(WOOD, 100));
-				weapon.add(new WeightedChoice<Quality>(STONE, 50));
-				weapon.add(new WeightedChoice<Quality>(IRON, 20));
+				weapon.add(new WeightedChoice<Quality>(WOOD, 200));
+				weapon.add(new WeightedChoice<Quality>(STONE, 100));
+				weapon.add(new WeightedChoice<Quality>(IRON, 50));
 				weapon.add(new WeightedChoice<Quality>(GOLD, 5));
 				weapon.add(new WeightedChoice<Quality>(DIAMOND, 2));
 				weapon.add(new WeightedChoice<Quality>(NETHERITE, 1));
 				break;
 			case 1:
-				weapon.add(new WeightedChoice<Quality>(WOOD, 20));
-				weapon.add(new WeightedChoice<Quality>(STONE, 50));
-				weapon.add(new WeightedChoice<Quality>(IRON, 30));
+				weapon.add(new WeightedChoice<Quality>(WOOD, 50));
+				weapon.add(new WeightedChoice<Quality>(STONE, 100));
+				weapon.add(new WeightedChoice<Quality>(IRON, 50));
 				weapon.add(new WeightedChoice<Quality>(GOLD, 5));
 				weapon.add(new WeightedChoice<Quality>(DIAMOND, 2));
 				weapon.add(new WeightedChoice<Quality>(NETHERITE, 1));
@@ -88,7 +88,7 @@ public enum Quality{
 			case 2:
 				weapon.add(new WeightedChoice<Quality>(WOOD, 10));
 				weapon.add(new WeightedChoice<Quality>(STONE, 30));
-				weapon.add(new WeightedChoice<Quality>(IRON, 50));
+				weapon.add(new WeightedChoice<Quality>(IRON, 80));
 				weapon.add(new WeightedChoice<Quality>(GOLD, 5));
 				weapon.add(new WeightedChoice<Quality>(DIAMOND, 2));
 				weapon.add(new WeightedChoice<Quality>(NETHERITE, 1));
@@ -96,17 +96,17 @@ public enum Quality{
 			case 3:
 				weapon.add(new WeightedChoice<Quality>(WOOD, 1));
 				weapon.add(new WeightedChoice<Quality>(STONE, 20));
-				weapon.add(new WeightedChoice<Quality>(IRON, 40));
+				weapon.add(new WeightedChoice<Quality>(IRON, 60));
 				weapon.add(new WeightedChoice<Quality>(GOLD, 5));
-				weapon.add(new WeightedChoice<Quality>(DIAMOND, 2));
+				weapon.add(new WeightedChoice<Quality>(DIAMOND, 5));
 				weapon.add(new WeightedChoice<Quality>(NETHERITE, 1));
 				break;
 			case 4:
 				weapon.add(new WeightedChoice<Quality>(WOOD, 1));
 				weapon.add(new WeightedChoice<Quality>(STONE, 5));
-				weapon.add(new WeightedChoice<Quality>(IRON, 20));
+				weapon.add(new WeightedChoice<Quality>(IRON, 40));
 				weapon.add(new WeightedChoice<Quality>(GOLD, 5));
-				weapon.add(new WeightedChoice<Quality>(DIAMOND, 5));
+				weapon.add(new WeightedChoice<Quality>(DIAMOND, 10));
 				weapon.add(new WeightedChoice<Quality>(NETHERITE, 1));
 				break;
 			}
@@ -115,7 +115,7 @@ public enum Quality{
 			WeightedRandomizer<Quality> tool = new WeightedRandomizer<Quality>();
 			switch(i){
 			case 0:
-				tool.add(new WeightedChoice<Quality>(WOOD, 20));
+				tool.add(new WeightedChoice<Quality>(WOOD, 50));
 				tool.add(new WeightedChoice<Quality>(STONE, 70));
 				tool.add(new WeightedChoice<Quality>(IRON, 30));
 				tool.add(new WeightedChoice<Quality>(GOLD, 5));
@@ -124,8 +124,8 @@ public enum Quality{
 				break;
 			case 1:
 				tool.add(new WeightedChoice<Quality>(WOOD, 10));
-				tool.add(new WeightedChoice<Quality>(STONE, 50));
-				tool.add(new WeightedChoice<Quality>(IRON, 30));
+				tool.add(new WeightedChoice<Quality>(STONE, 80));
+				tool.add(new WeightedChoice<Quality>(IRON, 40));
 				tool.add(new WeightedChoice<Quality>(GOLD, 5));
 				tool.add(new WeightedChoice<Quality>(DIAMOND, 5));
 				tool.add(new WeightedChoice<Quality>(NETHERITE, 1));
@@ -133,7 +133,7 @@ public enum Quality{
 			case 2:
 				tool.add(new WeightedChoice<Quality>(WOOD, 5));
 				tool.add(new WeightedChoice<Quality>(STONE, 30));
-				tool.add(new WeightedChoice<Quality>(IRON, 30));
+				tool.add(new WeightedChoice<Quality>(IRON, 50));
 				tool.add(new WeightedChoice<Quality>(GOLD, 5));
 				tool.add(new WeightedChoice<Quality>(DIAMOND, 5));
 				tool.add(new WeightedChoice<Quality>(NETHERITE, 1));
@@ -141,7 +141,7 @@ public enum Quality{
 			case 3:
 				tool.add(new WeightedChoice<Quality>(WOOD, 1));
 				tool.add(new WeightedChoice<Quality>(STONE, 10));
-				tool.add(new WeightedChoice<Quality>(IRON, 30));
+				tool.add(new WeightedChoice<Quality>(IRON, 40));
 				tool.add(new WeightedChoice<Quality>(GOLD, 5));
 				tool.add(new WeightedChoice<Quality>(DIAMOND, 5));
 				tool.add(new WeightedChoice<Quality>(NETHERITE, 1));
@@ -149,7 +149,7 @@ public enum Quality{
 			case 4:
 				tool.add(new WeightedChoice<Quality>(WOOD, 1));
 				tool.add(new WeightedChoice<Quality>(STONE, 5));
-				tool.add(new WeightedChoice<Quality>(IRON, 20));
+				tool.add(new WeightedChoice<Quality>(IRON, 30));
 				tool.add(new WeightedChoice<Quality>(GOLD, 5));
 				tool.add(new WeightedChoice<Quality>(DIAMOND, 5));
 				tool.add(new WeightedChoice<Quality>(NETHERITE, 1));
