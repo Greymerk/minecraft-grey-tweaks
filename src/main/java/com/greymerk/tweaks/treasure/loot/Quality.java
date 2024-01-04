@@ -57,8 +57,8 @@ public enum Quality{
 				break;
 			case 4:
 				armour.add(new WeightedChoice<Quality>(WOOD, 1));
-				armour.add(new WeightedChoice<Quality>(STONE, 10));
-				armour.add(new WeightedChoice<Quality>(IRON, 50));
+				armour.add(new WeightedChoice<Quality>(STONE, 20));
+				armour.add(new WeightedChoice<Quality>(IRON, 40));
 				armour.add(new WeightedChoice<Quality>(GOLD, 20));
 				armour.add(new WeightedChoice<Quality>(DIAMOND, 10));
 				armour.add(new WeightedChoice<Quality>(NETHERITE, 1));
