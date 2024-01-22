@@ -12,7 +12,8 @@
 	"IceMixin",
 	"EquipSkeletonMixin",
 	"EquipZombieMixin",
-	"MobEnchantMixin"
+	"MobEnchantMixin",
+	"ItemRepairCostMixin"
   ],
   "injectors": {
     "defaultRequire": 1
