@@ -39,13 +39,33 @@ public class WarmChunkLoadEvent implements Load{
 		Coord pos = top.copy();
 		
 		while(pos.getY() > 0) {
-			if(isAir(chunk, pos)) {
+			if(isAir(chunk, pos) || isLeaves(chunk, pos)) {
 				pos.add(Cardinal.DOWN);
 			} else {
 				return pos;	
 			}
 		}
 		return pos;
+	}
+	
+	private boolean isLeaves(WorldChunk chunk, Coord pos) {
+		BlockState bs = chunk.getBlockState(pos.getBlockPos());
+		Block b = bs.getBlock();
+		
+		if(	   b == Blocks.ACACIA_LEAVES
+			|| b == Blocks.AZALEA_LEAVES
+			|| b == Blocks.BIRCH_LEAVES
+			|| b == Blocks.CHERRY_LEAVES
+			|| b == Blocks.DARK_OAK_LEAVES
+			|| b == Blocks.FLOWERING_AZALEA_LEAVES
+			|| b == Blocks.JUNGLE_LEAVES
+			|| b == Blocks.MANGROVE_LEAVES
+			|| b == Blocks.OAK_LEAVES
+			|| b == Blocks.SPRUCE_LEAVES) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private boolean isAir(WorldChunk chunk, Coord pos) {
@@ -97,6 +117,12 @@ public class WarmChunkLoadEvent implements Load{
 			chunk.setBlockState(ubp, Blocks.GRASS_BLOCK.getDefaultState(), false);
 		}
 		
+		if(ubs.getBlock() == Blocks.MYCELIUM) {
+			chunk.setBlockState(ubp, Blocks.MYCELIUM.getDefaultState(), false);
+		}
 		
+		if(ubs.getBlock() == Blocks.PODZOL) {
+			chunk.setBlockState(ubp, Blocks.PODZOL.getDefaultState(), false);
+		}
 	}
 }
