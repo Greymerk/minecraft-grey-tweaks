@@ -5,10 +5,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.greymerk.tweaks.monster.IEntity;
-import com.greymerk.tweaks.monster.MetaEntity;
-import com.greymerk.tweaks.monster.MonsterProfile;
-
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
@@ -28,9 +27,13 @@ public class EquipMobMixin{
 		//System.out.println("phase: " + phase + " diff: " + diff);
 		if(!doEquip(random, diff)) return;
 		
+		/*
 		IEntity mob = new MetaEntity(entity);
 		MonsterProfile.equip(world, random, random.nextInt(diff + 1), mob);
 		cir.cancel();
+		*/
+		
+		this.setRoguelike(entity, diff);
 	}
 	
 	private boolean doEquip(Random rand, int diff) {		
@@ -48,5 +51,12 @@ public class EquipMobMixin{
 		if(phase == 1 || phase == 7) return 3;
 		if(phase == 2 || phase == 6) return 2;
 		return 1;
+	}
+	
+	private void setRoguelike(MobEntity mob, int level) {
+		final int DURATION = 10;
+		StatusEffect type = StatusEffects.MINING_FATIGUE;
+		StatusEffectInstance effect = new StatusEffectInstance(type, DURATION, level, false, false, false);
+		mob.addStatusEffect(effect);
 	}
 }

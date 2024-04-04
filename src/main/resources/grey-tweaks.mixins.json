@@ -10,8 +10,7 @@
 	"PinkPetalMixin",
 	"SnowMixin",
 	"IceMixin",
-	"EquipSkeletonMixin",
-	"EquipZombieMixin",
+	"EquipMobMixin",
 	"MobEnchantMixin",
 	"ItemRepairCostMixin"
   ],
