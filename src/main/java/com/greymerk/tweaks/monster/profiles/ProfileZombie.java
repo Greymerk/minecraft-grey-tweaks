@@ -32,7 +32,7 @@ public class ProfileZombie implements IMonsterProfile {
 		if(rand.nextInt(4) == 0) {
 			ItemStack weapon = ItemWeapon.getSword(rand, level, true);
 			mob.setSlot(EquipmentSlot.MAINHAND, weapon);
-			mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(rand));
+			mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(world.getRegistryManager(), rand));
 		} else {
 			ItemStack weapon = ItemTool.getRandom(rand, level, Enchant.canEnchant(world.getDifficulty(), rand, level));
 			mob.setSlot(EquipmentSlot.MAINHAND, weapon);

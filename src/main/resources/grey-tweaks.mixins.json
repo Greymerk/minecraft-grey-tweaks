@@ -11,8 +11,7 @@
 	"SnowMixin",
 	"IceMixin",
 	"EquipMobMixin",
-	"MobEnchantMixin",
-	"ItemRepairCostMixin"
+	"MobEnchantMixin"
   ],
   "injectors": {
     "defaultRequire": 1

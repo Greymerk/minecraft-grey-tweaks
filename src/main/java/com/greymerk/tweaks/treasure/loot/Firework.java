@@ -1,12 +1,7 @@
 package com.greymerk.tweaks.treasure.loot;
 
-import com.greymerk.tweaks.util.Color;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtIntArray;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.random.Random;
 
 public class Firework {
@@ -14,7 +9,7 @@ public class Firework {
 	public static ItemStack get(Random rand, int stackSize){
 	
 		ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET, stackSize);
-		
+		/*
 		NbtCompound tag = new NbtCompound();
 		NbtCompound fireworks = new NbtCompound();
 		
@@ -41,6 +36,7 @@ public class Firework {
 		tag.put("Fireworks", fireworks);
 		
 		rocket.setNbt(tag);
+		*/
 		
 		return rocket;
 	}

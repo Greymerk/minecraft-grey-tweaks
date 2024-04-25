@@ -1,16 +1,15 @@
 package com.greymerk.tweaks.treasure.loot.provider;
 
-import net.minecraft.util.math.random.Random;
-
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.treasure.loot.Equipment;
 import com.greymerk.tweaks.treasure.loot.Quality;
 import com.greymerk.tweaks.treasure.loot.Slot;
-import com.greymerk.tweaks.treasure.loot.trim.Trim;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.random.Random;
 
 public class ItemArmour extends ItemBase {
 
@@ -57,7 +56,7 @@ public class ItemArmour extends ItemBase {
 		}
 
 		ItemStack item = get(rand, slot, Quality.getArmourQuality(rand, level));
-		Trim.addRandom(item, rand);
+		//Trim.addRandom(item, rand);
 		if(enchantLevel > 0) Enchant.enchantItem(rand, item, enchantLevel);
 		return item;
 	}
@@ -124,21 +123,9 @@ public class ItemArmour extends ItemBase {
 	}
 	
 	public static ItemStack dyeArmor(ItemStack armor, int r, int g, int b){
-		
 		int color = r << 16 | g << 8 | b << 0;;
-        
-        NbtCompound nbtdata = armor.getNbt();
-        if (nbtdata == null){
-            nbtdata = new NbtCompound();
-            armor.setNbt(nbtdata);
-        }
-
-        NbtCompound nbtDisplay = nbtdata.getCompound("display");
-        if (!nbtdata.contains("display")){
-            nbtdata.put("display", nbtDisplay);
-        }
-
-        nbtDisplay.putInt("color", color);
+		DyedColorComponent dye = new DyedColorComponent(color, false);
+		armor.set(DataComponentTypes.DYED_COLOR, dye);
 		return armor;
 	}
 

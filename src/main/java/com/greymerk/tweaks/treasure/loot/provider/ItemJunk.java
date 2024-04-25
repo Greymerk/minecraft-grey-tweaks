@@ -1,14 +1,12 @@
 package com.greymerk.tweaks.treasure.loot.provider;
 
-import net.minecraft.util.math.random.Random;
-
 import com.greymerk.tweaks.treasure.loot.PotionMixture;
-import com.greymerk.tweaks.treasure.loot.Shield;
 import com.greymerk.tweaks.treasure.loot.TippedArrow;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.random.Random;
 
 public class ItemJunk extends ItemBase{
 
@@ -32,7 +30,7 @@ public class ItemJunk extends ItemBase{
 
 		if(level < 3 && rand.nextInt(80) == 0) return new ItemStack(Items.BOOK);
 		
-		if(rand.nextInt(80) == 0) return Shield.get(rand);
+		//if(rand.nextInt(80) == 0) return Shield.get(rand);
 		
 		if(level > 1 && rand.nextInt(60) == 0) return TippedArrow.get(rand, 4 + rand.nextInt(level) * 2);
 		

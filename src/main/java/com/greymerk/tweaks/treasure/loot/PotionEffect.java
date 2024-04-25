@@ -1,5 +1,6 @@
 package com.greymerk.tweaks.treasure.loot;
 
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
@@ -56,64 +57,39 @@ public enum PotionEffect {
 	
 	public static StatusEffect getStatusEffect(PotionEffect type) {
 		switch(type) {
-		case ABSORPTION: return StatusEffects.ABSORPTION;
-		case BAD_LUCK: return StatusEffects.UNLUCK;
-		case BLINDNESS: return StatusEffects.BLINDNESS;
-		case DAMAGE: return StatusEffects.INSTANT_DAMAGE;
-		case FATIGUE: return StatusEffects.MINING_FATIGUE;
-		case FIRERESIST: return StatusEffects.FIRE_RESISTANCE;
-		case GLOWING: return StatusEffects.GLOWING;
-		case HASTE: return StatusEffects.HASTE;
-		case HEALTH: return StatusEffects.INSTANT_HEALTH;
-		case HEALTHBOOST: return StatusEffects.HEALTH_BOOST;
-		case HUNGER: return StatusEffects.HUNGER;
-		case INVISIBILITY: return StatusEffects.INVISIBILITY;
-		case JUMP: return StatusEffects.JUMP_BOOST;
-		case LEVITATION: return StatusEffects.LEVITATION;
-		case LUCK: return StatusEffects.LUCK;
-		case NAUSIA: return StatusEffects.NAUSEA;
-		case NIGHTVISION: return StatusEffects.NIGHT_VISION;
-		case POISON: return StatusEffects.POISON;
-		case REGEN: return StatusEffects.REGENERATION;
-		case RESISTANCE: return StatusEffects.RESISTANCE;
-		case SATURATION: return StatusEffects.SATURATION;
-		case SLOWNESS: return StatusEffects.SLOWNESS;
-		case SPEED: return StatusEffects.SPEED;
-		case STRENGTH: return StatusEffects.STRENGTH;
-		case WATERBREATH: return StatusEffects.WATER_BREATHING;
-		case WEAKNESS: return StatusEffects.WEAKNESS;
-		case WITHER: return StatusEffects.WITHER;
-		default: return StatusEffects.WEAKNESS;
+		case ABSORPTION: return StatusEffects.ABSORPTION.value();
+		case BAD_LUCK: return StatusEffects.UNLUCK.value();
+		case BLINDNESS: return StatusEffects.BLINDNESS.value();
+		case DAMAGE: return StatusEffects.INSTANT_DAMAGE.value();
+		case FATIGUE: return StatusEffects.MINING_FATIGUE.value();
+		case FIRERESIST: return StatusEffects.FIRE_RESISTANCE.value();
+		case GLOWING: return StatusEffects.GLOWING.value();
+		case HASTE: return StatusEffects.HASTE.value();
+		case HEALTH: return StatusEffects.INSTANT_HEALTH.value();
+		case HEALTHBOOST: return StatusEffects.HEALTH_BOOST.value();
+		case HUNGER: return StatusEffects.HUNGER.value();
+		case INVISIBILITY: return StatusEffects.INVISIBILITY.value();
+		case JUMP: return StatusEffects.JUMP_BOOST.value();
+		case LEVITATION: return StatusEffects.LEVITATION.value();
+		case LUCK: return StatusEffects.LUCK.value();
+		case NAUSIA: return StatusEffects.NAUSEA.value();
+		case NIGHTVISION: return StatusEffects.NIGHT_VISION.value();
+		case POISON: return StatusEffects.POISON.value();
+		case REGEN: return StatusEffects.REGENERATION.value();
+		case RESISTANCE: return StatusEffects.RESISTANCE.value();
+		case SATURATION: return StatusEffects.SATURATION.value();
+		case SLOWNESS: return StatusEffects.SLOWNESS.value();
+		case SPEED: return StatusEffects.SPEED.value();
+		case STRENGTH: return StatusEffects.STRENGTH.value();
+		case WATERBREATH: return StatusEffects.WATER_BREATHING.value();
+		case WEAKNESS: return StatusEffects.WEAKNESS.value();
+		case WITHER: return StatusEffects.WITHER.value();
+		default: return StatusEffects.WEAKNESS.value();
 		}
 	}
 	
 	public static void addCustomEffect(ItemStack potion, PotionEffect type, int amplifier, int duration){
 		
-		final String CUSTOM = "custom_potion_effects";
-		
-		NbtCompound tag = potion.getNbt();
-		if(tag == null){
-			tag = new NbtCompound();
-			potion.setNbt(tag);
-		}
-		
-		
-		NbtList effects;
-		effects = tag.getList(CUSTOM, 10);
-		if (effects == null){
-			effects = new NbtList();
-			tag.put(CUSTOM, effects);
-		}
-		
-		NbtCompound toAdd = new NbtCompound();
-		
-		toAdd.putString("id", getEffectID(type));
-		toAdd.putByte("amplifier", (byte)(amplifier - 1));
-		toAdd.putInt("duration", duration * TICKS_PER_SECOND);
-		toAdd.putBoolean("ambient", true);
-		
-		effects.add(toAdd);
-		tag.put(CUSTOM, effects);
-		potion.setNbt(tag);
+		potion.apply(DataComponentTypes.POTION_CONTENTS, null, null);
 	}
 }

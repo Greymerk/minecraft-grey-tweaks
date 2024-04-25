@@ -389,7 +389,6 @@ public class ItemSpecialty extends ItemBase {
 		switch(quality){
 		case WOOD:
 			item = new ItemStack(Items.LEATHER_LEGGINGS);
-			Trim.addRandom(item, rand);
 			ItemArmour.dyeArmor(item, rand.nextInt(256), rand.nextInt(255), rand.nextInt(255));
 			canonical = "Pantaloons";
 			break;

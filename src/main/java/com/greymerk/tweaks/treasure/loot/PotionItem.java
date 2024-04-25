@@ -1,12 +1,13 @@
 package com.greymerk.tweaks.treasure.loot;
 
-import net.minecraft.util.math.random.Random;
-
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.random.Random;
 
 public enum PotionItem {
 	
@@ -27,21 +28,20 @@ public enum PotionItem {
 		
 	public static ItemStack getSpecific(PotionForm type, PotionItem effect, boolean upgrade, boolean extend){
 		
-		ItemStack potion;
+		Item t;
 		
 		switch(type){
-		case REGULAR: potion = new ItemStack(Items.POTION); break;
-		case SPLASH: potion = new ItemStack(Items.SPLASH_POTION); break;
-		case LINGERING: potion = new ItemStack(Items.LINGERING_POTION); break;
-		default: potion = new ItemStack(Items.POTION); break;
+		case REGULAR: t = Items.POTION; break;
+		case SPLASH: t = Items.SPLASH_POTION; break;
+		case LINGERING: t = Items.LINGERING_POTION; break;
+		default: t = Items.POTION; break;
 		}
 		
-		Potion data = getEffect(effect, upgrade, extend);
-		
-		return PotionUtil.setPotion(potion, data);
+		RegistryEntry<Potion> p = getEffect(effect, upgrade, extend);
+		return PotionContentsComponent.createStack(t, p);
 	}
 	
-	public static Potion getEffect(PotionItem effect, boolean upgrade, boolean extend){
+	public static RegistryEntry<Potion> getEffect(PotionItem effect, boolean upgrade, boolean extend){
 		
 		if(effect == null) return Potions.AWKWARD;
 		

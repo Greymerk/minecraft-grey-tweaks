@@ -63,7 +63,7 @@ public class WeightedRandomLoot implements Comparable<WeightedRandomLoot>, IWeig
 		} catch (NullPointerException e){
 			// ignore
 		}
-		if(this.nbt != null) item.setNbt(this.nbt);;
+		
 		return item;
 	}
 

@@ -9,6 +9,8 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.World;
@@ -55,8 +57,9 @@ public class EquipMobMixin{
 	
 	private void setRoguelike(MobEntity mob, int level) {
 		final int DURATION = 10;
-		StatusEffect type = StatusEffects.MINING_FATIGUE;
-		StatusEffectInstance effect = new StatusEffectInstance(type, DURATION, level, false, false, false);
+		StatusEffect type = StatusEffects.MINING_FATIGUE.value();
+		RegistryEntry<StatusEffect> ref = Registries.STATUS_EFFECT.getEntry(type);
+		StatusEffectInstance effect = new StatusEffectInstance(ref, DURATION, level, false, false, false);
 		mob.addStatusEffect(effect);
 	}
 }
