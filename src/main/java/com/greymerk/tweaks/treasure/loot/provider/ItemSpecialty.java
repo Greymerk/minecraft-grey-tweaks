@@ -1,16 +1,14 @@
 package com.greymerk.tweaks.treasure.loot.provider;
 
-import net.minecraft.util.math.random.Random;
-
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.treasure.loot.Equipment;
 import com.greymerk.tweaks.treasure.loot.Loot;
 import com.greymerk.tweaks.treasure.loot.Quality;
-import com.greymerk.tweaks.treasure.loot.trim.Trim;
 import com.greymerk.tweaks.util.TextFormat;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.random.Random;
 
 public class ItemSpecialty extends ItemBase {
 	

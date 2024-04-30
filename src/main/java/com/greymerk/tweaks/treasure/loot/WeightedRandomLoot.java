@@ -1,14 +1,12 @@
 package com.greymerk.tweaks.treasure.loot;
 
-import net.minecraft.util.math.random.Random;
-
 import com.greymerk.tweaks.util.IWeighted;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.random.Random;
 
 public class WeightedRandomLoot implements Comparable<WeightedRandomLoot>, IWeighted<ItemStack>{
 	
@@ -17,9 +15,7 @@ public class WeightedRandomLoot implements Comparable<WeightedRandomLoot>, IWeig
 	private int max;
 	private int enchLevel;
 	private int weight;
-	
-	private NbtCompound nbt; 
-	
+		
 	public WeightedRandomLoot(Block block, int minStackSize, int maxStackSize, int weight){
 		this.item = (ItemConvertible)block;
 		this.min = minStackSize;
