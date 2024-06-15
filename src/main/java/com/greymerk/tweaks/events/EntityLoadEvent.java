@@ -2,6 +2,7 @@ package com.greymerk.tweaks.events;
 
 import java.util.Map;
 
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.MetaEntity;
 import com.greymerk.tweaks.monster.MonsterProfile;
@@ -34,7 +35,7 @@ public class EntityLoadEvent implements Load{
 		
 		IEntity monster = new MetaEntity(mob);
 		Random random = world.getRandom();
-		MonsterProfile.equip(world, random, random.nextInt(level + 1), monster);
+		MonsterProfile.equip(world, random, Difficulty.from(random.nextInt(level + 1)), monster);
 		
 		//System.out.println("Set roguelike on " + mob.getType().toString());
 	}

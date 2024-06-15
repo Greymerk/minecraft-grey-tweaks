@@ -1,45 +1,34 @@
 package com.greymerk.tweaks.monster.profiles;
 
-import net.minecraft.util.math.random.Random;
-
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.IMonsterProfile;
 import com.greymerk.tweaks.monster.MonsterProfile;
-import com.greymerk.tweaks.treasure.loot.Enchant;
-import com.greymerk.tweaks.treasure.loot.Shield;
 import com.greymerk.tweaks.treasure.loot.provider.ItemTool;
-import com.greymerk.tweaks.treasure.loot.provider.ItemWeapon;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class ProfileZombie implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, int level, IEntity mob) {
-				
-		if(rand.nextInt(50) == 0){
-			MonsterProfile.get(MonsterProfile.BABY).addEquipment(world, rand, level, mob);
+	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
+		
+		if(diff.lt(Difficulty.HARD) && rand.nextInt(20) == 0){
+			MonsterProfile.get(MonsterProfile.VILLAGER).addEquipment(world, rand, diff, mob);
 			return;
 		}
 		
-		if(rand.nextInt(100) == 0){
-			MonsterProfile.get(MonsterProfile.VILLAGER).addEquipment(world, rand, level, mob);
+		if(rand.nextInt(3) == 0) {
+			MonsterProfile.get(MonsterProfile.SWORDSMAN).addEquipment(world, rand, diff, mob);
 			return;
 		}
-
-		if(rand.nextInt(4) == 0) {
-			ItemStack weapon = ItemWeapon.getSword(rand, level, true);
-			mob.setSlot(EquipmentSlot.MAINHAND, weapon);
-			mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(world.getRegistryManager(), rand));
-		} else {
-			ItemStack weapon = ItemTool.getRandom(rand, level, Enchant.canEnchant(world.getDifficulty(), rand, level));
-			mob.setSlot(EquipmentSlot.MAINHAND, weapon);
-		}
 		
-		MonsterProfile.get(MonsterProfile.TALLMOB).addEquipment(world, rand, level, mob);
-		
+		ItemStack weapon = ItemTool.getRandom(world.getRegistryManager(), world.getEnabledFeatures(), rand, diff, mob.canEnchant(rand, diff));
+		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
+		MonsterProfile.get(MonsterProfile.TALLMOB).addEquipment(world, rand, diff, mob);
 	}
 
 }

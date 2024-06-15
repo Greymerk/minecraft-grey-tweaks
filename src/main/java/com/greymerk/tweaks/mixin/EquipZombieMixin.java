@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.MetaEntity;
 import com.greymerk.tweaks.monster.MonsterProfile;
@@ -29,7 +30,7 @@ public class EquipZombieMixin{
 		if(!doEquip(random, diff)) return;
 		
 		IEntity mob = new MetaEntity(entity);
-		MonsterProfile.get(MonsterProfile.ZOMBIE).addEquipment(world, random, diff, mob);
+		MonsterProfile.get(MonsterProfile.ZOMBIE).addEquipment(world, random, Difficulty.from(diff), mob);
 		cir.cancel();
 	}
 	

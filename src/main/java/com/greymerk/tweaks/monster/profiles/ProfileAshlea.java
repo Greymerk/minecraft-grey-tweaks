@@ -1,7 +1,6 @@
 package com.greymerk.tweaks.monster.profiles;
 
-import net.minecraft.util.math.random.Random;
-
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.IMonsterProfile;
 import com.greymerk.tweaks.monster.MonsterProfile;
@@ -12,18 +11,19 @@ import com.greymerk.tweaks.treasure.loot.provider.ItemNovelty;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class ProfileAshlea implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, int level, IEntity mob) {
+	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
 		
 		mob.setChild(true);
 		
-		MonsterProfile.get(MonsterProfile.VILLAGER).addEquipment(world, rand, level, mob);
+		MonsterProfile.get(MonsterProfile.VILLAGER).addEquipment(world, rand, diff, mob);
 		
-		ItemStack weapon = ItemNovelty.getItem(ItemNovelty.ASHLEA);
+		ItemStack weapon = ItemNovelty.getItem(world.getRegistryManager(), ItemNovelty.ASHLEA);
 		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
 		
 		for(EquipmentSlot slot : new EquipmentSlot[]{

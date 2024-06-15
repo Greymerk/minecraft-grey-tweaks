@@ -1,85 +1,76 @@
 package com.greymerk.tweaks.treasure.loot.provider;
 
-import net.minecraft.util.math.random.Random;
-
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.treasure.loot.Equipment;
 import com.greymerk.tweaks.treasure.loot.Quality;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.util.math.random.Random;
 
 public class ItemWeapon extends ItemBase{
 	
-	private Equipment type;
-	private boolean enchant;
-	private Quality quality;
+	DynamicRegistryManager reg;
+	FeatureSet features;
 	
-	
-	public ItemWeapon(int weight, int level) {
-		super(weight, level);
+	public ItemWeapon(DynamicRegistryManager reg, FeatureSet features, int weight, Difficulty diff) {
+		super(weight, diff);
+		this.features = features;
+		this.reg = reg;
 	}
 
 	
 	@Override
-	public ItemStack getLootItem(Random rand, int level) {
-		if(type != null){
-			switch(type){
-			case BOW: return getBow(rand, level, enchant);
-			case SWORD: return getSword(rand, level, enchant, quality);
-			default: return getSword(rand, level, enchant);
-			}
-		}
-		return getRandom(rand, level, true);
+	public ItemStack getLootItem(Random rand, Difficulty diff) {
+		if(rand.nextInt(1000) == 0) return ItemNovelty.getItem(reg, ItemNovelty.GREYMERK);
+		return getRandom(this.reg, this.features, rand, diff, true);
 	}
 
-	public static ItemStack getRandom(Random rand, int rank, boolean enchant){
+	public static ItemStack getRandom(DynamicRegistryManager reg, FeatureSet features, Random rand, Difficulty diff, boolean enchant){
 		if(rand.nextInt(10) == 0){
-			return ItemWeapon.getBow(rand, rank, enchant);
+			return ItemWeapon.getBow(reg, features, rand, diff, enchant);
 		} else {
-			return ItemWeapon.getSword(rand, rank, enchant);
+			return ItemWeapon.getSword(reg, features, rand, diff, enchant);
 		}
 	}
 	
-	public static ItemStack getBow(Random rand, int level, boolean enchant){
+	public static ItemStack getBow(DynamicRegistryManager reg, FeatureSet features, Random rand, Difficulty diff, boolean enchant){
 		
-		if(rand.nextInt(20 + (level * 10)) == 0){
-			return ItemSpecialty.getRandomItem(Equipment.BOW, rand, level);
+		if(enchant && rand.nextInt(1000) == 0) return ItemNovelty.getItem(reg, ItemNovelty.WINDFORCE);
+		
+		if(enchant && rand.nextInt(30) == 0){
+			return ItemSpecialty.getRandomItem(reg, Equipment.BOW, rand, diff);
 		}
 		
 		ItemStack bow = new ItemStack(Items.BOW);
-		
-		if(enchant && rand.nextInt(6 - level) == 0){
-			Enchant.enchantItem(rand, bow, Enchant.getLevel(rand, level));
-		}
-		
+		if(enchant)Enchant.enchantItem(reg, features, rand, bow, Enchant.getLevel(rand, diff));
 		return bow;
-		
 	}
 	
-	public static ItemStack getSword(Random rand, int level, boolean enchant){
-		ItemStack sword;
+	public static ItemStack getSword(DynamicRegistryManager reg, FeatureSet features, Random rand, Difficulty diff, boolean enchant){
 		
-		if(enchant && rand.nextInt(10 + (level * 10)) == 0){
-			return ItemSpecialty.getRandomItem(Equipment.SWORD, rand, level);
+		if(enchant && rand.nextInt(1000) == 0) return ItemNovelty.getItem(reg, ItemNovelty.NULL);
+		
+		if(enchant && rand.nextInt(30) == 0){
+			return ItemSpecialty.getRandomItem(reg, Equipment.SWORD, rand, diff);
 		}
 		
-		sword = pickSword(rand, level);
+		ItemStack sword = pickSword(rand, diff);
 		
-		if(enchant && rand.nextInt(6 - level) == 0){
-			Enchant.enchantItem(rand, sword, Enchant.getLevel(rand, level));
-		}
-		
+		if(enchant) Enchant.enchantItem(reg, features, rand, sword, Enchant.getLevel(rand, diff));
 		return sword;		
 	}
 	
-	public static ItemStack getSword(Random rand, int level, boolean enchant, Quality quality){
-		ItemStack sword = quality != null ? getSwordByQuality(quality) : pickSword(rand, level);
-		return enchant ? Enchant.enchantItem(rand, sword, Enchant.getLevel(rand, level)) : sword;
+	public static ItemStack getSword(DynamicRegistryManager reg, FeatureSet features, Random rand, Difficulty diff, boolean enchant, Quality quality){
+		ItemStack sword = quality != null ? getSwordByQuality(quality) : pickSword(rand, diff);
+		return enchant ? Enchant.enchantItem(reg, features, rand, sword, Enchant.getLevel(rand, diff)) : sword;
 	}
 	
-	private static ItemStack pickSword(Random rand, int level){
-		Quality quality = Quality.getWeaponQuality(rand, level);
+	private static ItemStack pickSword(Random rand, Difficulty diff){
+		Quality quality = Quality.getWeaponQuality(rand, diff);
 		return getSwordByQuality(quality);
 	}
 	

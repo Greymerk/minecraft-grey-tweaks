@@ -9,12 +9,14 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 
 @Mixin(MobEntity.class)
 public class MobEnchantMixin {	
 
-	@Inject(at = @At("HEAD"), method = "enchantMainHandItem(Lnet/minecraft/util/math/random/Random;F)V", cancellable = true)
-	protected void enchantMainHandItem(Random random, float power, CallbackInfo cir) {
+	@Inject(at = @At("HEAD"), method = "enchantMainHandItem(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/util/math/random/Random;Lnet/minecraft/world/LocalDifficulty;)V", cancellable = true)
+	protected void enchantMainHandItem(ServerWorldAccess world, Random random, LocalDifficulty diff, CallbackInfo cir) {
 		MobEntity entity = (MobEntity)(Object)this;
 		if(entity.getMainHandStack().isEmpty()) {
 			cir.cancel();
@@ -26,8 +28,8 @@ public class MobEnchantMixin {
 		}
 	}
 			
-	@Inject(at = @At("HEAD"), method = "enchantEquipment(Lnet/minecraft/util/math/random/Random;FLnet/minecraft/entity/EquipmentSlot;)V", cancellable = true)
-	protected void enchantEquipment(Random random, float power, EquipmentSlot slot, CallbackInfo cir) {
+	@Inject(at = @At("HEAD"), method = "enchantEquipment(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/util/math/random/Random;Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/world/LocalDifficulty;)V", cancellable = true)
+	protected void enchantEquipment(ServerWorldAccess world, Random random, EquipmentSlot slot, LocalDifficulty diff, CallbackInfo cir) {
 		MobEntity entity = (MobEntity)(Object)this;
 		
 		if(!entity.hasStackEquipped(slot)) {

@@ -1,24 +1,24 @@
 package com.greymerk.tweaks.monster.profiles;
 
-import net.minecraft.util.math.random.Random;
-
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.IMonsterProfile;
 import com.greymerk.tweaks.treasure.loot.Quality;
-import com.greymerk.tweaks.treasure.loot.Shield;
 import com.greymerk.tweaks.treasure.loot.Slot;
+import com.greymerk.tweaks.treasure.loot.items.Shield;
 import com.greymerk.tweaks.treasure.loot.provider.ItemArmour;
 import com.greymerk.tweaks.treasure.loot.provider.ItemNovelty;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public class ProfileRleahy implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, int level, IEntity mob) {
-		ItemStack weapon = ItemNovelty.getItem(ItemNovelty.RLEAHY);
+	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
+		ItemStack weapon = ItemNovelty.getItem(world.getRegistryManager(), ItemNovelty.RLEAHY);
 		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
 		mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(world.getRegistryManager(), rand));
 		

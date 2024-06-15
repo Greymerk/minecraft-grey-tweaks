@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.MetaEntity;
 import com.greymerk.tweaks.monster.MonsterProfile;
@@ -24,7 +25,7 @@ public class EquipSkeletonMixin{
 		MobEntity entity = (MobEntity)(Object)this;
 		World world = entity.getWorld();
 		int phase = world.getMoonPhase();
-		int diff = this.getMoonDiff(phase);
+		Difficulty diff = this.getMoonDiff(phase);
 		
 		if(!doEquip(random, diff)) return;
 		
@@ -33,20 +34,20 @@ public class EquipSkeletonMixin{
 		cir.cancel();
 	}
 	
-	private boolean doEquip(Random rand, int diff) {		
-		if(diff == 4) return true;
-		if(diff == 3) return rand.nextInt(3) != 0;
-		if(diff == 2) return rand.nextBoolean();
-		if(diff == 1) return rand.nextInt(3) == 0;
-		if(diff == 0) return rand.nextInt(5) == 0;
+	private boolean doEquip(Random rand, Difficulty diff) {		
+		if(diff == Difficulty.HARDEST) return true;
+		if(diff == Difficulty.HARD) return rand.nextInt(3) != 0;
+		if(diff == Difficulty.MEDIUM) return rand.nextBoolean();
+		if(diff == Difficulty.EASY) return rand.nextInt(3) == 0;
+		if(diff == Difficulty.EASIEST) return rand.nextInt(5) == 0;
 		return false;
 	}
 	
-	private int getMoonDiff(int phase) {
-		if(phase == 0) return 4;
-		if(phase == 4) return 0;
-		if(phase == 1 || phase == 7) return 3;
-		if(phase == 2 || phase == 6) return 2;
-		return 1;
+	private Difficulty getMoonDiff(int phase) {
+		if(phase == 0) return Difficulty.HARDEST;
+		if(phase == 4) return Difficulty.EASIEST;
+		if(phase == 1 || phase == 7) return Difficulty.HARD;
+		if(phase == 2 || phase == 6) return Difficulty.MEDIUM;
+		return Difficulty.EASY;
 	}
 }

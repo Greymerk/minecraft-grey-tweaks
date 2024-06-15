@@ -13,31 +13,25 @@ public class WeightedRandomLoot implements Comparable<WeightedRandomLoot>, IWeig
 	private ItemConvertible item;
 	private int min;
 	private int max;
-	private int enchLevel;
 	private int weight;
-		
+	
+	
 	public WeightedRandomLoot(Block block, int minStackSize, int maxStackSize, int weight){
 		this.item = (ItemConvertible)block;
 		this.min = minStackSize;
 		this.max = maxStackSize;
 		this.weight = weight;
-		this.enchLevel = 0;
 	}
 	
 	public WeightedRandomLoot(Item item, int minStackSize, int maxStackSize, int weight){
-		this(item, minStackSize, maxStackSize, weight, 0);
-	}
-	
-	public WeightedRandomLoot(Item item, int minStackSize, int maxStackSize, int weight, int ench){
 		this.item = (ItemConvertible)item;
 		this.min = minStackSize;
 		this.max = maxStackSize;
 		this.weight = weight;
-		this.enchLevel = ench;
 	}
 
 	public WeightedRandomLoot(Item item, int weight){
-		this(item, 1, 1, weight, 0);
+		this(item, 1, 1, weight);
 	}
 
 	private int getStackSize(Random rand){
@@ -54,12 +48,6 @@ public class WeightedRandomLoot implements Comparable<WeightedRandomLoot>, IWeig
 	public ItemStack get(Random rand) {
 		ItemStack item = null;
 		if(this.item != null) item = new ItemStack((ItemConvertible)this.item, this.getStackSize(rand));
-		try{
-			if(this.enchLevel > 0 && this.enchLevel <= 30) Enchant.enchantItem(rand, item, this.enchLevel);
-		} catch (NullPointerException e){
-			// ignore
-		}
-		
 		return item;
 	}
 

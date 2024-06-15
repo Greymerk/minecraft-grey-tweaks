@@ -1,31 +1,57 @@
 package com.greymerk.tweaks.treasure.loot;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
+
+import com.greymerk.tweaks.Difficulty;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.Difficulty;
 
 public enum Enchant {
 
-	SHARPNESS, SMITE, ARTHOPODS, LOOTING, KNOCKBACK, FIREASPECT,
-	AQUAAFFINITY, RESPIRATION, FEATHERFALLING, DEPTHSTRIDER,
-	PROTECTION, BLASTPROTECTION, FIREPROTECTION, PROJECTILEPROTECTION, 
-	THORNS, UNBREAKING, EFFICIENCY, SILKTOUCH, FORTUNE,
-	POWER, PUNCH, FLAME, INFINITY, LURE, LUCKOFTHESEA, MENDING;
+	MENDING, UNBREAKING, 
+	CURSE_OF_VANISHING, CURSE_OF_BINDING,
+	EFFICIENCY, SILKTOUCH, FORTUNE,
+	SHARPNESS, SMITE, ARTHOPODS, FIREASPECT, KNOCKBACK, LOOTING,   
+	AQUAAFFINITY, RESPIRATION,
+	FEATHERFALLING, DEPTHSTRIDER, FROSTWALKER,
+	PROTECTION, BLASTPROTECTION, FIREPROTECTION, PROJECTILEPROTECTION, THORNS, 
+	POWER, PUNCH, FLAME, INFINITY, 
+	LURE, LUCKOFTHESEA,
+	CHANNELING, IMPALING, RIPTIDE, LOYALTY,
+	MULTISHOT, PIERCING, QUICK_CHARGE,
+	SOUL_SPEED, SWIFT_SNEAK;
 	
-	public static Enchantment getEnchant(Enchant type){
+	public static final List<Enchant> common = List.of(
+			UNBREAKING, EFFICIENCY, SILKTOUCH, FORTUNE,
+			SHARPNESS, SMITE, ARTHOPODS, FIREASPECT, KNOCKBACK, LOOTING,
+			AQUAAFFINITY, RESPIRATION, FEATHERFALLING, DEPTHSTRIDER, FROSTWALKER,
+			PROTECTION, BLASTPROTECTION, FIREPROTECTION, PROJECTILEPROTECTION, THORNS,
+			POWER, PUNCH, FLAME, INFINITY, LURE, LUCKOFTHESEA,
+			CHANNELING, IMPALING, RIPTIDE, LOYALTY, MULTISHOT, PIERCING, QUICK_CHARGE);
+	
+	public static final List<Enchant> endgame = List.of(SOUL_SPEED, SWIFT_SNEAK);
+	
+	public static final List<Enchant> cursed = List.of(CURSE_OF_VANISHING, CURSE_OF_BINDING);
+	
+	public static RegistryEntry<Enchantment> getEnchant(DynamicRegistryManager reg, Enchant type){
+		Registry<Enchantment> enchantments = reg.get(RegistryKeys.ENCHANTMENT);
 		String ns = "minecraft";
 		String path = getName(type);
-		Identifier id = new Identifier(ns, path);
-		return Registries.ENCHANTMENT.get(id);
+		Identifier id = Identifier.of(ns, path);
+		return enchantments.getEntry(id).get();
 	}
 	
 	public static String getName(Enchant type){
@@ -56,50 +82,98 @@ public enum Enchant {
 			case LURE: return "lure";
 			case LUCKOFTHESEA: return "luck_of_the_sea";
 			case MENDING: return "mending";
-			default: return "efficiency";
+			case CHANNELING: return "channeling";
+			case CURSE_OF_BINDING: return "binding_curse";
+			case CURSE_OF_VANISHING: return "vanishing_curse";
+			case FROSTWALKER: return "frost_walker";
+			case IMPALING: return "impaling";
+			case LOYALTY: return "loyalty";
+			case MULTISHOT: return "multishot";
+			case PIERCING: return "piercing";
+			case QUICK_CHARGE: return "quick_charge";
+			case RIPTIDE: return "riptide";
+			case SOUL_SPEED: return "soul_speed";
+			case SWIFT_SNEAK: return "swift_sneak";
 		}
+		return "efficiency";
 	}
 	
-	public static int getLevel(Random rand, int level) {
+	public static int getMaxRank(Enchant type) {
+		switch(type){
+		case SHARPNESS: return 5;
+		case SMITE: return 5;
+		case ARTHOPODS: return 5;
+		case LOOTING: return 3;
+		case KNOCKBACK: return 2;
+		case FIREASPECT: return 2;
+		case AQUAAFFINITY: return 1;
+		case RESPIRATION: return 3;
+		case FEATHERFALLING: return 4;
+		case DEPTHSTRIDER: return 3;
+		case PROTECTION: return 4;
+		case BLASTPROTECTION: return 4;
+		case FIREPROTECTION: return 4;
+		case PROJECTILEPROTECTION: return 4;
+		case THORNS: return 3;
+		case UNBREAKING: return 3;
+		case EFFICIENCY: return 5;
+		case SILKTOUCH: return 1;
+		case FORTUNE: return 3;
+		case POWER: return 5;
+		case PUNCH: return 2;
+		case FLAME: return 1;
+		case INFINITY: return 1;
+		case LURE: return 3;
+		case LUCKOFTHESEA: return 3;
+		case MENDING: return 1;
+		case CHANNELING: return 1;
+		case CURSE_OF_BINDING: return 1;
+		case CURSE_OF_VANISHING: return 1;
+		case FROSTWALKER: return 2;
+		case IMPALING: return 5;
+		case LOYALTY: return 3;
+		case MULTISHOT: return 1;
+		case PIERCING: return 4;
+		case QUICK_CHARGE: return 3;
+		case RIPTIDE: return 3;
+		case SOUL_SPEED: return 3;
+		case SWIFT_SNEAK: return 3;
+		}
+		
+		return 1;
+	}
+	
+	public static int getRandomRank(Random rand, Enchant type, Difficulty diff) {
+		int max = getMaxRank(type);
+		if(max == 1) return 1;
+		if(diff == Difficulty.HARDEST) return max;
+		return rand.nextBetween(1, max);
+	}
+	
+	public static int getLevel(Random rand, Difficulty diff) {
 
-		switch(level){
-		case 4: return 30 + rand.nextInt(10);
-		case 3: return 15 + rand.nextInt(15);
-		case 2: return 5 + rand.nextInt(15);
-		case 1: return 1 + rand.nextInt(10);
-		case 0: return 1 + rand.nextInt(5);
+		switch(diff){
+		case HARDEST: return 30 + rand.nextInt(10);
+		case HARD: return 15 + rand.nextInt(15);
+		case MEDIUM: return 5 + rand.nextInt(15);
+		case EASY: return 1 + rand.nextInt(10);
+		case EASIEST: return 1 + rand.nextInt(5);
 		default: return 1;
 		}
 	}
 
-	public static boolean canEnchant(Difficulty difficulty, Random rand, int level){
-		
-		if(difficulty == null) difficulty = Difficulty.NORMAL;
-		
-		switch(difficulty){
-		case PEACEFUL: return false;
-		case EASY: return rand.nextInt(6) == 0;
-		case NORMAL: return level >= 1 && rand.nextInt(4) == 0;
-		case HARD: return rand.nextBoolean();
-		}
-		
-		return false;
-	}
-
-	public static ItemStack enchantItem(Random rand, ItemStack item, int enchantLevel) {
-
+	public static ItemStack enchantItem(DynamicRegistryManager reg, FeatureSet features, Random rand, ItemStack item, int enchantLevel) {
+				
 		if (item == null ) return null;
 		
 		List<EnchantmentLevelEntry> enchants = null;
 		try{
-			enchants = EnchantmentHelper.generateEnchantments(FeatureSet.empty(), rand, item, enchantLevel, false);
+			enchants = EnchantmentHelper.generateEnchantments(rand, item, enchantLevel, streamEntries(reg));
 		} catch(NullPointerException e){
 			throw e;
 		}
-		
-		boolean isBook = item.getItem() == Items.BOOK;
 
-		if (isBook){
+		if (item.isOf(Items.BOOK)){
 			item = new ItemStack(Items.ENCHANTED_BOOK);
 			if(enchants.size() > 1){
 				enchants.remove(rand.nextInt(enchants.size()));
@@ -110,6 +184,46 @@ public enum Enchant {
 			item.addEnchantment(toAdd.enchantment, toAdd.level);
 		}
 		
+		return item;
+	}
+	
+	public static Stream<RegistryEntry<Enchantment>> streamEntries(DynamicRegistryManager reg){
+		List<RegistryEntry<Enchantment>> enchants = new ArrayList<RegistryEntry<Enchantment>>();
+		List.of(Enchant.values()).forEach(e -> {
+			enchants.add(Enchant.getEnchant(reg, e));
+		});
+		return enchants.stream();
+	}
+	
+	public static ItemStack getBook(DynamicRegistryManager reg, FeatureSet features, Random rand, Difficulty diff) {
+		ItemStack book = new ItemStack(Items.BOOK);
+		int level = getLevel(rand, diff);
+		return enchantItem(reg, features, rand, book, level);
+	}
+
+	public static ItemStack getBook(DynamicRegistryManager reg, Random rand, Enchant type, Difficulty diff) {
+		ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+		book.addEnchantment(Enchant.getEnchant(reg, type), Enchant.getRandomRank(rand, type, diff));
+		return book;
+	}
+	
+	public static ItemStack getBook(DynamicRegistryManager reg, Random rand, Difficulty diff) {
+		
+		if(diff == Difficulty.HARDEST && rand.nextInt(4) == 0) {
+			Enchant type = endgame.get(rand.nextInt(endgame.size()));
+			return Enchant.getBook(reg, rand, type, diff);	
+		}
+		
+		if(rand.nextInt(6) == 0) return Enchant.getBook(reg, Enchant.MENDING);
+		
+		Enchant type = common.get(rand.nextInt(common.size()));
+		return Enchant.getBook(reg, rand, type, diff);
+	}
+	
+	public static ItemStack getBook(DynamicRegistryManager reg, Enchant type) {
+		RegistryEntry<Enchantment> e = getEnchant(reg, type);
+		ItemStack item = new ItemStack(Items.ENCHANTED_BOOK);
+		item.addEnchantment(e, Enchant.getMaxRank(type));
 		return item;
 	}
 }

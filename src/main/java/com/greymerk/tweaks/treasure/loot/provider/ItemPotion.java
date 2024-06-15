@@ -1,24 +1,32 @@
 package com.greymerk.tweaks.treasure.loot.provider;
 
-import com.greymerk.tweaks.treasure.loot.PotionForm;
-import com.greymerk.tweaks.treasure.loot.PotionItem;
-import com.greymerk.tweaks.treasure.loot.PotionMixture;
+import com.greymerk.tweaks.Difficulty;
+import com.greymerk.tweaks.treasure.loot.potions.PotionForm;
+import com.greymerk.tweaks.treasure.loot.potions.PotionItem;
+import com.greymerk.tweaks.treasure.loot.potions.PotionMixture;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.random.Random;
 
 public class ItemPotion extends ItemBase{
 
-	public ItemPotion(int weight, int level) {
-		super(weight, level);
+	public ItemPotion(int weight, Difficulty diff) {
+		super(weight, diff);
 	}
 
 	@Override
-	public ItemStack getLootItem(Random rand, int level) {
-		if(level > 2 && rand.nextBoolean()) {
+	public ItemStack getLootItem(Random rand, Difficulty diff) {
+		
+		if(rand.nextInt(10) == 0) return PotionMixture.getPotion(rand, PotionMixture.LAUDANUM);
+		
+		if(diff.gt(Difficulty.MEDIUM) && rand.nextBoolean()) {
 			return PotionMixture.getPotion(rand, PotionMixture.VILE);
-		} else if(level > 0 && rand.nextBoolean()) {
+		} else if(diff.gt(Difficulty.EASIEST) && rand.nextBoolean()) {
 			return PotionMixture.getRandom(rand);
+		}
+		
+		if(rand.nextInt(10) == 0) {
+			return PotionMixture.getBooze(rand);
 		}
 		
 		final PotionItem[] potions = new PotionItem[]{

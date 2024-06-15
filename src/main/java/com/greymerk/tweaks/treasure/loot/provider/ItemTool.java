@@ -1,95 +1,62 @@
 package com.greymerk.tweaks.treasure.loot.provider;
 
-import net.minecraft.util.math.random.Random;
-
-import com.google.gson.JsonObject;
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.treasure.loot.Equipment;
 import com.greymerk.tweaks.treasure.loot.Quality;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.util.math.random.Random;
 
 public class ItemTool extends ItemBase {
 
-	private Equipment type;
-	private boolean enchant;
-	private Quality quality;
+	DynamicRegistryManager reg;
+	FeatureSet features;
 	
-	public ItemTool(int weight, int level) {
-		super(weight, level);
-	}
-	
-	public ItemTool(JsonObject data, int weight) throws Exception{
-		super(weight);
-		
-		this.enchant = data.has("ench") ? data.get("ench").getAsBoolean() : true;
-		
-		if(!data.has("level")) throw new Exception("Tool Loot requires a level");
-		this.level = data.get("level").getAsInt();
-		
-		
-		if(data.has("equipment")){
-			try{
-				this.type = Equipment.valueOf(data.get("equipment").getAsString().toUpperCase());
-			} catch(Exception e) {
-				throw new Exception("No such Equipment as: " + data.get("equipment").getAsString());
-			}
-		}
-		
-		if(data.has("quality")){
-			try{
-				this.quality = Quality.valueOf(data.get("quality").getAsString().toUpperCase());
-			} catch(Exception e){
-				throw new Exception("No such Quality as: " + data.get("quality").getAsString());
-			}	
-		}
+	public ItemTool(DynamicRegistryManager reg, FeatureSet features, int weight, Difficulty diff) {
+		super(weight, diff);
+		this.features = features;
+		this.reg = reg;
 	}
 	
 	@Override
-	public ItemStack getLootItem(Random rand, int level) {
-		if(type != null) return getTool(rand, level, quality, type, enchant);
-		
-		return getRandom(rand, level, true);
+	public ItemStack getLootItem(Random rand, Difficulty diff) {
+		if(rand.nextInt(2000) == 0) return ItemNovelty.getItem(reg, ItemNovelty.CLEO);
+		return getRandom(reg, features, rand, diff, true);
 	}
 
-	public static ItemStack getTool(Random rand, int level, Quality quality, Equipment type, boolean enchant){		
-		ItemStack tool = Equipment.get(type, quality == null ? Quality.get(level) : quality);
-		return enchant ? Enchant.enchantItem(rand, tool, Enchant.getLevel(rand, level)) : tool;
+	public static ItemStack getTool(DynamicRegistryManager reg, FeatureSet features, Random rand, Difficulty diff, Quality quality, Equipment type, boolean enchant){		
+		ItemStack tool = Equipment.get(type, quality == null ? Quality.get(diff) : quality);
+		return enchant ? Enchant.enchantItem(reg, features, rand, tool, Enchant.getLevel(rand, diff)) : tool;
 	}
 	
-	public static ItemStack getRandom(Random rand, int level, boolean enchant){
+	public static ItemStack getRandom(DynamicRegistryManager reg, FeatureSet features, Random rand, Difficulty diff, boolean enchant){
 		
-		if(enchant && rand.nextInt(20 + (level * 10)) == 0){
-			switch(rand.nextInt(3)){
-			case 0: return ItemSpecialty.getRandomItem(Equipment.PICK, rand, level);
-			case 1: return ItemSpecialty.getRandomItem(Equipment.AXE, rand, level);
-			case 2: return ItemSpecialty.getRandomItem(Equipment.SHOVEL, rand, level);
-			}
+		if(enchant && rand.nextInt(30) == 0){
+			return ItemSpecialty.getRandomTool(reg, rand, Quality.get(diff));
 		}
 		
-		ItemStack tool = pickTool(rand, level);
-		
-		if(enchant && rand.nextInt(6 - level) == 0){
-			Enchant.enchantItem(rand, tool, Enchant.getLevel(rand, level));
-		}
-		
+		ItemStack tool = pickTool(rand, diff);
+		if(enchant) Enchant.enchantItem(reg, features, rand, tool, Enchant.getLevel(rand, diff));
 		return tool;
 	}
 	
-	private static ItemStack pickTool(Random rand, int rank){
+	private static ItemStack pickTool(Random rand, Difficulty diff){
 		
 		switch(rand.nextInt(3)){
-		case 0: return pickPick(rand, rank);
-		case 1: return pickAxe(rand, rank);
-		case 2: return pickShovel(rand, rank);		
-		default: return pickPick(rand, rank);
+		case 0: return pickPick(rand, diff);
+		case 1: return pickAxe(rand, diff);
+		case 2: return pickShovel(rand, diff);		
+		default: return pickPick(rand, diff);
 		}
 	}
 	
 
-	private static ItemStack pickAxe(Random rand, int level) {
-		Quality quality = Quality.getToolQuality(rand, level);
+	private static ItemStack pickAxe(Random rand, Difficulty diff) {
+		Quality quality = Quality.getToolQuality(rand, diff);
 		switch (quality) {
 		case NETHERITE: return new ItemStack(Items.NETHERITE_AXE);
 		case DIAMOND: return new ItemStack(Items.DIAMOND_AXE);
@@ -100,9 +67,9 @@ public class ItemTool extends ItemBase {
 		}
 	}
 	
-	private static ItemStack pickShovel(Random rand, int level) {
+	private static ItemStack pickShovel(Random rand, Difficulty diff) {
 
-		Quality quality = Quality.getToolQuality(rand, level);
+		Quality quality = Quality.getToolQuality(rand, diff);
 		switch (quality) {
 		case NETHERITE: return new ItemStack(Items.NETHERITE_SHOVEL);
 		case DIAMOND: return new ItemStack(Items.DIAMOND_SHOVEL);
@@ -113,9 +80,9 @@ public class ItemTool extends ItemBase {
 		}
 	}
 	
-	private static ItemStack pickPick(Random rand, int level) {
+	private static ItemStack pickPick(Random rand, Difficulty diff) {
 
-		Quality quality = Quality.getToolQuality(rand, level);
+		Quality quality = Quality.getToolQuality(rand, diff);
 		switch (quality) {
 		case NETHERITE: return new ItemStack(Items.NETHERITE_PICKAXE);
 		case DIAMOND: return new ItemStack(Items.DIAMOND_PICKAXE);
@@ -125,4 +92,7 @@ public class ItemTool extends ItemBase {
 		default: return new ItemStack(Items.WOODEN_PICKAXE);
 		}
 	}
+
+
+	
 }

@@ -1,0 +1,57 @@
+package com.greymerk.tweaks.editor.blocks.door;
+
+import com.greymerk.tweaks.editor.Cardinal;
+import com.greymerk.tweaks.editor.Coord;
+import com.greymerk.tweaks.editor.IWorldEditor;
+import com.greymerk.tweaks.editor.MetaBlock;
+
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.enums.DoorHinge;
+import net.minecraft.block.enums.DoubleBlockHalf;
+
+public class Door implements IDoor {
+
+	DoorType type;
+	
+	public static Door of(DoorType type) {
+		return new Door(type);
+	}
+	
+	private Door(DoorType type){
+		this.type = type;
+	}
+
+	@Override
+	public void generate(IWorldEditor editor, Coord pos, Cardinal dir) {
+		Door.generate(editor, this.type, pos, dir, false);
+	}
+	
+	@Override
+	public void generate(IWorldEditor editor, Coord pos, Cardinal dir, boolean open) {
+		Door.generate(editor, this.type, pos, dir, open);
+	}
+	
+	public static void generate(IWorldEditor editor, Coord pos, Cardinal dir, DoorType type){
+		generate(editor, type, pos, dir, false);
+	}
+
+	public static void generate(IWorldEditor editor, DoorType type, Coord pos, Cardinal dir, boolean open){
+		Coord cursor = pos.copy();
+		MetaBlock doorBase = setProperties(type, false, dir, open, false);
+		doorBase.set(editor, cursor);
+		cursor.add(Cardinal.UP);
+		MetaBlock doorTop = setProperties(type, true, dir, open, false);
+		doorTop.set(editor, cursor);
+	}
+	
+	private static MetaBlock setProperties(DoorType type, boolean top, Cardinal dir, boolean open, boolean hingeLeft){
+		return DoorType.get(type)
+				.with(DoorBlock.HALF, top ? DoubleBlockHalf.UPPER : DoubleBlockHalf.LOWER)
+				.with(DoorBlock.FACING, Cardinal.facing(dir))
+				.with(DoorBlock.OPEN, open)
+				.with(DoorBlock.HINGE, hingeLeft ? DoorHinge.LEFT : DoorHinge.RIGHT);
+		
+		
+	}
+	
+}

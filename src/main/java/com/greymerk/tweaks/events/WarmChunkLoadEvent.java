@@ -2,6 +2,7 @@ package com.greymerk.tweaks.events;
 
 import com.greymerk.tweaks.editor.Cardinal;
 import com.greymerk.tweaks.editor.Coord;
+import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
 import com.greymerk.tweaks.editor.shapes.RectSolid;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents.Load;
@@ -26,7 +27,7 @@ public class WarmChunkLoadEvent implements Load{
 		Coord start = new Coord(cpos.getStartX(), world.getTopY(), cpos.getStartZ());
 		Coord end = new Coord(cpos.getEndX(), world.getTopY(), cpos.getEndZ());
 		
-		RectSolid cTop = new RectSolid(start, end);
+		RectSolid cTop = new RectSolid(BoundingBox.of(start, end));
 		for(Coord c : cTop) {
 			Coord surface = findSurface(chunk, c);
 			if(isWarmBiome(world, surface)){

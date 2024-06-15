@@ -3,6 +3,8 @@ package com.greymerk.tweaks.treasure.loot;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.greymerk.tweaks.Difficulty;
+import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.util.IWeighted;
 
 import net.minecraft.item.ItemStack;
@@ -12,10 +14,10 @@ public class LootSettings {
 
 	private Map<Loot, IWeighted<ItemStack>> loot;
 	
-	public LootSettings(int level){
+	public LootSettings(Difficulty diff, IWorldEditor editor){
 		loot = new HashMap<Loot, IWeighted<ItemStack>>();
 		for(Loot type : Loot.values()){
-			loot.put(type, Loot.getProvider(type, level));
+			loot.put(type, Loot.getProvider(type, diff, editor));
 		}
 	}
 	

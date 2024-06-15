@@ -1,7 +1,12 @@
 package com.greymerk.tweaks.monster;
 
+import com.greymerk.tweaks.Difficulty;
+
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.random.Random;
+
 
 public interface IEntity {
 
@@ -15,4 +20,9 @@ public interface IEntity {
 	
 	public void setName(String name);
 	
+	public boolean canEnchant(Random rand, Difficulty diff);
+
+	void setOnFire(int duration);
+
+	void setEffect(StatusEffectInstance effect);
 }

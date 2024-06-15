@@ -1,11 +1,11 @@
 package com.greymerk.tweaks.monster;
 
-import net.minecraft.util.math.random.Random;
-
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.profiles.ProfileArcher;
 import com.greymerk.tweaks.monster.profiles.ProfileAshlea;
 import com.greymerk.tweaks.monster.profiles.ProfileBaby;
 import com.greymerk.tweaks.monster.profiles.ProfileEvoker;
+import com.greymerk.tweaks.monster.profiles.ProfileFireArcher;
 import com.greymerk.tweaks.monster.profiles.ProfileHusk;
 import com.greymerk.tweaks.monster.profiles.ProfileJohnny;
 import com.greymerk.tweaks.monster.profiles.ProfileMagicArcher;
@@ -23,12 +23,13 @@ import com.greymerk.tweaks.monster.profiles.ProfileZombie;
 
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 public enum MonsterProfile {
 
 	TALLMOB, ZOMBIE, PIGMAN, SKELETON, VILLAGER, HUSK, BABY, ASHLEA, RLEAHY, 
-	ARCHER, WITHER, POISONARCHER, MAGICARCHER, SWORDSMAN, EVOKER, VINDICATOR,
+	ARCHER, WITHER, FIREARCHER, POISONARCHER, MAGICARCHER, SWORDSMAN, EVOKER, VINDICATOR,
 	WITCH, JOHNNY;
 	
 	public static IMonsterProfile get(MonsterProfile profile){
@@ -44,6 +45,7 @@ public enum MonsterProfile {
 		case RLEAHY: return new ProfileRleahy();
 		case ARCHER: return new ProfileArcher();
 		case WITHER: return new ProfileWither();
+		case FIREARCHER: return new ProfileFireArcher();
 		case POISONARCHER: return new ProfilePoisonArcher();
 		case MAGICARCHER: return new ProfileMagicArcher();
 		case SWORDSMAN: return new ProfileSwordsman();
@@ -55,7 +57,7 @@ public enum MonsterProfile {
 		}
 	}
 	
-	public static void equip(World world, Random rand, int level, IEntity mob){
+	public static void equip(World world, Random rand, Difficulty diff, IEntity mob){
 		
 		IMonsterProfile profile = null;
 		
@@ -65,9 +67,6 @@ public enum MonsterProfile {
 		
 		if(profile == null) return;
 		
-		profile.addEquipment(world, rand, level, mob);
+		profile.addEquipment(world, rand, diff, mob);
 	}
-	
-
-	
 }

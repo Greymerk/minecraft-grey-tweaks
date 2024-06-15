@@ -1,63 +1,57 @@
 package com.greymerk.tweaks.treasure.loot.provider;
 
+import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.treasure.loot.Equipment;
 import com.greymerk.tweaks.treasure.loot.Quality;
 import com.greymerk.tweaks.treasure.loot.Slot;
+import com.greymerk.tweaks.treasure.loot.trim.Trim;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.util.math.random.Random;
 
 public class ItemArmour extends ItemBase {
 
-	private Equipment type;
-	private boolean enchant;
-	private Quality quality;
+	private DynamicRegistryManager registry;
+	private FeatureSet features;
 	
-	public ItemArmour(int weight, int level) {
-		super(weight, level);
+	public ItemArmour(int weight, Difficulty diff, FeatureSet features, DynamicRegistryManager reg) {
+		super(weight, diff);
+		this.features = features;
+		this.registry = reg;
 	}	
 	
 	@Override
-	public ItemStack getLootItem(Random rand, int level) {
-		if(type != null || quality != null) return get(rand, level, quality, type, enchant);
-		return getRandom(rand, level, true);
+	public ItemStack getLootItem(Random rand, Difficulty diff) {
+		return getRandom(this.features, this.registry, rand, diff, true);
 	}
 
-	public static ItemStack get(Random rand, int level, Quality quality, Equipment type, boolean enchant){
-		ItemStack tool = Equipment.get(type, quality == null ? Quality.get(level) : quality);
-		return enchant ? Enchant.enchantItem(rand, tool, Enchant.getLevel(rand, level)) : tool;
-	}
-	
-	public static ItemStack getRandom(Random rand, int level, boolean enchant){
-		ItemStack item = getRandom(rand, level,
+	public static ItemStack getRandom(FeatureSet features, DynamicRegistryManager reg, Random rand, Difficulty diff, boolean enchant){
+		ItemStack item = getRandom(features, reg, rand, diff,
 				Slot.getSlotByNumber(rand.nextInt(4) + 1),
-				enchant ? Enchant.getLevel(rand, level) : 0);
+				enchant);
 		return item;
 	}
 	
-	public static ItemStack getRandom(Random rand, int level, Slot slot, boolean enchant){
-		return getRandom(rand, level, slot, enchant ? Enchant.getLevel(rand, level) : 0);
-	}
-	
-	public static ItemStack getRandom(Random rand, int level, Slot slot, int enchantLevel){
-		
-		if(enchantLevel > 0 && rand.nextInt(20 + (level * 10)) == 0){
+	public static ItemStack getRandom(FeatureSet features, DynamicRegistryManager reg, Random rand, Difficulty diff, Slot slot, boolean enchant){
+		if(enchant && rand.nextInt(20 + (Difficulty.value(diff) * 10)) == 0){
 			switch(slot){
-			case HEAD: return ItemSpecialty.getRandomItem(Equipment.HELMET, rand, level); 
-			case CHEST: return ItemSpecialty.getRandomItem(Equipment.CHEST, rand, level); 
-			case LEGS: return ItemSpecialty.getRandomItem(Equipment.LEGS, rand, level); 
-			case FEET: return ItemSpecialty.getRandomItem(Equipment.FEET, rand, level);
+			case HEAD: return ItemSpecialty.getRandomItem(reg, Equipment.HELMET, rand, diff); 
+			case CHEST: return ItemSpecialty.getRandomItem(reg, Equipment.CHEST, rand, diff); 
+			case LEGS: return ItemSpecialty.getRandomItem(reg, Equipment.LEGS, rand, diff); 
+			case FEET: return ItemSpecialty.getRandomItem(reg, Equipment.FEET, rand, diff);
 			default: return new ItemStack(Items.STICK);
 			}
 		}
 
-		ItemStack item = get(rand, slot, Quality.getArmourQuality(rand, level));
-		//Trim.addRandom(item, rand);
-		if(enchantLevel > 0) Enchant.enchantItem(rand, item, enchantLevel);
+		ItemStack item = get(rand, slot, Quality.getArmourQuality(rand, diff));
+		if(enchant) Enchant.enchantItem(reg, features, rand, item, Enchant.getLevel(rand, diff));
+		Trim.addRandom(reg, item, rand);
 		return item;
 	}
 	
@@ -118,12 +112,14 @@ public class ItemArmour extends ItemBase {
 				dyeArmor(item, rand.nextInt(256), rand.nextInt(255), rand.nextInt(255));
 				return item;
 			}
-		default: return new ItemStack(Items.STICK);
+		default: return new ItemStack(Items.LEATHER_CHESTPLATE);
 		}
 	}
 	
 	public static ItemStack dyeArmor(ItemStack armor, int r, int g, int b){
+		
 		int color = r << 16 | g << 8 | b << 0;;
+        
 		DyedColorComponent dye = new DyedColorComponent(color, false);
 		armor.set(DataComponentTypes.DYED_COLOR, dye);
 		return armor;
