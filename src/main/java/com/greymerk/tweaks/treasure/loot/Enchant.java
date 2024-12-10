@@ -47,7 +47,7 @@ public enum Enchant {
 	public static final List<Enchant> cursed = List.of(CURSE_OF_VANISHING, CURSE_OF_BINDING);
 	
 	public static RegistryEntry<Enchantment> getEnchant(DynamicRegistryManager reg, Enchant type){
-		Registry<Enchantment> enchantments = reg.get(RegistryKeys.ENCHANTMENT);
+		Registry<Enchantment> enchantments = reg.getOrThrow(RegistryKeys.ENCHANTMENT);
 		String ns = "minecraft";
 		String path = getName(type);
 		Identifier id = Identifier.of(ns, path);

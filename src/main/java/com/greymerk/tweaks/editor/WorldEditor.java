@@ -104,7 +104,7 @@ public class WorldEditor implements IWorldEditor{
 
 	public Coord findSurface(Coord pos) {
 		
-		Coord cursor = new Coord(pos.getX(), world.getTopY(), pos.getZ());
+		Coord cursor = new Coord(pos.getX(), world.getTopYInclusive(), pos.getZ());
 		
 		while(cursor.getY() > 60) {
 			MetaBlock m = this.getBlock(cursor);

@@ -2,7 +2,6 @@ package com.greymerk.tweaks.treasure.loot.potions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -104,7 +103,7 @@ public enum PotionEffect {
 		flist.addAll(effects);
 		flist.add(instance);
 		
-		PotionContentsComponent replace = new PotionContentsComponent(Optional.empty(), contents.customColor(), flist);
+		PotionContentsComponent replace = new PotionContentsComponent(java.util.Optional.empty(), contents.customColor(), flist, contents.customName());
 		potion.set(DataComponentTypes.POTION_CONTENTS, replace);
 	}
 	

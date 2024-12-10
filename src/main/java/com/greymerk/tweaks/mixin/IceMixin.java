@@ -60,7 +60,7 @@ public class IceMixin {
             return;
         }
         world.setBlockState(pos, Blocks.WATER.getDefaultState());
-        world.updateNeighbor(pos, Blocks.WATER, pos);
+        world.updateNeighbors(pos, Blocks.WATER);
     }
 	
 	public boolean nearWater(World world, BlockPos pos) {

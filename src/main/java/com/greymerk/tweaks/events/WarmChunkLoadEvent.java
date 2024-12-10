@@ -24,8 +24,8 @@ public class WarmChunkLoadEvent implements Load{
 		
 		
 		ChunkPos cpos = chunk.getPos();
-		Coord start = new Coord(cpos.getStartX(), world.getTopY(), cpos.getStartZ());
-		Coord end = new Coord(cpos.getEndX(), world.getTopY(), cpos.getEndZ());
+		Coord start = new Coord(cpos.getStartX(), world.getTopYInclusive(), cpos.getStartZ());
+		Coord end = new Coord(cpos.getEndX(), world.getTopYInclusive(), cpos.getEndZ());
 		
 		RectSolid cTop = new RectSolid(BoundingBox.of(start, end));
 		for(Coord c : cTop) {

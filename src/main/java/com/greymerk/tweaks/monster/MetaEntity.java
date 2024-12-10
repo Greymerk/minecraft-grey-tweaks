@@ -26,6 +26,7 @@ public class MetaEntity implements IEntity {
 	@Override
 	public void setSlot(EquipmentSlot slot, ItemStack item) {
 		mob.equipStack(slot, item);
+		mob.setEquipmentDropChance(slot, 0.085f);
 	}
 	
 	public ItemStack getEquippedStack(EquipmentSlot slot) {
