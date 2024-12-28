@@ -1,17 +1,11 @@
-package com.greymerk.tweaks.mixin;
+package com.greymerk.tickers;
 
 import java.util.Arrays;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerbedBlock;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -21,20 +15,18 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.WorldChunk;
 
-@Mixin(ServerWorld.class)
-public class PinkPetalMixin{
-	
+public class PinkPetalTicker implements IChunkTicker {
+
 	private static Block[] canGrow = {
-		Blocks.GRASS_BLOCK, Blocks.PODZOL, Blocks.MYCELIUM, 
-		Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT,
-		Blocks.MOSS_BLOCK, Blocks.MUD, Blocks.MUDDY_MANGROVE_ROOTS,
-		Blocks.FARMLAND
-	};
+			Blocks.GRASS_BLOCK, Blocks.PODZOL, Blocks.MYCELIUM, 
+			Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT,
+			Blocks.MOSS_BLOCK, Blocks.MUD, Blocks.MUDDY_MANGROVE_ROOTS,
+			Blocks.FARMLAND
+		};
 	
-	@Inject(at = @At("HEAD"), method = "tickChunk(Lnet/minecraft/world/chunk/WorldChunk;I)V")
-	private void tickChunk(WorldChunk chunk, int randomTickSpeed, CallbackInfo info) {
-		
-		int petalChance = 200;
+	@Override
+	public void tick(WorldChunk chunk, int randomTickSpeed) {
+		int petalChance = 1000;
 		World world = chunk.getWorld();
 		Random rand = world.getRandom();
 		ChunkPos chunkPos = chunk.getPos();
@@ -54,6 +46,7 @@ public class PinkPetalMixin{
                 petal(world, rand, pos);
             }
         }  	
+
 	}
 	
 	private void petal(World world, Random rand, BlockPos pos) {
@@ -110,4 +103,6 @@ public class PinkPetalMixin{
 			world.setBlockState(pos, Blocks.PINK_PETALS.getDefaultState());
 		}
 	}
+
+
 }

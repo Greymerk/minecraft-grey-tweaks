@@ -5,12 +5,11 @@
   "mixins": [
 	"VillagerMixin",
 	"CatSpawnerMixin",
-	"DecayTickMixin",
-	"PinkPetalMixin",
 	"SnowMixin",
 	"IceMixin",
 	"EquipMobMixin",
-	"MobEnchantMixin"
+	"MobEnchantMixin",
+	"TickChunkMixin"
   ],
   "injectors": {
     "defaultRequire": 1

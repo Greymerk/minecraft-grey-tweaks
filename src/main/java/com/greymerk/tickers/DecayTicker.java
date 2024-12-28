@@ -1,14 +1,8 @@
-package com.greymerk.tweaks.mixin;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+package com.greymerk.tickers;
 
 import com.greymerk.tweaks.DecayBlocks;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -17,12 +11,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.WorldChunk;
 
-@Mixin(ServerWorld.class)
-public class DecayTickMixin{
-	
-	@Inject(at = @At("HEAD"), method = "tickChunk(Lnet/minecraft/world/chunk/WorldChunk;I)V")
-	private void tickChunk(WorldChunk chunk, int randomTickSpeed, CallbackInfo info) {
-		
+public class DecayTicker implements IChunkTicker {
+
+	@Override
+	public void tick(WorldChunk chunk, int randomTickSpeed) {
 		final int DECAY_CHANCE = 10000;
 		World world = chunk.getWorld();
 		Random rand = world.getRandom();
@@ -68,4 +60,5 @@ public class DecayTickMixin{
 				+ Integer.toString(pos.getY()) + ", "
 				+ Integer.toString(pos.getZ()));
 	}
+
 }
