@@ -8,11 +8,17 @@ import com.greymerk.tweaks.treasure.loot.Slot;
 import com.greymerk.tweaks.treasure.loot.trim.Trim;
 
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.type.DyedColorComponent;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
 
 public class ItemArmour extends ItemBase {
@@ -48,7 +54,7 @@ public class ItemArmour extends ItemBase {
 			default: return new ItemStack(Items.STICK);
 			}
 		}
-
+		
 		ItemStack item = get(rand, slot, Quality.getArmourQuality(rand, diff));
 		if(enchant) Enchant.enchantItem(reg, features, rand, item, Enchant.getLevel(rand, diff));
 		Trim.addRandom(reg, item, rand);
@@ -124,6 +130,19 @@ public class ItemArmour extends ItemBase {
 		armor.set(DataComponentTypes.DYED_COLOR, dye);
 		return armor;
 	}
+	
+	public static ItemStack addSpeedAttribute(ItemStack item, double speed) {
+		AttributeModifiersComponent modifiers = createAttributeModifiers(speed);
+		item.set(DataComponentTypes.ATTRIBUTE_MODIFIERS, modifiers);		
+		return item;
+	}
 
+	public static AttributeModifiersComponent createAttributeModifiers(double speed) {
+		final Identifier SPEED_MODIFIER_ID = Identifier.ofVanilla("movement_speed");
+		
+		return AttributeModifiersComponent.builder()
+			.add(EntityAttributes.MOVEMENT_SPEED, new EntityAttributeModifier(SPEED_MODIFIER_ID, speed, Operation.ADD_MULTIPLIED_BASE), AttributeModifierSlot.FEET)
+			.build();
+	}
 
 }

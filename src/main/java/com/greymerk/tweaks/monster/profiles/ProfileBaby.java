@@ -3,7 +3,7 @@ package com.greymerk.tweaks.monster.profiles;
 import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.IMonsterProfile;
-import com.greymerk.tweaks.monster.MonsterProfile;
+import com.greymerk.tweaks.monster.MobType;
 import com.greymerk.tweaks.treasure.loot.provider.ItemNovelty;
 import com.greymerk.tweaks.util.WeightedChoice;
 import com.greymerk.tweaks.util.WeightedRandomizer;
@@ -21,8 +21,8 @@ public class ProfileBaby implements IMonsterProfile {
 	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
 		mob.setChild(true);
 		
-		if(rand.nextInt(4) == 0){
-			MonsterProfile.get(MonsterProfile.VILLAGER).addEquipment(world, rand, diff, mob);
+		if(rand.nextInt(10) == 0){
+			mob.setMobClass(MobType.ZOMBIEVILLAGER, false);
 		}
 		
 		mob.setSlot(EquipmentSlot.MAINHAND, toy(world.getRegistryManager(), rand));

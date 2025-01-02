@@ -12,8 +12,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -23,7 +23,7 @@ public class EntityLoadEvent implements Load{
 
 	@Override
 	public void onLoad(Entity entity, ServerWorld world) {
-		if(!(entity instanceof SkeletonEntity || entity instanceof ZombieEntity)) return;
+		if(!(entity instanceof AbstractSkeletonEntity || entity instanceof ZombieEntity)) return;
 		MobEntity mob = (MobEntity)entity;
 		
 		Map<RegistryEntry<StatusEffect>, StatusEffectInstance> effects = mob.getActiveStatusEffects();

@@ -3,10 +3,15 @@ package com.greymerk.tweaks.treasure.loot.provider;
 
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.treasure.loot.Loot;
+import com.greymerk.tweaks.treasure.loot.LootAttribute;
+import com.greymerk.tweaks.treasure.loot.trim.Trim;
+import com.greymerk.tweaks.treasure.loot.trim.TrimMaterial;
+import com.greymerk.tweaks.treasure.loot.trim.TrimPattern;
 import com.greymerk.tweaks.util.IWeighted;
 import com.greymerk.tweaks.util.TextFormat;
 import com.greymerk.tweaks.util.WeightedChoice;
 
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -14,9 +19,9 @@ import net.minecraft.util.Rarity;
 
 public enum ItemNovelty {
 
-	GREYMERK, NULL, ZISTEAU, AVIDYA, ASHLEA, KURT, 
+	GREYMERK, NULL, ZISTEAU, AVIDYA, ASHLEA, TRAVELERS, 
 	CLEO, WINDFORCE, RLEAHY, VECHS, GENERIKB, FOURLES,
-	BURNING;
+	BURNING, RUNNERS;
 		
 	public static IWeighted<ItemStack> get(DynamicRegistryManager reg, ItemNovelty choice, int weight){
 		return new WeightedChoice<ItemStack>(getItem(reg, choice), weight);
@@ -36,6 +41,7 @@ public enum ItemNovelty {
 			item.addEnchantment(Enchant.getEnchant(reg, Enchant.SHARPNESS), 3);
 			item.addEnchantment(Enchant.getEnchant(reg, Enchant.KNOCKBACK), 1);
 			item.addEnchantment(Enchant.getEnchant(reg, Enchant.UNBREAKING), 2);
+			LootAttribute.addAttribute(item, EquipmentSlot.MAINHAND, LootAttribute.ATTACK_SPEED, 1);
 			return item;
 		case NULL:
 			item = new ItemStack(Items.NETHERITE_SWORD);
@@ -67,16 +73,6 @@ public enum ItemNovelty {
 			Loot.setItemName(item, "Oatmeal Cookie");
 			Loot.setItemLore(item, "Perfect for elevensies", TextFormat.DARKGREEN);
 			Loot.setRarity(item, Rarity.EPIC);
-			return item;
-		case KURT:
-			item = new ItemStack(Items.LEATHER_BOOTS);
-			Loot.setItemName(item, "Farland Travellers");
-			Loot.setItemLore(item, "Indeed!", TextFormat.DARKGREEN);
-			Loot.setRarity(item, Rarity.EPIC);
-			item.addEnchantment(Enchant.getEnchant(reg, Enchant.PROTECTION), 3);
-			item.addEnchantment(Enchant.getEnchant(reg, Enchant.FEATHERFALLING), 2);
-			item.addEnchantment(Enchant.getEnchant(reg, Enchant.UNBREAKING), 3);
-			ItemArmour.dyeArmor(item, 165, 42, 42);
 			return item;
 		case CLEO:
 			item = new ItemStack(Items.COD);
@@ -130,6 +126,25 @@ public enum ItemNovelty {
 			Loot.setItemName(item, "Burning Bow");
 			Loot.setRarity(item, Rarity.EPIC);
 			item.addEnchantment(Enchant.getEnchant(reg, Enchant.FLAME), 1);
+			return item;
+		case RUNNERS:
+			item = new ItemStack(Items.LEATHER_BOOTS);
+			Loot.setItemName(item, "Dungeon Runners");
+			Loot.setRarity(item, Rarity.EPIC);
+			ItemArmour.dyeArmor(item, 220, 200, 240);
+			LootAttribute.addAttribute(item, EquipmentSlot.FEET, LootAttribute.MOVEMENT_SPEED, 0.2);
+			Trim.set(reg, item, TrimPattern.COAST, TrimMaterial.LAPIS);
+			return item;
+		case TRAVELERS:
+			item = new ItemStack(Items.LEATHER_BOOTS);
+			Loot.setItemName(item, "Farland Travelers");
+			Loot.setRarity(item, Rarity.EPIC);
+			LootAttribute.addAttribute(item, EquipmentSlot.FEET, LootAttribute.MOVEMENT_SPEED, 0.4);
+			item.addEnchantment(Enchant.getEnchant(reg, Enchant.PROTECTION), 3);
+			item.addEnchantment(Enchant.getEnchant(reg, Enchant.FEATHERFALLING), 2);
+			item.addEnchantment(Enchant.getEnchant(reg, Enchant.UNBREAKING), 3);
+			ItemArmour.dyeArmor(item, 165, 42, 42);
+			Trim.set(reg, item, TrimPattern.DUNE, TrimMaterial.GOLD);
 			return item;
 		default:
 			return new ItemStack(Items.STICK);

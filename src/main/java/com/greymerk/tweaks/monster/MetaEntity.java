@@ -68,7 +68,7 @@ public class MetaEntity implements IEntity {
 
 	@Override
 	public boolean instance(Class<?> type) {
-		return type.isInstance(this.mob);
+		return type.isInstance(this.mob);	
 	}
 
 	@Override
