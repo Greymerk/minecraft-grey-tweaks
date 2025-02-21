@@ -1,5 +1,6 @@
 package com.greymerk.tweaks.events;
 
+import com.greymerk.tweaks.config.Config;
 import com.greymerk.tweaks.editor.Cardinal;
 import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
@@ -22,6 +23,7 @@ public class WarmChunkLoadEvent implements Load{
 	@Override
 	public void onChunkLoad(ServerWorld world, WorldChunk chunk) {
 		
+		if(!Config.ofBoolean(Config.SUMMER)) return;
 		
 		ChunkPos cpos = chunk.getPos();
 		Coord start = new Coord(cpos.getStartX(), world.getTopYInclusive(), cpos.getStartZ());
