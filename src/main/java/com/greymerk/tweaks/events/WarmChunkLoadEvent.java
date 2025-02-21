@@ -4,7 +4,6 @@ import com.greymerk.tweaks.config.Config;
 import com.greymerk.tweaks.editor.Cardinal;
 import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
-import com.greymerk.tweaks.editor.shapes.RectSolid;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents.Load;
 import net.minecraft.block.Block;
@@ -12,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -25,17 +25,21 @@ public class WarmChunkLoadEvent implements Load{
 		
 		if(!Config.ofBoolean(Config.SUMMER)) return;
 		
+		chunkTopBox(world, chunk).forEach(c -> {
+			Coord surface = findSurface(chunk, c);
+			if(isWarmBiome(world, surface)){
+				forceMelt(chunk, surface);
+			}
+		});
+	}
+	
+
+
+	private BoundingBox chunkTopBox(ServerWorld world, WorldChunk chunk) {
 		ChunkPos cpos = chunk.getPos();
 		Coord start = new Coord(cpos.getStartX(), world.getTopYInclusive(), cpos.getStartZ());
 		Coord end = new Coord(cpos.getEndX(), world.getTopYInclusive(), cpos.getEndZ());
-		
-		RectSolid cTop = new RectSolid(BoundingBox.of(start, end));
-		for(Coord c : cTop) {
-			Coord surface = findSurface(chunk, c);
-			if(isWarmBiome(world, surface)){
-				forceMelt(chunk, surface);	
-			}
-		}
+		return BoundingBox.of(start, end);
 	}
 	
 	private Coord findSurface(WorldChunk chunk, Coord top) {
@@ -53,35 +57,12 @@ public class WarmChunkLoadEvent implements Load{
 	
 	private boolean isLeaves(WorldChunk chunk, Coord pos) {
 		BlockState bs = chunk.getBlockState(pos.getBlockPos());
-		Block b = bs.getBlock();
-		
-		if(	   b == Blocks.ACACIA_LEAVES
-			|| b == Blocks.AZALEA_LEAVES
-			|| b == Blocks.BIRCH_LEAVES
-			|| b == Blocks.CHERRY_LEAVES
-			|| b == Blocks.DARK_OAK_LEAVES
-			|| b == Blocks.FLOWERING_AZALEA_LEAVES
-			|| b == Blocks.JUNGLE_LEAVES
-			|| b == Blocks.MANGROVE_LEAVES
-			|| b == Blocks.OAK_LEAVES
-			|| b == Blocks.SPRUCE_LEAVES) {
-			return true;
-		}
-		
-		return false;
+		return bs.isIn(BlockTags.LEAVES);
 	}
 	
 	private boolean isAir(WorldChunk chunk, Coord pos) {
 		BlockState bs = chunk.getBlockState(pos.getBlockPos());
-		Block b = bs.getBlock();
-		
-		if(	   b == Blocks.AIR 
-			|| b == Blocks.CAVE_AIR
-			|| b == Blocks.VOID_AIR) {
-			return true;
-		}
-		
-		return false;
+		return bs.isIn(BlockTags.AIR);
 	}
 	
 	private boolean isWarmBiome(ServerWorld world, Coord pos) {
@@ -109,23 +90,24 @@ public class WarmChunkLoadEvent implements Load{
 	
 	private void meltSnow(WorldChunk chunk, Coord pos) {
 		BlockPos bp = pos.getBlockPos();
-		
 		chunk.setBlockState(bp, Blocks.AIR.getDefaultState(), false);
-		
 		Coord under = pos.copy().add(Cardinal.DOWN);
-		BlockPos ubp = under.getBlockPos();
-		BlockState ubs = chunk.getBlockState(ubp);
-		
-		if(ubs.getBlock() == Blocks.GRASS_BLOCK) {
-			chunk.setBlockState(ubp, Blocks.GRASS_BLOCK.getDefaultState(), false);
+		fixSnowSurface(chunk, under);
+	}
+	
+	private void fixSnowSurface(WorldChunk chunk, Coord surface) {
+		BlockPos bp = surface.getBlockPos();
+		BlockState bs = chunk.getBlockState(bp);
+		if(bs.getBlock() == Blocks.GRASS_BLOCK) {
+			chunk.setBlockState(bp, Blocks.GRASS_BLOCK.getDefaultState(), false);
 		}
 		
-		if(ubs.getBlock() == Blocks.MYCELIUM) {
-			chunk.setBlockState(ubp, Blocks.MYCELIUM.getDefaultState(), false);
+		if(bs.getBlock() == Blocks.MYCELIUM) {
+			chunk.setBlockState(bp, Blocks.MYCELIUM.getDefaultState(), false);
 		}
 		
-		if(ubs.getBlock() == Blocks.PODZOL) {
-			chunk.setBlockState(ubp, Blocks.PODZOL.getDefaultState(), false);
+		if(bs.getBlock() == Blocks.PODZOL) {
+			chunk.setBlockState(bp, Blocks.PODZOL.getDefaultState(), false);
 		}
 	}
 }

@@ -15,7 +15,7 @@ public class ElytraEvent implements Allow{
 
 	@Override
 	public boolean allowElytraFlight(LivingEntity entity) {
-		// Whether or not to allow outside of the End dimension.
+		// Whether or not to allow elytra flight outside of the End dimension.
 		
 		
 		World world = entity.getEntityWorld();
