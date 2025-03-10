@@ -183,6 +183,12 @@ public class WorldEditor implements IWorldEditor{
 		return world.getServer().getGameRules();
 	}
 	
+	public ServerWorld getServerWorld() {
+		MinecraftServer server = this.world.getServer();
+		ServerWorld sw = server.getOverworld();
+		return sw;
+	}
+	
 	/*
 	public RoguelikeState getState() {
 		return RoguelikeState.getServerState(world.getServer());

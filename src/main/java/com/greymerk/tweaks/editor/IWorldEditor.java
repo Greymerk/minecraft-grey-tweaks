@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.GameRules;
 
@@ -47,6 +48,8 @@ public interface IWorldEditor {
 	public Path getWorldDirectory();
 	
 	public GameRules getGameRules();
+	
+	public ServerWorld getServerWorld();
 	
 	//public RoguelikeState getState();
 

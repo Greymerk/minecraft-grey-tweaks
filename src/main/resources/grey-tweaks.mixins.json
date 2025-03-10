@@ -9,7 +9,8 @@
 	"IceMixin",
 	"EquipMobMixin",
 	"MobEnchantMixin",
-	"TickChunkMixin"
+	"TickChunkMixin",
+	"BeeEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
