@@ -1,10 +1,5 @@
 package com.greymerk.tweaks;
 
-
-
-
-
-
 import java.util.logging.Logger;
 
 import com.greymerk.gamerules.GameRuleTweaks;
@@ -18,6 +13,7 @@ import com.greymerk.tweaks.events.ElytraEvent;
 import com.greymerk.tweaks.events.EntityLoadEvent;
 import com.greymerk.tweaks.events.EntityRegenTick;
 import com.greymerk.tweaks.events.WarmChunkLoadEvent;
+import com.greymerk.tweaks.trades.CustomWandererTrades;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
@@ -46,6 +42,8 @@ public class GreyTweaks implements ModInitializer {
 		tickers.add(new PinkPetalTicker());
 		tickers.add(new DecayTicker());
 		tickers.add(new ResinTicker());
+		
+		CustomWandererTrades.registerCustomTrades();
 		
 		ConfigSettings.init(new ConfigFile());
 	}

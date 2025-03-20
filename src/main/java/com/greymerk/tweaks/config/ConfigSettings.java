@@ -43,8 +43,7 @@ public class ConfigSettings {
 	}
 
 	public JsonObject asJson() {
-		JsonObject json = new JsonObject();
-		
+		JsonObject json = new JsonObject();		
 		json.addProperty(Config.DEBUG.keyOf(), this.get(MixedKey.ofBoolean(Config.DEBUG.keyOf())));
 		json.addProperty(Config.SUMMER.keyOf(), this.get(MixedKey.ofBoolean(Config.SUMMER.keyOf())));
 		return json;
