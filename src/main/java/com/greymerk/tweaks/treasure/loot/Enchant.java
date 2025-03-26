@@ -181,7 +181,7 @@ public enum Enchant {
 		}
 
 		for (EnchantmentLevelEntry toAdd : enchants){
-			item.addEnchantment(toAdd.enchantment, toAdd.level);
+			item.addEnchantment(toAdd.enchantment(), toAdd.level());
 		}
 		
 		return item;

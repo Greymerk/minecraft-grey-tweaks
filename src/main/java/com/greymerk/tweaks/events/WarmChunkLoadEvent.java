@@ -79,7 +79,7 @@ public class WarmChunkLoadEvent implements Load{
 		
 		Block b = bs.getBlock();
 		if(b == Blocks.ICE) {
-			chunk.setBlockState(bp, Blocks.WATER.getDefaultState(), false);
+			chunk.setBlockState(bp, Blocks.WATER.getDefaultState());
 		}
 		
 		if(bs.contains(SnowBlock.LAYERS)) {
@@ -90,7 +90,7 @@ public class WarmChunkLoadEvent implements Load{
 	
 	private void meltSnow(WorldChunk chunk, Coord pos) {
 		BlockPos bp = pos.getBlockPos();
-		chunk.setBlockState(bp, Blocks.AIR.getDefaultState(), false);
+		chunk.setBlockState(bp, Blocks.AIR.getDefaultState());
 		Coord under = pos.copy().add(Cardinal.DOWN);
 		fixSnowSurface(chunk, under);
 	}
@@ -99,15 +99,15 @@ public class WarmChunkLoadEvent implements Load{
 		BlockPos bp = surface.getBlockPos();
 		BlockState bs = chunk.getBlockState(bp);
 		if(bs.getBlock() == Blocks.GRASS_BLOCK) {
-			chunk.setBlockState(bp, Blocks.GRASS_BLOCK.getDefaultState(), false);
+			chunk.setBlockState(bp, Blocks.GRASS_BLOCK.getDefaultState());
 		}
 		
 		if(bs.getBlock() == Blocks.MYCELIUM) {
-			chunk.setBlockState(bp, Blocks.MYCELIUM.getDefaultState(), false);
+			chunk.setBlockState(bp, Blocks.MYCELIUM.getDefaultState());
 		}
 		
 		if(bs.getBlock() == Blocks.PODZOL) {
-			chunk.setBlockState(bp, Blocks.PODZOL.getDefaultState(), false);
+			chunk.setBlockState(bp, Blocks.PODZOL.getDefaultState());
 		}
 	}
 }

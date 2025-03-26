@@ -4,13 +4,13 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
 	"VillagerMixin",
-	"CatSpawnerMixin",
 	"SnowMixin",
 	"IceMixin",
 	"EquipMobMixin",
 	"MobEnchantMixin",
 	"TickChunkMixin",
-	"BeeEntityMixin"
+	"BeeEntityMixin",
+	"CatSpawnerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

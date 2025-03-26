@@ -45,8 +45,8 @@ public class BoundingBox implements IBounded, IShape{
 	}
 	
 	public BoundingBox(NbtCompound tag) {
-		this.start = Coord.of(tag.getCompound("start"));
-		this.end = Coord.of(tag.getCompound("end"));
+		this.start = Coord.of(tag.getCompound("start").get());
+		this.end = Coord.of(tag.getCompound("end").get());
 		this.correct();
 	}
 

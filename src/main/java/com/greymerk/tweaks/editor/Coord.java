@@ -33,9 +33,9 @@ public class Coord {
 	}
 	
 	public static Coord of(NbtCompound tag) {
-		int x = tag.getInt("x");
-		int y = tag.getInt("y");
-		int z = tag.getInt("z");
+		int x = tag.getInt("x").get();
+		int y = tag.getInt("y").get();
+		int z = tag.getInt("z").get();
 		return new Coord(x, y, z);
 	}
 	
