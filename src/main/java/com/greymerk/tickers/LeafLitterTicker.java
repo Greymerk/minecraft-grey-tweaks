@@ -24,14 +24,14 @@ public class LeafLitterTicker implements IChunkTicker {
 			Blocks.OAK_LEAVES, Blocks.BIRCH_LEAVES, Blocks.ACACIA_LEAVES,
 			Blocks.PALE_OAK_LEAVES, Blocks.DARK_OAK_LEAVES);
 	
-	public static final int MAX_LEAVES = 24;
+	public static final int MAX_LEAVES = 12;
 	
 	
 	@Override
 	public void tick(WorldChunk chunk, int randomTickSpeed) {
 		ChunkHelper.processRandomTicker(chunk, randomTickSpeed, (world, pos) -> {
 			Random rand = world.random;
-			if(rand.nextInt(1000) != 0) return;
+			if(rand.nextInt(50) != 0) return;
 			leaf(world, rand, pos);
 		});
 	}
@@ -60,7 +60,11 @@ public class LeafLitterTicker implements IChunkTicker {
 	private void placeLeaf(World world, BlockPos pos) {
 
 		if(world.isAir(pos)) {
-			world.setBlockState(pos, Blocks.LEAF_LITTER.getDefaultState());
+			Cardinal dir = Cardinal.randDir(world.random);
+			Direction facing = Cardinal.facing(dir);
+			System.out.println(dir.name());
+			world.setBlockState(pos, Blocks.LEAF_LITTER.getDefaultState()
+					.with(LeafLitterBlock.HORIZONTAL_FACING, facing));
 			return;
 		}
 		
@@ -78,7 +82,7 @@ public class LeafLitterTicker implements IChunkTicker {
 	private boolean leavesAbove(World world, BlockPos pos, int range) {
 		BoundingBox bb = BoundingBox.of(Coord.of(pos))
 				.grow(Cardinal.directions, range)
-				.grow(Cardinal.UP, 8)
+				.grow(Cardinal.UP, 5)
 				.add(Cardinal.UP, 2);
 			for(Coord c : bb) {
 				Block toCheck = world.getBlockState(c.getBlockPos()).getBlock();

@@ -98,6 +98,10 @@ public enum Cardinal {
 		return dirs;
 	}
 
+	public static Cardinal randDir(Random rand) {
+		return directions.get(rand.nextInt(directions.size()));
+	}
+	
 	public static Cardinal of(Direction direction) {
 		switch(direction) {
 		case DOWN: return Cardinal.DOWN;
