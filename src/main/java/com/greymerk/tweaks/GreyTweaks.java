@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.greymerk.gamerules.GameRuleTweaks;
 import com.greymerk.tickers.ChunkTickManager;
 import com.greymerk.tickers.DecayTicker;
+import com.greymerk.tickers.LeafLitterTicker;
 import com.greymerk.tickers.PinkPetalTicker;
 import com.greymerk.tickers.ResinTicker;
 import com.greymerk.tweaks.config.ConfigFile;
@@ -42,6 +43,7 @@ public class GreyTweaks implements ModInitializer {
 		tickers.add(new PinkPetalTicker());
 		tickers.add(new DecayTicker());
 		tickers.add(new ResinTicker());
+		tickers.add(new LeafLitterTicker());
 		
 		CustomWandererTrades.registerCustomTrades();
 		

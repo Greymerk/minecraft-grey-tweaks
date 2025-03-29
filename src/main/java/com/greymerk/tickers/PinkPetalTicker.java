@@ -1,52 +1,39 @@
 package com.greymerk.tickers;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.greymerk.tweaks.editor.Cardinal;
+import com.greymerk.tweaks.editor.Coord;
+import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
+import com.greymerk.tweaks.util.ChunkHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerbedBlock;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.WorldChunk;
 
 public class PinkPetalTicker implements IChunkTicker {
 
-	private static Block[] canGrow = {
-			Blocks.GRASS_BLOCK, Blocks.PODZOL, Blocks.MYCELIUM, 
-			Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT,
-			Blocks.MOSS_BLOCK, Blocks.MUD, Blocks.MUDDY_MANGROVE_ROOTS,
-			Blocks.FARMLAND
-		};
+	private static final List<Block> canGrow = List.of(
+		Blocks.GRASS_BLOCK, Blocks.PODZOL, Blocks.MYCELIUM, 
+		Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.ROOTED_DIRT,
+		Blocks.MOSS_BLOCK, Blocks.MUD, Blocks.MUDDY_MANGROVE_ROOTS,
+		Blocks.FARMLAND
+	);
 	
 	@Override
 	public void tick(WorldChunk chunk, int randomTickSpeed) {
-		int petalChance = 1000;
-		World world = chunk.getWorld();
-		Random rand = world.getRandom();
-		ChunkPos chunkPos = chunk.getPos();
-        int worldX = chunkPos.getStartX();
-        int worldZ = chunkPos.getStartZ();
-        
-        if (randomTickSpeed <= 0) return;
-        if (rand.nextInt(petalChance) != 0) return;
-        
-        ChunkSection[] chunkSections = chunk.getSectionArray();
-        
-        for (int i = 0; i < chunkSections.length; ++i) {
-            int sectionCoord = chunk.sectionIndexToCoord(i);
-            int sectionY = ChunkSectionPos.getBlockCoord(sectionCoord);
-            for (int l = 0; l < randomTickSpeed; ++l) {
-                BlockPos pos = world.getRandomPosInChunk(worldX, sectionY, worldZ, 15);
-                petal(world, rand, pos);
-            }
-        }  	
-
+		ChunkHelper.processRandomTicker(chunk, randomTickSpeed, (world, pos) -> {
+			Random rand = world.random;
+			if(rand.nextInt(1000) != 0) return;
+			petal(world, rand, pos);
+		});
 	}
 	
 	private void petal(World world, Random rand, BlockPos pos) {
@@ -54,7 +41,7 @@ public class PinkPetalTicker implements IChunkTicker {
 		if(daylight == 0) return;
 		
 		Block blockBelow = world.getBlockState(pos.down()).getBlock();
-		if(!Arrays.asList(canGrow).contains(blockBelow)) return;
+		if(!canGrow.contains(blockBelow)) return;
 		if(!isCherryAbove(world, pos, 3)) return;
 		if(countNearbyPetals(world, pos, 2) > 5) return;
 		
@@ -62,32 +49,30 @@ public class PinkPetalTicker implements IChunkTicker {
 	}
 	
 	private boolean isCherryAbove(World world, BlockPos pos, int range) {
-		for(int x = pos.getX() - range; x < pos.getX() + range; ++x) {
-			for(int y = pos.getY() + 2; y < pos.getY() + 8; ++y) {
-				for(int z = pos.getZ() - range; z < pos.getZ() + range; ++z) {
-					BlockPos bp = new BlockPos(x, y, z);
-					Block toCheck = world.getBlockState(bp).getBlock();
-					if(toCheck == Blocks.CHERRY_LEAVES) return true;	
-				}
-			}
-		}
+		BoundingBox bb = BoundingBox.of(Coord.of(pos))
+			.grow(Cardinal.directions, range)
+			.grow(Cardinal.UP, 6)
+			.add(Cardinal.UP, 2);
+		for(Coord c : bb) {
+			Block toCheck = world.getBlockState(c.getBlockPos()).getBlock();
+			if(toCheck == Blocks.CHERRY_LEAVES) return true;
+		};
+
 		return false;
 	}
 	
 	public int countNearbyPetals(World world, BlockPos pos, int range) {
-		int petalCount = 0;
-		for(int x = pos.getX() - range; x < pos.getX() + range; ++x) {
-			for(int y = pos.getY() - range; y < pos.getY() + range; ++y) {
-				for(int z = pos.getZ() - range; z < pos.getZ() + range; ++z) {
-					BlockPos bp = new BlockPos(x, y, z);
-					BlockState toCheck = world.getBlockState(bp);
-					if(toCheck.getBlock() == Blocks.PINK_PETALS) {
-						petalCount += toCheck.get(FlowerbedBlock.FLOWER_AMOUNT);
-					}
+		AtomicInteger count = new AtomicInteger(0);
+		BoundingBox.of(Coord.of(pos))
+			.grow(Cardinal.all, range)
+			.forEach(c -> {
+				BlockState toCheck = world.getBlockState(c.getBlockPos());
+				if(toCheck.getBlock() == Blocks.PINK_PETALS) {
+					count.set(count.get() + toCheck.get(FlowerbedBlock.FLOWER_AMOUNT));
+					
 				}
-			}
-		}
-		return petalCount;
+			});
+		return count.get();
 	}
 	
 	private void addPetals(World world, BlockPos pos) {
