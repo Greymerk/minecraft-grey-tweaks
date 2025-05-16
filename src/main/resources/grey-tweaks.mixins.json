@@ -10,7 +10,8 @@
 	"MobEnchantMixin",
 	"TickChunkMixin",
 	"BeeEntityMixin",
-	"CatSpawnerMixin"
+	"CatSpawnerMixin",
+	"AnvilNextCostMixin"
   ],
   "injectors": {
     "defaultRequire": 1

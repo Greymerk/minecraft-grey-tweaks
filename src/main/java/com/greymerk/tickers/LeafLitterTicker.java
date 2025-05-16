@@ -31,7 +31,7 @@ public class LeafLitterTicker implements IChunkTicker {
 	public void tick(WorldChunk chunk, int randomTickSpeed) {
 		ChunkHelper.processRandomTicker(chunk, randomTickSpeed, (world, pos) -> {
 			Random rand = world.random;
-			if(rand.nextInt(50) != 0) return;
+			if(rand.nextInt(2000) != 0) return;
 			leaf(world, rand, pos);
 		});
 	}
@@ -62,7 +62,6 @@ public class LeafLitterTicker implements IChunkTicker {
 		if(world.isAir(pos)) {
 			Cardinal dir = Cardinal.randDir(world.random);
 			Direction facing = Cardinal.facing(dir);
-			System.out.println(dir.name());
 			world.setBlockState(pos, Blocks.LEAF_LITTER.getDefaultState()
 					.with(LeafLitterBlock.HORIZONTAL_FACING, facing));
 			return;
