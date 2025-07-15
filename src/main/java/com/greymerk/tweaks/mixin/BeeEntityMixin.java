@@ -59,7 +59,7 @@ public class BeeEntityMixin {
     	
     	Coord flowerPos = Coord.of(bee.getFlowerPos());
         
-    	World world = bee.getEntityWorld();
+    	World world = bee.getWorld();
     	if(!isOverworld(world)) {
     		return;
     	}

@@ -11,8 +11,10 @@ import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.block.spawner.MobSpawnerLogic;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.storage.NbtReadView;
+import net.minecraft.storage.ReadView;
+import net.minecraft.util.ErrorReporter;
 import net.minecraft.util.math.random.Random;
-
 import net.minecraft.world.World;
 
 
@@ -43,7 +45,8 @@ public class Spawnable {
 		MobSpawnerBlockEntity spawner = (MobSpawnerBlockEntity)be;
 		MobSpawnerLogic logic = spawner.getLogic();
 		spawner.setEntityType(Spawner.getType(type), rand);
-		logic.readNbt(world, pos.getBlockPos(), nbt);
+		ReadView view = NbtReadView.create(ErrorReporter.EMPTY, editor.getRegistryManager(), nbt);
+		logic.readData(world, pos.getBlockPos(), view);
 		spawner.markDirty();
 	}
 	

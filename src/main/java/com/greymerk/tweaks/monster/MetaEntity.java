@@ -37,7 +37,7 @@ public class MetaEntity implements IEntity {
 	public void setMobClass(MobType type, boolean clear) {
 		
 		LivingEntity oldMob = (LivingEntity)this.mob;
-		LivingEntity newMob = (LivingEntity)MobType.getEntity(this.mob.getEntityWorld(), type);
+		LivingEntity newMob = (LivingEntity)MobType.getEntity(this.mob.getWorld(), type);
 		newMob.copyPositionAndRotation(oldMob);
 		this.mob = (MobEntity)newMob;
 		
@@ -57,7 +57,7 @@ public class MetaEntity implements IEntity {
 		}
 		
 		oldMob.remove(RemovalReason.DISCARDED);
-		newMob.getEntityWorld().spawnEntity(newMob);
+		newMob.getWorld().spawnEntity(newMob);
 	}
 
 	@Override
