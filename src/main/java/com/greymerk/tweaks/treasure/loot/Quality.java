@@ -12,46 +12,49 @@ import net.minecraft.util.math.random.Random;
 
 public enum Quality{
 	
-	WOOD, STONE, IRON, GOLD, DIAMOND, NETHERITE;
+	WOOD, STONE, COPPER, IRON, GOLD, DIAMOND, NETHERITE;
 	
 	private static Map<Difficulty, IWeighted<Quality>> armourQuality;
 	private static Map<Difficulty, IWeighted<Quality>> weaponQuality;
 	private static Map<Difficulty, IWeighted<Quality>> toolQuality;
+	
 	static {
 		armourQuality = new HashMap<Difficulty, IWeighted<Quality>>();
 		weaponQuality = new HashMap<Difficulty, IWeighted<Quality>>();
 		toolQuality = new HashMap<Difficulty, IWeighted<Quality>>();
 		
-		armourQuality.put(Difficulty.EASIEST, 	create(120, 60, 40, 10, 2, 1));
-		armourQuality.put(Difficulty.EASY, 		create(80, 60, 60, 10, 2, 1));
-		armourQuality.put(Difficulty.MEDIUM, 	create(20, 80, 80, 20, 10, 1));
-		armourQuality.put(Difficulty.HARD, 		create(20, 30, 100, 10, 10, 1));
-		armourQuality.put(Difficulty.HARDEST, 	create(10, 20, 60, 5, 20, 1));
+		armourQuality.put(Difficulty.EASIEST, 	create(120, 50, 30, 20, 10, 2, 1));
+		armourQuality.put(Difficulty.EASY, 		create(80, 50, 40, 30, 10, 2, 1));
+		armourQuality.put(Difficulty.MEDIUM, 	create(20, 60, 50, 40, 20, 10, 1));
+		armourQuality.put(Difficulty.HARD, 		create(20, 20, 30, 80, 10, 10, 1));
+		armourQuality.put(Difficulty.HARDEST, 	create(5, 10, 20, 40, 5, 20, 1));
 		
-		weaponQuality.put(Difficulty.EASIEST, 	create(20, 160, 40, 2, 2, 1));
-		weaponQuality.put(Difficulty.EASY, 		create(20, 120, 60, 2, 5, 1));
-		weaponQuality.put(Difficulty.MEDIUM, 	create(20, 80, 160, 5, 10, 1));
-		weaponQuality.put(Difficulty.HARD, 		create(10, 40, 120, 5, 10, 1));
-		weaponQuality.put(Difficulty.HARDEST, 	create(5, 5, 80, 5, 10, 1));
+		weaponQuality.put(Difficulty.EASIEST, 	create(20, 140, 20, 40, 2, 2, 1));
+		weaponQuality.put(Difficulty.EASY, 		create(20, 100, 30, 60, 2, 5, 1));
+		weaponQuality.put(Difficulty.MEDIUM, 	create(20, 60, 40, 140, 5, 10, 1));
+		weaponQuality.put(Difficulty.HARD, 		create(10, 30, 20, 100, 5, 10, 1));
+		weaponQuality.put(Difficulty.HARDEST, 	create(5, 5, 5, 80, 5, 10, 1));
 		
-		toolQuality.put(Difficulty.EASIEST, 	create(30, 200, 100, 2, 2, 1));
-		toolQuality.put(Difficulty.EASY, 		create(20, 120, 200, 2, 10, 1));
-		toolQuality.put(Difficulty.MEDIUM, 		create(5, 80, 160, 5, 10, 1));
-		toolQuality.put(Difficulty.HARD, 		create(2, 20, 120, 5, 20, 1));
-		toolQuality.put(Difficulty.HARDEST, 	create(1, 5, 80, 5, 20, 1));
+		toolQuality.put(Difficulty.EASIEST, 	create(30, 150, 50, 100, 2, 2, 1));
+		toolQuality.put(Difficulty.EASY, 		create(20, 100, 50, 180, 2, 10, 1));
+		toolQuality.put(Difficulty.MEDIUM, 		create(5, 60, 40, 140, 5, 10, 1));
+		toolQuality.put(Difficulty.HARD, 		create(2, 20, 30, 100, 5, 20, 1));
+		toolQuality.put(Difficulty.HARDEST, 	create(1, 5, 20, 80, 5, 20, 1));
+		
 	}
 
-	private static WeightedRandomizer<Quality> create(int wood, int stone, int iron, int gold, int diamond, int netherite){
+	private static WeightedRandomizer<Quality> create(int wood, int stone, int copper, int iron, int gold, int diamond, int netherite){
 		WeightedRandomizer<Quality> randomizer = new WeightedRandomizer<Quality>();
 		randomizer.add(new WeightedChoice<Quality>(WOOD, wood));
 		randomizer.add(new WeightedChoice<Quality>(STONE, stone));
+		randomizer.add(new WeightedChoice<Quality>(COPPER, copper));
 		randomizer.add(new WeightedChoice<Quality>(IRON, iron));
 		randomizer.add(new WeightedChoice<Quality>(GOLD, gold));
 		randomizer.add(new WeightedChoice<Quality>(DIAMOND, diamond));
 		randomizer.add(new WeightedChoice<Quality>(NETHERITE, netherite));
 		return randomizer;
 	}
-
+	
 	public static Quality get(Random rand, Difficulty diff, Equipment type) {
 		
 		switch(type){
@@ -70,7 +73,6 @@ public enum Quality{
 		}
 		return null;
 	}
-	
 	public static Quality get(Difficulty diff){
 		switch(diff){
 		case EASIEST: return Quality.WOOD;

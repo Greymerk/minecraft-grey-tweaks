@@ -59,12 +59,12 @@ public class BeeEntityMixin {
     	
     	Coord flowerPos = Coord.of(bee.getFlowerPos());
         
-    	World world = bee.getWorld();
+    	World world = bee.getEntityWorld();
     	if(!isOverworld(world)) {
     		return;
     	}
     	
-    	Random rand = new CheckedRandom(Objects.hash(flowerPos, bee.getWorld().getTime()));
+    	Random rand = new CheckedRandom(Objects.hash(flowerPos, bee.getEntityWorld().getTime()));
     	IWorldEditor editor = new WorldEditor(world);
     	
     	MetaBlock flower = editor.getBlock(flowerPos);

@@ -54,7 +54,6 @@ public class ItemTool extends ItemBase {
 		}
 	}
 	
-
 	private static ItemStack pickAxe(Random rand, Difficulty diff) {
 		Quality quality = Quality.getToolQuality(rand, diff);
 		switch (quality) {
@@ -62,6 +61,7 @@ public class ItemTool extends ItemBase {
 		case DIAMOND: return new ItemStack(Items.DIAMOND_AXE);
 		case GOLD: return new ItemStack(Items.GOLDEN_AXE);
 		case IRON: return new ItemStack(Items.IRON_AXE);
+		case COPPER: return new ItemStack(Items.COPPER_AXE);
 		case STONE: return new ItemStack(Items.STONE_AXE);
 		default: return new ItemStack(Items.WOODEN_AXE);
 		}
@@ -75,6 +75,7 @@ public class ItemTool extends ItemBase {
 		case DIAMOND: return new ItemStack(Items.DIAMOND_SHOVEL);
 		case GOLD: return new ItemStack(Items.GOLDEN_SHOVEL);
 		case IRON: return new ItemStack(Items.IRON_SHOVEL);
+		case COPPER: return new ItemStack(Items.COPPER_SHOVEL);
 		case STONE: return new ItemStack(Items.STONE_SHOVEL);
 		default: return new ItemStack(Items.WOODEN_SHOVEL);
 		}
@@ -88,11 +89,9 @@ public class ItemTool extends ItemBase {
 		case DIAMOND: return new ItemStack(Items.DIAMOND_PICKAXE);
 		case GOLD: return new ItemStack(Items.GOLDEN_PICKAXE);
 		case IRON: return new ItemStack(Items.IRON_PICKAXE);
+		case COPPER: return new ItemStack(Items.COPPER_PICKAXE);
 		case STONE: return new ItemStack(Items.STONE_PICKAXE);
 		default: return new ItemStack(Items.WOODEN_PICKAXE);
 		}
 	}
-
-
-	
 }

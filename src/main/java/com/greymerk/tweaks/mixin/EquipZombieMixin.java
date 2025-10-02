@@ -23,7 +23,7 @@ public class EquipZombieMixin{
 	protected void initEquipment(Random random, LocalDifficulty localDifficulty, CallbackInfo cir) {
 		
 		MobEntity entity = (MobEntity)(Object)this;
-		World world = entity.getWorld();
+		World world = entity.getEntityWorld();
 		int phase = world.getMoonPhase();
 		int diff = this.getMoonDiff(phase);
 		

@@ -18,10 +18,10 @@ public class ElytraEvent implements Allow{
 		// Whether or not to allow elytra flight outside of the End dimension.
 		
 		
-		World world = entity.getWorld();
-		if(world.isClient) return true;
+		World world = entity.getEntityWorld();
+		if(world.isClient()) return true;
 		
-		MinecraftServer mcserver = entity.getServer();
+		MinecraftServer mcserver = world.getServer();
 		GameRules rules = mcserver.getGameRules();
 		if(rules.getBoolean(GameRuleTweaks.GREY_TWEAK_ALLOW_ELYTRA)) {
 			return true;
