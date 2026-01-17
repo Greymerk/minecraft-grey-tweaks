@@ -3,7 +3,6 @@ package com.greymerk.tweaks.editor;
 import java.nio.file.Path;
 import java.util.Objects;
 
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -19,12 +18,12 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.CheckedRandom;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.rule.GameRules;
 
 public class WorldEditor implements IWorldEditor{
 
@@ -180,7 +179,7 @@ public class WorldEditor implements IWorldEditor{
 	}
 	
 	public GameRules getGameRules() {
-		return world.getServer().getGameRules();
+		return this.getServerWorld().getGameRules();
 	}
 	
 	public ServerWorld getServerWorld() {

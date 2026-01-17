@@ -9,6 +9,7 @@ import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.MetaEntity;
 import com.greymerk.tweaks.monster.MonsterProfile;
+import com.greymerk.tweaks.util.MoonHelper;
 
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.entity.mob.MobEntity;
@@ -24,8 +25,7 @@ public class EquipSkeletonMixin{
 		
 		MobEntity entity = (MobEntity)(Object)this;
 		World world = entity.getEntityWorld();
-		int phase = world.getMoonPhase();
-		Difficulty diff = this.getMoonDiff(phase);
+		Difficulty diff = MoonHelper.getDiff(world);
 		
 		if(!doEquip(random, diff)) return;
 		
@@ -43,11 +43,5 @@ public class EquipSkeletonMixin{
 		return false;
 	}
 	
-	private Difficulty getMoonDiff(int phase) {
-		if(phase == 0) return Difficulty.HARDEST;
-		if(phase == 4) return Difficulty.EASIEST;
-		if(phase == 1 || phase == 7) return Difficulty.HARD;
-		if(phase == 2 || phase == 6) return Difficulty.MEDIUM;
-		return Difficulty.EASY;
-	}
+
 }

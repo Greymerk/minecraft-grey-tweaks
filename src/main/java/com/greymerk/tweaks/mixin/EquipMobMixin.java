@@ -5,6 +5,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.greymerk.tweaks.Difficulty;
+import com.greymerk.tweaks.util.MoonHelper;
+
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -23,8 +26,8 @@ public class EquipMobMixin{
 		
 		MobEntity entity = (MobEntity)(Object)this;
 		World world = entity.getEntityWorld();
-		int phase = world.getMoonPhase();
-		int diff = this.getMoonDiff(phase);
+		
+		Difficulty diff = MoonHelper.getDiff(world);
 		
 		//System.out.println("phase: " + phase + " diff: " + diff);
 		if(!doEquip(random, diff)) return;
@@ -38,24 +41,18 @@ public class EquipMobMixin{
 		this.setRoguelike(entity, diff);
 	}
 	
-	private boolean doEquip(Random rand, int diff) {		
-		if(diff == 4) return true;
-		if(diff == 3) return rand.nextInt(3) != 0;
-		if(diff == 2) return rand.nextBoolean();
-		if(diff == 1) return rand.nextInt(3) == 0;
-		if(diff == 0) return rand.nextInt(5) == 0;
+	private boolean doEquip(Random rand, Difficulty diff) {		
+		if(diff == Difficulty.HARDEST) return true;
+		if(diff == Difficulty.HARD) return rand.nextInt(3) != 0;
+		if(diff == Difficulty.MEDIUM) return rand.nextBoolean();
+		if(diff == Difficulty.EASY) return rand.nextInt(3) == 0;
+		if(diff == Difficulty.EASIEST) return rand.nextInt(5) == 0;
 		return false;
 	}
 	
-	private int getMoonDiff(int phase) {
-		if(phase == 0) return 4;
-		if(phase == 4) return 0;
-		if(phase == 1 || phase == 7) return 3;
-		if(phase == 2 || phase == 6) return 2;
-		return 1;
-	}
-	
-	private void setRoguelike(MobEntity mob, int level) {
+	private void setRoguelike(MobEntity mob, Difficulty diff) {
+		int level = diff.value;
+		
 		final int DURATION = 10;
 		StatusEffect type = StatusEffects.MINING_FATIGUE.value();
 		RegistryEntry<StatusEffect> ref = Registries.STATUS_EFFECT.getEntry(type);

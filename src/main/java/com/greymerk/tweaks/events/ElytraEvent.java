@@ -5,11 +5,10 @@ import com.greymerk.gamerules.GameRuleTweaks;
 import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents.Allow;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.world.rule.GameRules;
 
 public class ElytraEvent implements Allow{
 
@@ -21,9 +20,8 @@ public class ElytraEvent implements Allow{
 		World world = entity.getEntityWorld();
 		if(world.isClient()) return true;
 		
-		MinecraftServer mcserver = world.getServer();
-		GameRules rules = mcserver.getGameRules();
-		if(rules.getBoolean(GameRuleTweaks.GREY_TWEAK_ALLOW_ELYTRA)) {
+		GameRules rules = world.getServer().getWorld(world.getRegistryKey()).getGameRules();
+		if(rules.getValue(GameRuleTweaks.GREY_TWEAK_ALLOW_ELYTRA)) {
 			return true;
 		}
 		

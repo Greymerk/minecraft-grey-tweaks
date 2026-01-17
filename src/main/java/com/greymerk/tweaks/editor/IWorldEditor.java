@@ -7,7 +7,7 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 
 public interface IWorldEditor {
 	

@@ -55,10 +55,6 @@ public class IceMixin {
 	}
 	
 	public void melt(BlockState state, World world, BlockPos pos) {
-        if (world.getDimension().ultrawarm()) {
-            world.removeBlock(pos, false);
-            return;
-        }
         world.setBlockState(pos, Blocks.WATER.getDefaultState());
         world.updateNeighbors(pos, Blocks.WATER);
     }

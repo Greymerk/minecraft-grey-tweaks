@@ -9,6 +9,7 @@ import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.monster.IEntity;
 import com.greymerk.tweaks.monster.MetaEntity;
 import com.greymerk.tweaks.monster.MonsterProfile;
+import com.greymerk.tweaks.util.MoonHelper;
 
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ZombieEntity;
@@ -24,30 +25,21 @@ public class EquipZombieMixin{
 		
 		MobEntity entity = (MobEntity)(Object)this;
 		World world = entity.getEntityWorld();
-		int phase = world.getMoonPhase();
-		int diff = this.getMoonDiff(phase);
+		Difficulty diff = MoonHelper.getDiff(world);
 		
 		if(!doEquip(random, diff)) return;
 		
 		IEntity mob = new MetaEntity(entity);
-		MonsterProfile.get(MonsterProfile.ZOMBIE).addEquipment(world, random, Difficulty.from(diff), mob);
+		MonsterProfile.get(MonsterProfile.ZOMBIE).addEquipment(world, random, diff, mob);
 		cir.cancel();
 	}
 	
-	private boolean doEquip(Random rand, int diff) {		
-		if(diff == 4) return true;
-		if(diff == 3) return rand.nextInt(3) != 0;
-		if(diff == 2) return rand.nextBoolean();
-		if(diff == 1) return rand.nextInt(3) == 0;
-		if(diff == 0) return rand.nextInt(5) == 0;
+	private boolean doEquip(Random rand, Difficulty diff) {		
+		if(diff == Difficulty.HARDEST) return true;
+		if(diff == Difficulty.HARD) return rand.nextInt(3) != 0;
+		if(diff == Difficulty.MEDIUM) return rand.nextBoolean();
+		if(diff == Difficulty.EASY) return rand.nextInt(3) == 0;
+		if(diff == Difficulty.EASIEST) return rand.nextInt(5) == 0;
 		return false;
-	}
-	
-	private int getMoonDiff(int phase) {
-		if(phase == 0) return 4;
-		if(phase == 4) return 0;
-		if(phase == 1 || phase == 7) return 3;
-		if(phase == 2 || phase == 6) return 2;
-		return 1;
 	}
 }
