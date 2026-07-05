@@ -28,41 +28,19 @@ public class Bed {
 	
 	public static void generate(IWorldEditor editor, Cardinal dir, Coord origin, Color color){
 		
+		Block b = Blocks.BED.pick(Color.get(color));
+		
 		Coord pos = origin.copy();
-		MetaBlock head = MetaBlock.of(getFromColor(color));
+		MetaBlock head = MetaBlock.of(b);
 		head.with(BedBlock.PART, BedPart.HEAD);
 		head.with(HorizontalDirectionalBlock.FACING, Cardinal.facing(dir));
 		head.set(editor, pos);
 		
 		pos.add(dir);
-		MetaBlock foot = MetaBlock.of(getFromColor(color));
+		MetaBlock foot = MetaBlock.of(b);
 		foot.with(BedBlock.PART, BedPart.FOOT);
 		foot.with(HorizontalDirectionalBlock.FACING, Cardinal.facing(dir));
 		foot.set(editor, pos);
 
 	}
-	
-	public static Block getFromColor(Color c) {
-		switch(c) {
-		case WHITE: return Blocks.WHITE_BED;
-		case ORANGE: return Blocks.ORANGE_BED;
-		case MAGENTA: return Blocks.MAGENTA_BED;
-		case LIGHT_BLUE: return Blocks.LIGHT_BLUE_BED;
-		case YELLOW: return Blocks.YELLOW_BED;
-		case LIME: return Blocks.LIME_BED;
-		case PINK: return Blocks.PINK_BED;
-		case GRAY: return Blocks.GRAY_BED;
-		case LIGHT_GRAY: return Blocks.LIGHT_GRAY_BED;
-		case CYAN: return Blocks.CYAN_BED;
-		case PURPLE: return Blocks.PURPLE_BED;
-		case BLUE: return Blocks.BLUE_BED;
-		case BROWN: return Blocks.BROWN_BED;
-		case GREEN: return Blocks.GREEN_BED;
-		case RED: return Blocks.RED_BED;
-		case BLACK: return Blocks.BLACK_BED;
-		default: return Blocks.RED_BED;
-		}
-	}
-	
-	
 }

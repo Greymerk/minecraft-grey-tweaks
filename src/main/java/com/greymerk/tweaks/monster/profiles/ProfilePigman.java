@@ -19,7 +19,7 @@ public class ProfilePigman implements IMonsterProfile {
 
 	@Override
 	public void addEquipment(Level world, RandomSource rand, Difficulty diff, IEntity mob) {
-		mob.setMobClass(MobType.PIGZOMBIE, true);
+		mob.setMobClass(MobType.PIGLIN, true);
 		ItemStack weapon = ItemWeapon.getSword(world.registryAccess(), world.enabledFeatures(), rand, diff, true);
 		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
 		mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(world.registryAccess(), rand));

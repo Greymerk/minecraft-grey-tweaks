@@ -28,7 +28,8 @@ public class WarmChunkLoadEvent implements Load{
 		chunkTopBox(world, chunk).forEach(c -> {
 			Coord surface = findSurface(chunk, c);
 			if(isWarmBiome(world, surface)){
-				forceMelt(world, surface);
+				//forceMelt(world, surface);
+				
 			}
 		});
 	}
@@ -70,30 +71,7 @@ public class WarmChunkLoadEvent implements Load{
 		return biome.warmEnoughToRain(pos.getBlockPos(), world.getSeaLevel());
 	}
 
-	private void forceMelt(ServerLevel world, Coord pos) {
-		BlockPos bp = pos.getBlockPos();
-		BlockState bs = world.getBlockState(bp);
-		
-		//Block b = bs.getBlock();
-		
-		/*
-		if(b == Blocks.ICE) {
-			//world.setBlock(bp, Blocks.WATER.defaultBlockState(), Block.UPDATE_ALL);
-		}
-		
-		if(bs.hasProperty(SnowLayerBlock.LAYERS)) {
-			 //meltSnow(world, pos);
-		}
-		*/
-	}
-	
-	private void meltSnow(ServerLevel world, Coord pos) {
-		BlockPos bp = pos.getBlockPos();
-		world.setBlock(bp, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-		Coord under = pos.copy().add(Cardinal.DOWN);
-		fixSnowSurface(world, under);
-	}
-	
+	@SuppressWarnings("unused")
 	private void fixSnowSurface(ServerLevel world, Coord surface) {
 		BlockPos bp = surface.getBlockPos();
 		BlockState bs = world.getBlockState(bp);

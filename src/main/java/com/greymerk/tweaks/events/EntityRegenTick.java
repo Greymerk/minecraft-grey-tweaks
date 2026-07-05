@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 
 
@@ -20,16 +21,16 @@ public class EntityRegenTick implements EndLevelTick {
 		if(time % 100 != 0) return;
 		
 		List<EntityType<? extends AgeableMob>> types = List.of(
-				EntityType.BEE, 
-				EntityType.VILLAGER,
-				EntityType.SHEEP,
-				EntityType.CHICKEN,
-				EntityType.COW,
-				EntityType.PIG,
-				EntityType.CAT,
-				EntityType.MOOSHROOM,
-				EntityType.TURTLE,
-				EntityType.RABBIT
+				EntityTypes.BEE, 
+				EntityTypes.VILLAGER,
+				EntityTypes.SHEEP,
+				EntityTypes.CHICKEN,
+				EntityTypes.COW,
+				EntityTypes.PIG,
+				EntityTypes.CAT,
+				EntityTypes.MOOSHROOM,
+				EntityTypes.TURTLE,
+				EntityTypes.RABBIT
 				);
 		
 		types.forEach(type -> {

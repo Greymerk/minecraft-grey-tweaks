@@ -6,9 +6,9 @@ import com.greymerk.tweaks.editor.MetaBlock;
 import com.greymerk.tweaks.util.Color;
 
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 
@@ -39,27 +39,8 @@ public class Candle {
 			.set(editor, origin);
 	}
 	
-	public static Block fromColor(Color color) {
-		switch(color) {
-		case BLACK: return Blocks.BLACK_CANDLE;
-		case BLUE: return Blocks.BLUE_CANDLE;
-		case BROWN: return Blocks.BROWN_CANDLE;
-		case CYAN: return Blocks.CYAN_CANDLE;
-		case GRAY: return Blocks.GRAY_CANDLE;
-		case GREEN: return Blocks.GREEN_CANDLE;
-		case LIGHT_BLUE: return Blocks.LIGHT_BLUE_CANDLE;
-		case LIGHT_GRAY: return Blocks.LIGHT_GRAY_CANDLE;
-		case LIME: return Blocks.LIME_CANDLE;
-		case MAGENTA: return Blocks.MAGENTA_CANDLE;
-		case ORANGE: return Blocks.ORANGE_CANDLE;
-		case PINK: return Blocks.PINK_CANDLE;
-		case PURPLE: return Blocks.PURPLE_CANDLE;
-		case RED: return Blocks.RED_CANDLE;
-		case WHITE: return Blocks.WHITE_CANDLE;
-		case YELLOW: return Blocks.YELLOW_CANDLE;
-		default: return Blocks.CANDLE;
-		
-		}
+	public static BlockState fromColor(Color color) {
+		return Blocks.DYED_CANDLE.pick(Color.get(color)).defaultBlockState();
 	}
 	
 }
