@@ -19,33 +19,33 @@ import com.greymerk.tweaks.editor.WorldEditor;
 import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
 import com.greymerk.tweaks.util.math.RandHelper;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.passive.BeeEntity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.math.random.CheckedRandom;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.animal.bee.Bee;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
 
-@Mixin(BeeEntity.class)
+
+
+@Mixin(Bee.class)
 public class BeeEntityMixin {
 
     boolean hasSpread = true;
 
     @Inject (
-            method = "tick()V",
+            method = "tick",
             at = @At("HEAD")
     )
 	
     public void tick(CallbackInfo info) {
-    	BeeEntity bee = (BeeEntity)(Object)this;
+    	
+    	Bee bee = (Bee)(Object)this;
     	
     	if(!bee.hasNectar()) {
     		if(hasSpread) {
@@ -53,22 +53,29 @@ public class BeeEntityMixin {
     		}
     		return;
     	}
-    	if(!bee.hasFlower()) return;
+    	
+    	if(!bee.hasSavedFlowerPos()) return;    	
     	if(bee.hasNectar() && hasSpread) return;
     	
+    	Coord flowerPos = Coord.of(bee.getSavedFlowerPos());
     	
-    	Coord flowerPos = Coord.of(bee.getFlowerPos());
-        
-    	World world = bee.getEntityWorld();
-    	if(!isOverworld(world)) {
+    	
+    	Level world = bee.level();
+    	
+    	IWorldEditor editor = WorldEditor.of(world);
+    	
+    	if(!editor.isOverworld()) {
     		return;
     	}
     	
-    	Random rand = new CheckedRandom(Objects.hash(flowerPos, bee.getEntityWorld().getTime()));
-    	IWorldEditor editor = new WorldEditor(world);
+    	long seed = Objects.hash(flowerPos, bee.level().getGameTime());
+    	RandomSource rand = new LegacyRandomSource(seed);
     	
     	MetaBlock flower = editor.getBlock(flowerPos);
+    	
     	if(!flower.isIn(BlockTags.SMALL_FLOWERS)) return;
+    	
+    	//good so far
     	
     	Optional<Coord> o = findViableGrowLocation(editor, rand, flowerPos, flower);
     	if(o.isEmpty() || rand.nextBoolean()) {
@@ -79,14 +86,13 @@ public class BeeEntityMixin {
     	Coord growPos = o.get();
     	editor.set(growPos, flower);
     	
-    	ServerWorld sw = editor.getServerWorld();
-    	
-    	this.produceParticles(sw, rand, growPos, ParticleTypes.HAPPY_VILLAGER);
-    	world.playSound(null, growPos.getBlockPos(), flower.getState().getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS);
+    	this.produceParticles(editor.getServerWorld(), rand, growPos, ParticleTypes.HAPPY_VILLAGER);
+    	SoundEvent se = flower.getState().getSoundType().getPlaceSound();
+    	world.playSound(null, growPos.getBlockPos(), se, SoundSource.BLOCKS);
     	this.hasSpread = true;
     }
     
-    private Optional<Coord> findViableGrowLocation(IWorldEditor editor, Random rand, Coord flowerPos, MetaBlock flower) {
+    private Optional<Coord> findViableGrowLocation(IWorldEditor editor, RandomSource rand, Coord flowerPos, MetaBlock flower) {
     	final int FLOWER_SPREAD_DISTANCE = 4;
     	final int MAX_FLOWERS = 4;
     	
@@ -105,7 +111,7 @@ public class BeeEntityMixin {
     		if(!editor.isAir(c)) return;
     		Coord below = c.copy().add(Cardinal.DOWN);
     		MetaBlock ground = editor.getBlock(below);
-    		if(ground.isIn(BlockTags.DIRT)) viable.add(c);
+    		if(ground.isIn(List.of(BlockTags.DIRT, BlockTags.MUD, BlockTags.GRASS_BLOCKS))) viable.add(c);
     	});
     	
     	if(viable.isEmpty()) return Optional.empty();
@@ -117,23 +123,21 @@ public class BeeEntityMixin {
     	return Optional.of(viable.getFirst());
     }
     
-    private void produceParticles(ServerWorld sw, Random rand, Coord pos, ParticleEffect parameters) {
-		
-		double d = rand.nextGaussian() * 0.02;
-		double e = rand.nextGaussian() * 0.02;
-		double f = rand.nextGaussian() * 0.02;
-		double x = (double)pos.getX() + 0.5;
-		double y = (double)pos.getY() + 0.5;
-		double z = (double)pos.getZ() + 0.5;
-		sw.spawnParticles(parameters, x, y, z, 20, d, e, f, 0.3);
-		
+    private void produceParticles(ServerLevel sw, RandomSource rand, Coord pos, SimpleParticleType params) {
+		double spreadWidth = 0.5;
+    	double spreadHeight = 0.2;
+    	int count = 3;
+    	
+    	for(int i = 0; i < 5; ++i) {
+    		double spreadStartOffset = 0.5 - spreadWidth;
+			double x = pos.getX() + spreadStartOffset + rand.nextDouble() * spreadWidth * 2.0;
+			double y = pos.getY() + rand.nextDouble() * spreadHeight;
+			double z = pos.getZ() + spreadStartOffset + rand.nextDouble() * spreadWidth * 2.0;
+    		double xv = rand.nextGaussian() * 0.02;
+			double yv = rand.nextGaussian() * 0.02;
+			double zv = rand.nextGaussian() * 0.02;
+			sw.sendParticles(params, x, y, z, count, xv, yv, zv, spreadHeight);
+    	}
 	}
-    
-    private boolean isOverworld(World world) {
-    	RegistryEntry<DimensionType> dimEntry = world.getDimensionEntry();
-    	Optional<RegistryKey<DimensionType>> optDimKey = dimEntry.getKey();
-    	if(optDimKey.isEmpty()) return false;
-    	RegistryKey<DimensionType> dimKey = optDimKey.get();
-    	return dimKey == DimensionTypes.OVERWORLD;
-    }
+
 }	

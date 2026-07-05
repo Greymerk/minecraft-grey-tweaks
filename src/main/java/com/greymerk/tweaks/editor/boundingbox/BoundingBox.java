@@ -13,8 +13,8 @@ import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.shapes.IShape;
 import com.greymerk.tweaks.editor.shapes.Shape;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
 
 public class BoundingBox implements IBounded, IShape{
 
@@ -41,12 +41,6 @@ public class BoundingBox implements IBounded, IShape{
 	private BoundingBox(Coord start, Coord end){
 		this.start = start.copy();
 		this.end = end.copy();
-		this.correct();
-	}
-	
-	public BoundingBox(NbtCompound tag) {
-		this.start = Coord.of(tag.getCompound("start").get());
-		this.end = Coord.of(tag.getCompound("end").get());
 		this.correct();
 	}
 
@@ -141,14 +135,6 @@ public class BoundingBox implements IBounded, IShape{
 	}
 
 	@Override
-	public NbtCompound getNbt() {
-		NbtCompound nbt = new NbtCompound();
-		nbt.put("start", this.start.getNbt());
-		nbt.put("end", this.end.getNbt());
-		return nbt;
-	}
-
-	@Override
 	public boolean contains(Coord pos) {
 		if(pos.getX() < this.start.getX() || pos.getX() > this.end.getX()) return false;
 		if(pos.getY() < this.start.getY() || pos.getY() > this.end.getY()) return false;
@@ -196,13 +182,13 @@ public class BoundingBox implements IBounded, IShape{
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, @NotNull IBlockFactory block) {
+	public void fill(IWorldEditor editor, RandomSource rand, @NotNull IBlockFactory block) {
 		this.getShape(Shape.RECTSOLID).fill(editor, rand, block);
 		
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
+	public void fill(IWorldEditor editor, RandomSource rand, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
 		this.getShape(Shape.RECTSOLID).fill(editor, rand, block, fillAir, replaceSolid);
 		
 	}

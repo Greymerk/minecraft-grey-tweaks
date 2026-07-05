@@ -8,7 +8,9 @@ import com.greymerk.tweaks.treasure.Treasure;
 import com.greymerk.tweaks.treasure.TreasureManager;
 import com.greymerk.tweaks.treasure.chest.ITreasureChest;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+
+
 
 public class LootTableRule {
 

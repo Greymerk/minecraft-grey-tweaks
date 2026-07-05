@@ -9,21 +9,21 @@ import com.greymerk.tweaks.treasure.Inventory;
 import com.greymerk.tweaks.treasure.Treasure;
 import com.greymerk.tweaks.treasure.loot.Loot;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FacingBlock;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class TreasureChest implements ITreasureChest{
 
 	private Inventory inventory;
 	private Treasure type;
-	private LootableContainerBlockEntity chest;
+	private RandomizableContainerBlockEntity chest;
 	private Difficulty diff;
 
 	public TreasureChest(Treasure type){
@@ -31,7 +31,7 @@ public class TreasureChest implements ITreasureChest{
 		this.diff = Difficulty.EASIEST;
 	}
 	
-	public ITreasureChest generate(IWorldEditor editor, Random rand, Coord pos, ChestType block) throws ChestPlacementException {
+	public ITreasureChest generate(IWorldEditor editor, RandomSource rand, Coord pos, ChestType block) throws ChestPlacementException {
 		for(Cardinal dir : Cardinal.randDirs(rand)) {
 			Coord p = pos.copy();
 			p.add(dir);
@@ -43,7 +43,7 @@ public class TreasureChest implements ITreasureChest{
 		return this.generate(editor, rand, pos, dir, block);
 	}
 	
-	public ITreasureChest generate(IWorldEditor editor, Random rand, Coord pos, Cardinal dir, ChestType type) throws ChestPlacementException {
+	public ITreasureChest generate(IWorldEditor editor, RandomSource rand, Coord pos, Cardinal dir, ChestType type) throws ChestPlacementException {
 
 		this.diff = Difficulty.fromY(pos.getY());
 		
@@ -55,7 +55,7 @@ public class TreasureChest implements ITreasureChest{
 			throw new ChestPlacementException("Failed to place chest in world");
 		}
 		
-		this.chest = (LootableContainerBlockEntity) editor.getBlockEntity(pos);
+		this.chest = (RandomizableContainerBlockEntity) editor.getBlockEntity(pos);
 		this.inventory = new Inventory(rand, chest);		
 		Loot.fillChest(editor, this, rand);
 		return this;
@@ -66,16 +66,16 @@ public class TreasureChest implements ITreasureChest{
 		
 		if(b == Blocks.CHEST || b == Blocks.TRAPPED_CHEST) {
 			if(Cardinal.directions.contains(dir)) {
-				block.with(HorizontalFacingBlock.FACING, Cardinal.facing(dir).getOpposite());	
+				block.with(HorizontalDirectionalBlock.FACING, Cardinal.facing(dir).getOpposite());	
 			}
 		}
 		
 		if(b == Blocks.BARREL) {
-			block.with(Properties.FACING, Cardinal.facing(Cardinal.UP));
+			block.with(BlockStateProperties.FACING, Cardinal.facing(Cardinal.UP));
 		}
 		
 		if(b == Blocks.SHULKER_BOX) {
-			block.with(FacingBlock.FACING, Cardinal.facing(dir));
+			block.with(DirectionalBlock.FACING, Cardinal.facing(dir));
 		}
 	}
 	

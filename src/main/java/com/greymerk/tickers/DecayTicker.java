@@ -2,42 +2,44 @@ package com.greymerk.tickers;
 
 import com.greymerk.tweaks.DecayBlocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.ChunkSectionPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+
+
 
 public class DecayTicker implements IChunkTicker {
 
 	@Override
-	public void tick(WorldChunk chunk, int randomTickSpeed) {
+	public void tick(LevelChunk chunk, int randomTickSpeed) {
 		final int DECAY_CHANCE = 10000;
-		World world = chunk.getWorld();
-		Random rand = world.getRandom();
+		Level world = chunk.getLevel();
+		RandomSource rand = world.getRandom();
 		ChunkPos chunkPos = chunk.getPos();
-        int worldX = chunkPos.getStartX();
-        int worldZ = chunkPos.getStartZ();
+        int worldX = chunkPos.getMinBlockX();
+        int worldZ = chunkPos.getMinBlockZ();
         
         if (randomTickSpeed <= 0) return;
         
-        ChunkSection[] chunkSections = chunk.getSectionArray();
+        LevelChunkSection[] chunkSections = chunk.getSections();
 
         
         for (int i = 0; i < chunkSections.length; ++i) {
-            int sectionCoord = chunk.sectionIndexToCoord(i);
-            int sectionY = ChunkSectionPos.getBlockCoord(sectionCoord);
+            int sectionCoord = chunk.getSectionIndexFromSectionY(i);
+            int sectionY = SectionPos.sectionToBlockCoord(sectionCoord);
             for (int l = 0; l < randomTickSpeed; ++l) {
-                BlockPos pos = world.getRandomPosInChunk(worldX, sectionY, worldZ, 15);
-                if(rand.nextInt(DECAY_CHANCE) == 0) decay(world, rand, pos);
+            	BlockPos bp = world.getBlockRandomPos(worldX, sectionY, worldZ, 15);
+                if(rand.nextInt(DECAY_CHANCE) == 0) decay(world, rand, bp);
             }
         }   
 	}
 	
-	private void decay(World world, Random rand, BlockPos pos) {
+	private void decay(Level world, RandomSource rand, BlockPos pos) {
 		BlockState block = world.getBlockState(pos);
 		
 		if(!DecayBlocks.canDecay(block)) return;

@@ -6,7 +6,9 @@ import java.util.Map;
 import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.util.IWeighted;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+
+
 
 public class LootProvider implements ILoot {
 

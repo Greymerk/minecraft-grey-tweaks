@@ -8,7 +8,7 @@ import com.greymerk.tweaks.util.IWeighted;
 import com.greymerk.tweaks.util.WeightedChoice;
 import com.greymerk.tweaks.util.WeightedRandomizer;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 
 public enum Quality{
 	
@@ -55,7 +55,7 @@ public enum Quality{
 		return randomizer;
 	}
 	
-	public static Quality get(Random rand, Difficulty diff, Equipment type) {
+	public static Quality get(RandomSource rand, Difficulty diff, Equipment type) {
 		
 		switch(type){
 		case SWORD:
@@ -84,15 +84,15 @@ public enum Quality{
 		}
 	}
 
-	public static Quality getArmourQuality(Random rand, Difficulty diff) {
+	public static Quality getArmourQuality(RandomSource rand, Difficulty diff) {
 		return armourQuality.get(diff).get(rand);
 	}
 
-	public static Quality getToolQuality(Random rand, Difficulty diff) {
+	public static Quality getToolQuality(RandomSource rand, Difficulty diff) {
 		return toolQuality.get(diff).get(rand);
 	}
 
-	public static Quality getWeaponQuality(Random rand, Difficulty diff) {
+	public static Quality getWeaponQuality(RandomSource rand, Difficulty diff) {
 		return weaponQuality.get(diff).get(rand);
 	}
 	

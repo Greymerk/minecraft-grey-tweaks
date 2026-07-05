@@ -7,32 +7,34 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.poi.PointOfInterestStorage;
-import net.minecraft.world.poi.PointOfInterestStorage.OccupationStatus;
-import net.minecraft.world.poi.PointOfInterestType;
-import net.minecraft.world.poi.PointOfInterestTypes;
-import net.minecraft.world.spawner.CatSpawner;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiManager.Occupancy;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.entity.npc.CatSpawner;
+
+
 
 @Mixin(CatSpawner.class)
 public class CatSpawnerMixin {
 
 	@Inject(
 		at = @At("HEAD"),
-		method = "spawnInHouse(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;)V",
+		method = "spawnInVillage",
 		cancellable = true
 	)
-	private void spawnInHouse(ServerWorld world, BlockPos pos, CallbackInfo cir) {
+	private void spawnInVillage(ServerLevel world, BlockPos pos, CallbackInfo cir) {
 		
-		PointOfInterestStorage pois = world.getPointOfInterestStorage();
+		PoiManager pois = world.getPoiManager();
 		int radius = 48;
-		RegistryKey<PointOfInterestType> type = PointOfInterestTypes.FISHERMAN;
-		Predicate<RegistryEntry<PointOfInterestType>> predicate = entry -> entry.matchesKey(type);
-		OccupationStatus occupied = PointOfInterestStorage.OccupationStatus.IS_OCCUPIED;
-		long fishermen = pois.count(predicate, pos, radius, occupied);
+		ResourceKey<PoiType> type = PoiTypes.FISHERMAN;
+		Predicate<Holder<PoiType>> predicate = entry -> entry.is(type);
+		Occupancy occupied = PoiManager.Occupancy.IS_OCCUPIED;
+		long fishermen = pois.getCountInRange(predicate, pos, radius, occupied);
 
 		if(fishermen < 4L) cir.cancel();
 	}

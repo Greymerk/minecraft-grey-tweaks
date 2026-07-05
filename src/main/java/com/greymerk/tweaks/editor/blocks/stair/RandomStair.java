@@ -8,7 +8,9 @@ import com.greymerk.tweaks.editor.shapes.IShape;
 import com.greymerk.tweaks.util.WeightedChoice;
 import com.greymerk.tweaks.util.WeightedRandomizer;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
+
 
 public class RandomStair implements IStair, IBlockFactory {
 
@@ -35,26 +37,26 @@ public class RandomStair implements IStair, IBlockFactory {
 	}
 
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord pos) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos) {
 		if(this.stairs.isEmpty()) return false;
 		return this.stairs.get(rand).setOrientation(this.dir, this.upsideDown).set(editor, rand, pos);
 	}
 
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord pos, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos, boolean fillAir, boolean replaceSolid) {
 		if(this.stairs.isEmpty()) return false;
 		return this.stairs.get(rand).setOrientation(this.dir, this.upsideDown).set(editor, rand, pos, fillAir, replaceSolid);
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IShape shape, boolean fillAir, boolean replaceSolid) {
+	public void fill(IWorldEditor editor, RandomSource rand, IShape shape, boolean fillAir, boolean replaceSolid) {
 		shape.forEach(pos -> {
 			this.set(editor, rand, pos, fillAir, replaceSolid);
 		});
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IShape shape) {
+	public void fill(IWorldEditor editor, RandomSource rand, IShape shape) {
 		this.fill(editor, rand, shape, true, true);
 	}
 	

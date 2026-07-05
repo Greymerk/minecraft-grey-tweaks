@@ -10,7 +10,8 @@ import com.greymerk.tweaks.editor.IBlockFactory;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
 
 public class Sphere implements IShape {
 
@@ -26,13 +27,13 @@ public class Sphere implements IShape {
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IBlockFactory block) {
+	public void fill(IWorldEditor editor, RandomSource rand, IBlockFactory block) {
 		this.fill(editor, rand, block, true, true);
 
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
+	public void fill(IWorldEditor editor, RandomSource rand, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
 		for(Coord pos : this){
 			block.set(editor, rand, pos, fillAir, replaceSolid);
 		}

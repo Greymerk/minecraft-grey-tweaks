@@ -4,66 +4,68 @@ import java.util.List;
 
 import com.greymerk.tweaks.Difficulty;
 
-import net.minecraft.entity.Entity.RemovalReason;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
+
 
 public class MetaEntity implements IEntity {
 
-	private MobEntity mob;
+	private Mob mob;
 	
-	public MetaEntity(MobEntity mob){
+	public MetaEntity(Mob mob){
 		this.mob = mob;
 	}
 	
 	@Override
 	public void setSlot(EquipmentSlot slot, ItemStack item) {
-		mob.equipStack(slot, item);
-		mob.setEquipmentDropChance(slot, 0.085f);
+		mob.setItemSlot(slot, item);
+		mob.setDropChance(slot, 0.085f);
 	}
 	
 	public ItemStack getEquippedStack(EquipmentSlot slot) {
-		return ((LivingEntity)this.mob).getEquippedStack(slot);
+		return ((LivingEntity)this.mob).getItemBySlot(slot);
 	}
 	
 	@Override
 	public void setMobClass(MobType type, boolean clear) {
 		
 		LivingEntity oldMob = (LivingEntity)this.mob;
-		LivingEntity newMob = (LivingEntity)MobType.getEntity(this.mob.getEntityWorld(), type);
-		newMob.copyPositionAndRotation(oldMob);
-		this.mob = (MobEntity)newMob;
+		LivingEntity newMob = (LivingEntity)MobType.getEntity(this.mob.level(), type);
+		newMob.copyPosition(oldMob);
+		this.mob = (Mob)newMob;
 		
-		if(newMob instanceof ZombieEntity){
-			((ZombieEntity)newMob).setBaby(((ZombieEntity)oldMob).isBaby());
+		if(newMob instanceof Zombie){
+			((Zombie)newMob).setBaby(((Zombie)oldMob).isBaby());
 		}
 		
 		if(clear) {
 			List.of(EquipmentSlot.values()).forEach(slot -> {
-				mob.equipStack(slot, ItemStack.EMPTY);
+				mob.setItemSlot(slot, ItemStack.EMPTY);
 			});
 		} else {
 			List.of(EquipmentSlot.values()).forEach(slot -> {
-				ItemStack toTrade = oldMob.getEquippedStack(slot);
+				ItemStack toTrade = oldMob.getItemBySlot(slot);
 				this.setSlot(slot, toTrade);
 			});
 		}
 		
 		oldMob.remove(RemovalReason.DISCARDED);
-		newMob.getEntityWorld().spawnEntity(newMob);
+		newMob.level().addFreshEntity(newMob);
 	}
 
 	@Override
 	public void setChild(boolean child) {
-		if(!(this.mob instanceof ZombieEntity)) return;
-		((ZombieEntity)this.mob).setBaby(child);
+		if(!(this.mob instanceof Zombie)) return;
+		((Zombie)this.mob).setBaby(child);
 	}
 
 	@Override
@@ -73,24 +75,24 @@ public class MetaEntity implements IEntity {
 
 	@Override
 	public void setName(String name) {
-		this.mob.setCustomName(Text.of(name));
+		this.mob.setCustomName(Component.nullToEmpty(name));
 		this.mob.setCustomNameVisible(true);
 	}
 
 	@Override
 	public void setOnFire(int duration) {
-		this.mob.setOnFireFor(duration);;
+		this.mob.igniteForSeconds(duration);;
 	}
 	
 	@Override
-	public void setEffect(StatusEffectInstance effect) {
-		this.mob.addStatusEffect(effect);
+	public void setEffect(MobEffectInstance effect) {
+		this.mob.addEffect(effect);
 	}
 	
 	@Override
-	public boolean canEnchant(Random rand, Difficulty diff) {
+	public boolean canEnchant(RandomSource rand, Difficulty diff) {
 		
-		World world = this.mob.getEntityWorld();
+		Level world = this.mob.level();
 
 		switch(world.getDifficulty()){
 		case PEACEFUL: return false;

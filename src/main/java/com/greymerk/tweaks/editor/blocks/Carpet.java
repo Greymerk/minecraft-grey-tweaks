@@ -13,13 +13,15 @@ import com.greymerk.tweaks.editor.shapes.RectSolid;
 import com.greymerk.tweaks.util.Color;
 import com.greymerk.tweaks.util.math.RandHelper;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+
+
 
 public class Carpet {
 
-	public static void generate(IWorldEditor editor, Random rand, Coord origin, int radius) {
+	public static void generate(IWorldEditor editor, RandomSource rand, Coord origin, int radius) {
 		List<Color> colors = Arrays.asList(Color.values());
 		RandHelper.shuffle(colors, rand);
 		
@@ -37,7 +39,7 @@ public class Carpet {
 		
 	}
 	
-	public static MetaBlock getRandom(Random rand) {
+	public static MetaBlock getRandom(RandomSource rand) {
 		return get(Color.get(rand));
 	}
 	

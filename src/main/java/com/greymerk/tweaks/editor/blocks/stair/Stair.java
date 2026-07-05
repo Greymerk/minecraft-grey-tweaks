@@ -2,8 +2,10 @@ package com.greymerk.tweaks.editor.blocks.stair;
 
 import com.greymerk.tweaks.editor.Cardinal;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+
+
 
 public enum Stair{
 

@@ -3,9 +3,11 @@ package com.greymerk.tweaks.editor.blocks;
 import com.greymerk.tweaks.editor.Cardinal;
 import com.greymerk.tweaks.editor.MetaBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PillarBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+
+
 
 public enum Quartz {
 
@@ -17,7 +19,7 @@ public enum Quartz {
 
 	public static MetaBlock getPillar(Cardinal dir){
 		MetaBlock block = MetaBlock.of(Blocks.QUARTZ_PILLAR);
-		block.with(PillarBlock.AXIS, Cardinal.axis(dir));
+		block.with(RotatedPillarBlock.AXIS, Cardinal.axis(dir));
 		return block;
 	}
 	

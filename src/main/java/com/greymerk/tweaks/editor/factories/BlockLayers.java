@@ -7,7 +7,9 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IBlockFactory;
 import com.greymerk.tweaks.editor.IWorldEditor;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
+
 
 public class BlockLayers extends BlockBase{
 
@@ -22,7 +24,7 @@ public class BlockLayers extends BlockBase{
 	}
 	
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord pos, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos, boolean fillAir, boolean replaceSolid) {
 		IBlockFactory block = this.blocks.get(pos.getY() % this.blocks.size());
 		return block.set(editor, rand, pos, fillAir, replaceSolid);
 	}

@@ -13,12 +13,9 @@ import com.greymerk.tweaks.config.ConfigSettings;
 import com.greymerk.tweaks.events.ElytraEvent;
 import com.greymerk.tweaks.events.EntityLoadEvent;
 import com.greymerk.tweaks.events.EntityRegenTick;
-import com.greymerk.tweaks.events.WarmChunkLoadEvent;
-import com.greymerk.tweaks.trades.CustomWandererTrades;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
@@ -33,19 +30,15 @@ public class GreyTweaks implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		ServerChunkEvents.CHUNK_LOAD.register(new WarmChunkLoadEvent());
-		//ServerTickEvents.END_WORLD_TICK.register(new SlowDayWorldTickEvent());
 		ServerEntityEvents.ENTITY_LOAD.register(new EntityLoadEvent());
 		EntityElytraEvents.ALLOW.register(new ElytraEvent());
-		ServerTickEvents.END_WORLD_TICK.register(new EntityRegenTick());
+		ServerTickEvents.END_LEVEL_TICK.register(new EntityRegenTick());
 		
 		ChunkTickManager tickers = ChunkTickManager.getInstance();
 		tickers.add(new PinkPetalTicker());
 		tickers.add(new DecayTicker());
 		tickers.add(new ResinTicker());
 		tickers.add(new LeafLitterTicker());
-		
-		CustomWandererTrades.registerCustomTrades();
 		
 		ConfigSettings.init(new ConfigFile());
 	}

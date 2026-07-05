@@ -4,8 +4,10 @@ import com.greymerk.tweaks.editor.IBlockFactory;
 import com.greymerk.tweaks.editor.MetaBlock;
 import com.greymerk.tweaks.editor.factories.BlockJumble;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+
+
 
 public enum SilverfishBlock {
 

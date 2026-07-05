@@ -12,7 +12,8 @@ import com.greymerk.tweaks.editor.blocks.Air;
 import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
 import com.greymerk.tweaks.editor.boundingbox.IBounded;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
 
 public class RectHollow implements IShape {
 
@@ -22,21 +23,21 @@ public class RectHollow implements IShape {
 		this.bb = bb;
 	}
 	
-	public static void fill(IWorldEditor editor, Random rand, IBounded bb, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
+	public static void fill(IWorldEditor editor, RandomSource rand, IBounded bb, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
 		bb.getShape(Shape.RECTHOLLOW).fill(editor, rand, block, fillAir, replaceSolid);
 	}
 
-	public static void fill(IWorldEditor editor, Random rand, IBounded bb, IBlockFactory block) {
+	public static void fill(IWorldEditor editor, RandomSource rand, IBounded bb, IBlockFactory block) {
 		bb.getShape(Shape.RECTHOLLOW).fill(editor, rand, block, true, true);
 	}
 	
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IBlockFactory block){
+	public void fill(IWorldEditor editor, RandomSource rand, IBlockFactory block){
 		fill(editor, rand, block, true, true);
 	}
 	
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
+	public void fill(IWorldEditor editor, RandomSource rand, IBlockFactory block, boolean fillAir, boolean replaceSolid) {
 		for(Coord c : this){
 			block.set(editor, rand, c, fillAir, replaceSolid);
 		}

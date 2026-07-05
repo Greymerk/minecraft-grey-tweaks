@@ -6,7 +6,8 @@ import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.util.WeightedChoice;
 import com.greymerk.tweaks.util.WeightedRandomizer;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
 
 public class BlockWeightedRandom extends BlockBase {
 
@@ -22,7 +23,7 @@ public class BlockWeightedRandom extends BlockBase {
 	}
 
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord origin, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord origin, boolean fillAir, boolean replaceSolid) {
 		IBlockFactory block = blocks.get(rand);
 		return block.set(editor, rand, origin, fillAir, replaceSolid);
 	}

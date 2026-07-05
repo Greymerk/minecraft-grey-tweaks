@@ -4,7 +4,9 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IBlockFactory;
 import com.greymerk.tweaks.editor.IWorldEditor;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
+
 
 public class BlockCheckers extends BlockBase {
 
@@ -24,7 +26,7 @@ public class BlockCheckers extends BlockBase {
 	}
 
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord origin, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord origin, boolean fillAir, boolean replaceSolid) {
 		
 		int x = origin.getX() - this.offset.getX();
 		int y = origin.getY() - this.offset.getY();

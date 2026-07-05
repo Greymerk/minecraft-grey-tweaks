@@ -2,7 +2,7 @@ package com.greymerk.tweaks.editor.blocks;
 
 import com.greymerk.tweaks.editor.MetaBlock;
 
-import net.minecraft.block.LeavesBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 
 public class Leaves {
 	

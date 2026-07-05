@@ -9,19 +9,19 @@ import com.greymerk.tweaks.treasure.loot.Loot;
 import com.greymerk.tweaks.treasure.loot.Slot;
 import com.greymerk.tweaks.treasure.loot.provider.ItemNovelty;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.resource.featuretoggle.FeatureSet;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class ProfileTallMob implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
-		DynamicRegistryManager reg = world.getRegistryManager();
-		FeatureSet features = world.getEnabledFeatures();
+	public void addEquipment(Level world, RandomSource rand, Difficulty diff, IEntity mob) {
+		RegistryAccess reg = world.registryAccess();
+		FeatureFlagSet features = world.enabledFeatures();
 		
 		int ilvl = diff.lt(Difficulty.HARD) ? diff.value : 2 + rand.nextInt(3);
 

@@ -5,40 +5,42 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ServerLevelAccessor;
 
-@Mixin(MobEntity.class)
+
+
+@Mixin(Mob.class)
 public class MobEnchantMixin {	
 
-	@Inject(at = @At("HEAD"), method = "enchantMainHandItem(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/util/math/random/Random;Lnet/minecraft/world/LocalDifficulty;)V", cancellable = true)
-	protected void enchantMainHandItem(ServerWorldAccess world, Random random, LocalDifficulty diff, CallbackInfo cir) {
-		MobEntity entity = (MobEntity)(Object)this;
-		if(entity.getMainHandStack().isEmpty()) {
+	@Inject(at = @At("HEAD"), method = "enchantSpawnedWeapon", cancellable = true)
+	protected void enchantMainHandItem(ServerLevelAccessor world, RandomSource random, DifficultyInstance diff, CallbackInfo cir) {
+		Mob entity = (Mob)(Object)this;
+		if(entity.getMainHandItem().isEmpty()) {
 			cir.cancel();
 		}
 		
-		ItemStack item = entity.getMainHandStack();
-		if(item.hasEnchantments()) {
+		ItemStack item = entity.getMainHandItem();
+		if(item.getEnchantments().isEmpty()) {
 			cir.cancel();
 		}
 	}
 			
-	@Inject(at = @At("HEAD"), method = "enchantEquipment(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/util/math/random/Random;Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/world/LocalDifficulty;)V", cancellable = true)
-	protected void enchantEquipment(ServerWorldAccess world, Random random, EquipmentSlot slot, LocalDifficulty diff, CallbackInfo cir) {
-		MobEntity entity = (MobEntity)(Object)this;
+	@Inject(at = @At("HEAD"), method = "enchantSpawnedArmor", cancellable = true)
+	protected void enchantEquipment(ServerLevelAccessor world, RandomSource random, EquipmentSlot slot, DifficultyInstance diff, CallbackInfo cir) {
+		Mob entity = (Mob)(Object)this;
 		
-		if(!entity.hasStackEquipped(slot)) {
+		if(!entity.hasItemInSlot(slot)) {
 			cir.cancel();
 		}
 		
-		ItemStack item = entity.getEquippedStack(slot);
+		ItemStack item = entity.getItemBySlot(slot);
 		
-		if(item.hasEnchantments()) {
+		if(item.getEnchantments().isEmpty()) {
 			cir.cancel();
 		}
 	}	

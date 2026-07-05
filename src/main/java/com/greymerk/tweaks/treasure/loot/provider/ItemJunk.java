@@ -8,17 +8,19 @@ import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.treasure.loot.WeightedRandomLoot;
 import com.greymerk.tweaks.util.WeightedRandomizer;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+
 
 public class ItemJunk extends ItemBase{
 
 	private Map<Difficulty, WeightedRandomizer<ItemStack>> loot;
-	private DynamicRegistryManager reg;
+	private RegistryAccess reg;
 	
-	public ItemJunk(DynamicRegistryManager reg, int weight, Difficulty diff) {
+	public ItemJunk(RegistryAccess reg, int weight, Difficulty diff) {
 		super(weight, diff	);
 		this.reg = reg;
 		this.loot = new HashMap<Difficulty, WeightedRandomizer<ItemStack>>();
@@ -60,7 +62,7 @@ public class ItemJunk extends ItemBase{
 	}
 
 	@Override
-	public ItemStack getLootItem(Random rand, Difficulty diff){
+	public ItemStack getLootItem(RandomSource rand, Difficulty diff){
 		if(rand.nextInt(5000) == 0) return ItemNovelty.getItem(reg, ItemNovelty.ZISTEAU);
 		if(rand.nextInt(5000) == 0) return ItemNovelty.getItem(reg, ItemNovelty.VECHS);
 		return this.loot.get(diff).get(rand);

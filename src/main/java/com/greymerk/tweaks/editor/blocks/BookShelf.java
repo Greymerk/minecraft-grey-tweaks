@@ -12,39 +12,39 @@ import com.greymerk.tweaks.editor.MetaBlock;
 import com.greymerk.tweaks.treasure.loot.Enchant;
 import com.greymerk.tweaks.util.math.RandHelper;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 
 
 public class BookShelf {
 
-	public static void set(IWorldEditor editor, Random rand, Coord origin, Cardinal dir) {
+	public static void set(IWorldEditor editor, RandomSource rand, Coord origin, Cardinal dir) {
 		
 		MetaBlock.of(Blocks.CHISELED_BOOKSHELF)
-			.with(HorizontalFacingBlock.FACING, Cardinal.facing(Cardinal.reverse(dir)))
+			.with(HorizontalDirectionalBlock.FACING, Cardinal.facing(Cardinal.reverse(dir)))
 			.set(editor, origin);
 		
 		BlockEntity be = editor.getBlockEntity(origin);
 		
 		if(be == null) return;
-		if(!(be instanceof ChiseledBookshelfBlockEntity)) return;
+		if(!(be instanceof ChiseledBookShelfBlockEntity)) return;
 		
-		ChiseledBookshelfBlockEntity shelf = (ChiseledBookshelfBlockEntity)be;
+		ChiseledBookShelfBlockEntity shelf = (ChiseledBookShelfBlockEntity)be;
 		
 		getSlots(rand).forEach(i -> {
-			shelf.setStack(i, Enchant.getBook(editor.getRegistryManager(), rand, Difficulty.fromY(origin.getY())));		
+			shelf.setItem(i, Enchant.getBook(editor.getRegistryManager(), rand, Difficulty.fromY(origin.getY())));		
 		});
 		
-		shelf.markDirty();
+		shelf.setChanged();
 	}
 	
-	private static List<Integer> getSlots(Random rand){
+	private static List<Integer> getSlots(RandomSource rand){
 		List<Integer> slots = IntStream.rangeClosed(0, 5).boxed().collect(Collectors.toList());
 		RandHelper.shuffle(slots, rand);
-		int count = rand.nextBetween(1, 3);
+		int count = rand.nextIntBetweenInclusive(1, 3);
 		return slots.subList(0, count);
 	}
 	

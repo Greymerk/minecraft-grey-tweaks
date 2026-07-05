@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.greymerk.tweaks.util.math.RandHelper;
 
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 
 public enum Cardinal {
 	NORTH, EAST, WEST, SOUTH, UP, DOWN;
@@ -92,13 +92,13 @@ public enum Cardinal {
 		}
 	}
 	
-	public static List<Cardinal> randDirs(Random rand){
+	public static List<Cardinal> randDirs(RandomSource rand){
 		List<Cardinal> dirs = Arrays.asList(new Cardinal[] {NORTH, EAST, SOUTH, WEST});
 		RandHelper.shuffle(Arrays.asList(dirs), rand);
 		return dirs;
 	}
 
-	public static Cardinal randDir(Random rand) {
+	public static Cardinal randDir(RandomSource rand) {
 		return directions.get(rand.nextInt(directions.size()));
 	}
 	

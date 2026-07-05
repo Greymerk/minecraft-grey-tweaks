@@ -5,7 +5,9 @@ import com.greymerk.tweaks.editor.IBlockFactory;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.blocks.Air;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
+
 
 /**
  * This BlockFactory serves the special purpose of
@@ -31,7 +33,7 @@ public class BlockFloor extends BlockBase implements IBlockFactory{
 	}
 	
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord pos, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos, boolean fillAir, boolean replaceSolid) {
 		if(!fillAir && editor.isAir(pos)) return false;
 		if(!replaceSolid && editor.isSolid(pos)) return false;
 		

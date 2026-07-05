@@ -5,11 +5,13 @@ import java.util.Objects;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtInt;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.ChunkPos;
+
+
 
 /**
 Mutable Coordinate 3DVector
@@ -29,13 +31,17 @@ public class Coord {
 	}
 	
 	public static Coord of(ChunkPos cpos) {
-		return new Coord(cpos.x << 4, 0, cpos.z << 4);
+		return new Coord(cpos.x() << 4, 0, cpos.z() << 4);
 	}
 	
-	public static Coord of(NbtCompound tag) {
-		int x = tag.getInt("x").get();
-		int y = tag.getInt("y").get();
-		int z = tag.getInt("z").get();
+	public static Coord of(int x, int y, int z) {
+		return new Coord(x, y, z);
+	}
+	
+	public static Coord of(CompoundTag tag) {
+		int x = tag.get("x").asInt().get();
+		int y = tag.get("y").asInt().get();
+		int z = tag.get("z").asInt().get();
 		return new Coord(x, y, z);
 	}
 	
@@ -233,11 +239,11 @@ public class Coord {
 		return new ChunkPos(this.x >> 4, this.z >> 4);
 	}
 	
-	public NbtElement getNbt() {
-		NbtCompound nbt = new NbtCompound();
-		nbt.put("x", NbtInt.of(x));
-		nbt.put("y", NbtInt.of(y));
-		nbt.put("z", NbtInt.of(z));
+	public Tag getNbt() {
+		CompoundTag nbt = new CompoundTag();
+		nbt.put("x", IntTag.valueOf(x));
+		nbt.put("y", IntTag.valueOf(y));
+		nbt.put("z", IntTag.valueOf(z));
 		return nbt;
 	}
 

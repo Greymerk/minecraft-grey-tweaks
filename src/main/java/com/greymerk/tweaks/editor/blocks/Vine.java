@@ -7,15 +7,17 @@ import com.greymerk.tweaks.editor.MetaBlock;
 import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
 import com.greymerk.tweaks.editor.shapes.RectSolid;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.VineBlock;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.VineBlock;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+
+
 
 public class Vine {
 
-	public static void fill(IWorldEditor editor, Random rand, Coord start, Coord end){
+	public static void fill(IWorldEditor editor, RandomSource rand, Coord start, Coord end){
 		for(Coord cursor : new RectSolid(BoundingBox.of(start, end))){
 			set(editor, cursor);
 		}
@@ -47,7 +49,7 @@ public class Vine {
 		Direction facing = Cardinal.directions.contains(dir) 
 				? Cardinal.facing(Cardinal.reverse(dir))
 				: Cardinal.facing(dir);
-		BooleanProperty facingProperty = VineBlock.getFacingProperty(facing);
+		BooleanProperty facingProperty = VineBlock.getPropertyForFace(facing);
 		if(facingProperty == null) return;
 		MetaBlock.of(Blocks.VINE)
 			.with(facingProperty, true)

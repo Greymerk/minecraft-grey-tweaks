@@ -8,23 +8,27 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.block.IceBlock;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import com.greymerk.tweaks.util.Season;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+
+
 
 @Mixin(IceBlock.class)
 public class IceMixin {
 
 	@Inject(at = @At("HEAD"), method = "randomTick")
-	public void injectRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo info) {
+	public void injectRandomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random, CallbackInfo info) {
 		
 		if(!canMelt(world, pos)) return;
 		
@@ -33,33 +37,37 @@ public class IceMixin {
 			return;
 		}
 		
-		if(isSummer() || random.nextInt(16) == 0) {
+		if(shouldMelt(random)) {
 			melt(state, world, pos);
 		}
 	}
 	
-	private boolean isSummer() {
+	private boolean shouldMelt(RandomSource rand) {
 		Calendar c = Calendar.getInstance();
 		int month = c.get(Calendar.MONTH);
-		return month >= Calendar.MAY && month < Calendar.OCTOBER;
-	}
-	
-	public boolean canMelt(World world, BlockPos pos) {
-		Biome biome = world.getBiome(pos).value();
-		BlockPos above = pos.up();
 		
-		if (biome.getTemperature() < 0.15) return false;
-        if (!world.isSkyVisible(above)) return false;
-        
-        return true;
+		switch(Season.getSeason(month)) {
+		case Season.WINTER: return false;
+		case Season.SPRING: return rand.nextInt(16) == 0;
+		case Season.SUMMER: return true;
+		case Season.FALL: return rand.nextInt(16) == 0;
+		default: return true;
+		}
 	}
 	
-	public void melt(BlockState state, World world, BlockPos pos) {
-        world.setBlockState(pos, Blocks.WATER.getDefaultState());
-        world.updateNeighbors(pos, Blocks.WATER);
+	
+	public boolean canMelt(Level world, BlockPos pos) {
+		Biome biome = world.getBiome(pos).value();
+		if (!world.canSeeSky(pos.above())) return false;
+        return biome.warmEnoughToRain(pos, world.getSeaLevel());
+	}
+	
+	public void melt(BlockState state, Level world, BlockPos pos) {
+        world.setBlock(pos, Blocks.WATER.defaultBlockState(), Block.UPDATE_ALL);
+        world.updateNeighborsAt(pos, Blocks.WATER);
     }
 	
-	public boolean nearWater(World world, BlockPos pos) {
+	public boolean nearWater(Level world, BlockPos pos) {
 		
 		if(isWater(world, pos.north())) return true;
 		if(isWater(world, pos.south())) return true;
@@ -69,10 +77,9 @@ public class IceMixin {
 		return false;
 	}
 	
-	public boolean isWater(World world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
+	public boolean isWater(Level world, BlockPos pos) {
         FluidState fluidState = world.getFluidState(pos);
-		return fluidState.getFluid() == Fluids.WATER && blockState.getBlock() instanceof FluidBlock;
+        return fluidState.is(Fluids.WATER);
 	}
 	
 }

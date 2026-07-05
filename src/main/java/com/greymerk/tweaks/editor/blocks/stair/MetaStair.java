@@ -6,11 +6,13 @@ import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.MetaBlock;
 import com.greymerk.tweaks.editor.shapes.IShape;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.block.enums.BlockHalf;
-import net.minecraft.block.enums.StairShape;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.StairsShape;
+
+
 
 public class MetaStair implements IStair{
 
@@ -37,30 +39,30 @@ public class MetaStair implements IStair{
 	}
 	
 	public MetaStair setOrientation(Cardinal dir, Boolean upsideDown){
-		stair.with(StairsBlock.FACING, Cardinal.facing(dir));
-		stair.with(StairsBlock.HALF, upsideDown ? BlockHalf.TOP : BlockHalf.BOTTOM);
+		stair.with(StairBlock.FACING, Cardinal.facing(dir));
+		stair.with(StairBlock.HALF, upsideDown ? Half.TOP : Half.BOTTOM);
 		return this;
 	}
 	
-	public boolean set(IWorldEditor editor, Random rand, Coord pos) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos) {
 		setStairShape(editor, pos);
 		return this.stair.set(editor, rand, pos);
 	}
 	
-	public boolean set(IWorldEditor editor, Random rand, Coord pos, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos, boolean fillAir, boolean replaceSolid) {
 		setStairShape(editor, pos);
 		return this.stair.set(editor, rand, pos, fillAir, replaceSolid);
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IShape shape, boolean fillAir, boolean replaceSolid) {
+	public void fill(IWorldEditor editor, RandomSource rand, IShape shape, boolean fillAir, boolean replaceSolid) {
 		shape.get().forEach(pos -> {
 			this.set(editor, rand, pos, fillAir, replaceSolid);
 		});
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IShape shape) {
+	public void fill(IWorldEditor editor, RandomSource rand, IShape shape) {
 		this.fill(editor, rand, shape, true, true);
 	}
 	
@@ -72,11 +74,11 @@ public class MetaStair implements IStair{
 			MetaStair other = new MetaStair(mb);
 			if(other.isUpsideDown() == this.isUpsideDown()){
 				if(other.direction() == Cardinal.left(this.direction())) {
-					this.setShape(StairShape.INNER_LEFT);
+					this.setShape(StairsShape.INNER_LEFT);
 					return;
 				}
 				if(other.direction() == Cardinal.right(this.direction())) {
-					this.setShape(StairShape.INNER_RIGHT);
+					this.setShape(StairsShape.INNER_RIGHT);
 					return;
 				}
 			}
@@ -88,33 +90,33 @@ public class MetaStair implements IStair{
 			MetaStair other = new MetaStair(mb);
 			if(other.isUpsideDown() == this.isUpsideDown()){
 				if(other.direction() == Cardinal.left(this.direction())) {
-					this.setShape(StairShape.OUTER_LEFT);
+					this.setShape(StairsShape.OUTER_LEFT);
 					return;
 				}
 				if(other.direction() == Cardinal.right(this.direction())) {
-					this.setShape(StairShape.OUTER_RIGHT);
+					this.setShape(StairsShape.OUTER_RIGHT);
 					return;
 				}
 			}
 		}
 		
-		this.setShape(StairShape.STRAIGHT); // resetting by default
+		this.setShape(StairsShape.STRAIGHT); // resetting by default
 	}
 	
     public Cardinal direction() {
-    	return Cardinal.of(this.stair.get(StairsBlock.FACING));
+    	return Cardinal.of(this.stair.get(StairBlock.FACING));
     }
     
     public boolean isUpsideDown() {
-    	return this.stair.get(StairsBlock.HALF) == BlockHalf.TOP;
+    	return this.stair.get(StairBlock.HALF) == Half.TOP;
     }
     
     private boolean isStair(MetaBlock mb) {
-    	return mb.getBlock() instanceof StairsBlock;
+    	return mb.getBlock() instanceof StairBlock;
     }
     
-    private MetaStair setShape(StairShape shape) {
-		stair.with(StairsBlock.SHAPE, shape);
+    private MetaStair setShape(StairsShape shape) {
+		stair.with(StairBlock.SHAPE, shape);
 		return this;
 	}
 }

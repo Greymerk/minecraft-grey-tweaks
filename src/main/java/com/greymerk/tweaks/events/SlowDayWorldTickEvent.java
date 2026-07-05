@@ -1,9 +1,9 @@
 package com.greymerk.tweaks.events;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.EndWorldTick;
-import net.minecraft.server.world.ServerWorld;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.EndLevelTick;
+import net.minecraft.server.level.ServerLevel;
 
-public class SlowDayWorldTickEvent implements EndWorldTick{
+public class SlowDayWorldTickEvent implements EndLevelTick{
 
 	private long lastReverse;
 	
@@ -12,14 +12,14 @@ public class SlowDayWorldTickEvent implements EndWorldTick{
 	}
 	
 	@Override
-	public void onEndTick(ServerWorld world) {
+	public void onEndTick(ServerLevel world) {
 		
 		final long DAWN = 0;
 		final long DUSK = 12000;
 		final long DAYLIGHT_SAVINGS = 1; // ticks
 		
-		long timeTick = world.getTime();
-		long timeOfDay = world.getTimeOfDay();
+		long timeTick = world.getGameTime();
+		long timeOfDay = world.getOverworldClockTime();
 		
 		if((timeTick % 5) != 0) return;
 		
@@ -32,9 +32,9 @@ public class SlowDayWorldTickEvent implements EndWorldTick{
 		
 		if(timeOfDay - this.lastReverse <= DAYLIGHT_SAVINGS) return;
 		
-		world.setTimeOfDay(timeOfDay - DAYLIGHT_SAVINGS);
+		//world.setTimeOfDay(timeOfDay - DAYLIGHT_SAVINGS);
 		this.lastReverse = timeOfDay - DAYLIGHT_SAVINGS;
-		System.out.println("time: " + timeOfDay + " , " + world.getTimeOfDay());
+		System.out.println("time: " + timeOfDay + " , " + world.getOverworldClockTime());
 	}
 
 }

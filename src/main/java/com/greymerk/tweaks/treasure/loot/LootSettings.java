@@ -7,8 +7,8 @@ import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.util.IWeighted;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 
 public class LootSettings {
 
@@ -32,7 +32,7 @@ public class LootSettings {
 		if(override != null) this.loot.putAll(override.loot);
 	}
 	
-	public ItemStack get(Loot type, Random rand){
+	public ItemStack get(Loot type, RandomSource rand){
 		IWeighted<ItemStack> provider = loot.get(type);
 		return provider.get(rand);
 	}

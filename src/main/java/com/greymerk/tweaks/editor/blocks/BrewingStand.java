@@ -6,10 +6,12 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.MetaBlock;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BrewingStandBlockEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
+
+
 
 public enum BrewingStand {
 
@@ -30,7 +32,7 @@ public enum BrewingStand {
 	public static boolean add(IWorldEditor editor, Coord pos, BrewingStand slot, ItemStack item){
 		BrewingStandBlockEntity stand = get(editor, pos);
 		if(stand == null) return false;
-		stand.setStack(slot.id, item);
+		stand.setItem(slot.id, item);
 		return true;
 	}
 	

@@ -2,7 +2,8 @@ package com.greymerk.tweaks.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.util.math.random.Random;
+
+import net.minecraft.util.RandomSource;
 
 public class WeightedRandomizer<T> implements IWeighted<T>{
 
@@ -54,7 +55,7 @@ public class WeightedRandomizer<T> implements IWeighted<T>{
 		this.items.add(toAdd);
 	}
 	
-	public T get(Random rand){
+	public T get(RandomSource rand){
 		if (weightSum == 0) return null;
 		if (items.isEmpty()) return null;
 		

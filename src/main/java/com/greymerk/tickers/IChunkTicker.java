@@ -1,9 +1,9 @@
 package com.greymerk.tickers;
 
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.world.level.chunk.LevelChunk;
 
 public interface IChunkTicker {
 
-	public void tick(WorldChunk chunk, int randomTickSpeed);
+	public void tick(LevelChunk chunk, int randomTickSpeed);
 	
 }

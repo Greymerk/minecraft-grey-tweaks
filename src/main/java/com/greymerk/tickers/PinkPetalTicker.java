@@ -8,15 +8,17 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.boundingbox.BoundingBox;
 import com.greymerk.tweaks.util.ChunkHelper;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowerbedBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerBedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+
+
 
 public class PinkPetalTicker implements IChunkTicker {
 
@@ -28,19 +30,19 @@ public class PinkPetalTicker implements IChunkTicker {
 	);
 	
 	@Override
-	public void tick(WorldChunk chunk, int randomTickSpeed) {
+	public void tick(LevelChunk chunk, int randomTickSpeed) {
 		ChunkHelper.processRandomTicker(chunk, randomTickSpeed, (world, pos) -> {
-			Random rand = world.random;
+			RandomSource rand = world.getRandom();
 			if(rand.nextInt(1000) != 0) return;
 			petal(world, rand, pos);
 		});
 	}
 	
-	private void petal(World world, Random rand, BlockPos pos) {
-		int daylight = world.getLightLevel(LightType.SKY, pos);
+	private void petal(Level world, RandomSource rand, BlockPos pos) {
+		int daylight = world.getBrightness(LightLayer.SKY, pos);
 		if(daylight == 0) return;
 		
-		Block blockBelow = world.getBlockState(pos.down()).getBlock();
+		Block blockBelow = world.getBlockState(pos.below()).getBlock();
 		if(!canGrow.contains(blockBelow)) return;
 		if(!isCherryAbove(world, pos, 3)) return;
 		if(countNearbyPetals(world, pos, 2) > 5) return;
@@ -48,7 +50,7 @@ public class PinkPetalTicker implements IChunkTicker {
 		addPetals(world, pos); 
 	}
 	
-	private boolean isCherryAbove(World world, BlockPos pos, int range) {
+	private boolean isCherryAbove(Level world, BlockPos pos, int range) {
 		BoundingBox bb = BoundingBox.of(Coord.of(pos))
 			.grow(Cardinal.directions, range)
 			.grow(Cardinal.UP, 6)
@@ -61,31 +63,31 @@ public class PinkPetalTicker implements IChunkTicker {
 		return false;
 	}
 	
-	public int countNearbyPetals(World world, BlockPos pos, int range) {
+	public int countNearbyPetals(Level world, BlockPos pos, int range) {
 		AtomicInteger count = new AtomicInteger(0);
 		BoundingBox.of(Coord.of(pos))
 			.grow(Cardinal.all, range)
 			.forEach(c -> {
 				BlockState toCheck = world.getBlockState(c.getBlockPos());
 				if(toCheck.getBlock() == Blocks.PINK_PETALS) {
-					count.set(count.get() + toCheck.get(FlowerbedBlock.FLOWER_AMOUNT));
+					count.set(count.get() + toCheck.getValue(FlowerBedBlock.AMOUNT));
 					
 				}
 			});
 		return count.get();
 	}
 	
-	private void addPetals(World world, BlockPos pos) {
+	private void addPetals(Level world, BlockPos pos) {
 		BlockState toPlant = world.getBlockState(pos);
 		if(toPlant.getBlock() == Blocks.PINK_PETALS) {
-			int petalCount = toPlant.get(FlowerbedBlock.FLOWER_AMOUNT);
+			int petalCount = toPlant.getValue(FlowerBedBlock.AMOUNT);
 			if(petalCount >= 4) return;
-			BlockState bs = toPlant.with(FlowerbedBlock.FLOWER_AMOUNT, petalCount + 1);
-			world.setBlockState(pos, bs);
+			BlockState bs = toPlant.setValue(FlowerBedBlock.AMOUNT, petalCount + 1);
+			world.setBlock(pos, bs, Block.UPDATE_ALL);
 		}
 		
 		if(toPlant.getBlock() == Blocks.AIR) {
-			world.setBlockState(pos, Blocks.PINK_PETALS.getDefaultState());
+			world.setBlock(pos, Blocks.PINK_PETALS.defaultBlockState(), Block.UPDATE_ALL);
 		}
 	}
 

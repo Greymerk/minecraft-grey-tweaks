@@ -9,21 +9,23 @@ import com.greymerk.tweaks.treasure.loot.Slot;
 import com.greymerk.tweaks.treasure.loot.provider.ItemArmour;
 import com.greymerk.tweaks.treasure.loot.provider.ItemNovelty;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
+
 
 public class ProfileAshlea implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
+	public void addEquipment(Level world, RandomSource rand, Difficulty diff, IEntity mob) {
 		
 		mob.setChild(true);
 		
 		MonsterProfile.get(MonsterProfile.VILLAGER).addEquipment(world, rand, diff, mob);
 		
-		ItemStack weapon = ItemNovelty.getItem(world.getRegistryManager(), ItemNovelty.ASHLEA);
+		ItemStack weapon = ItemNovelty.getItem(world.registryAccess(), ItemNovelty.ASHLEA);
 		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
 		
 		for(EquipmentSlot slot : new EquipmentSlot[]{

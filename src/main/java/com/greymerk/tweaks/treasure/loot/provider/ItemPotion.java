@@ -5,8 +5,10 @@ import com.greymerk.tweaks.treasure.loot.potions.PotionForm;
 import com.greymerk.tweaks.treasure.loot.potions.PotionItem;
 import com.greymerk.tweaks.treasure.loot.potions.PotionMixture;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+
+
 
 public class ItemPotion extends ItemBase{
 
@@ -15,7 +17,7 @@ public class ItemPotion extends ItemBase{
 	}
 
 	@Override
-	public ItemStack getLootItem(Random rand, Difficulty diff) {
+	public ItemStack getLootItem(RandomSource rand, Difficulty diff) {
 		
 		if(rand.nextInt(10) == 0) return PotionMixture.getPotion(rand, PotionMixture.LAUDANUM);
 		

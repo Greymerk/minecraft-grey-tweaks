@@ -9,25 +9,27 @@ import com.greymerk.tweaks.util.IWeighted;
 import com.greymerk.tweaks.util.WeightedChoice;
 import com.greymerk.tweaks.util.WeightedRandomizer;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.block.entity.Sherds;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.entity.PotDecorations;
+
+
 
 
 public class DecoratedPot {
 
-	public static void set(IWorldEditor editor, Random rand, Coord origin) {
+	public static void set(IWorldEditor editor, RandomSource rand, Coord origin) {
 		set(editor, rand, origin, Loot.PRECIOUS);
 	}
 	
-	public static void set(IWorldEditor editor, Random rand, Coord origin, Loot type) {
+	public static void set(IWorldEditor editor, RandomSource rand, Coord origin, Loot type) {
 		
 		if(!MetaBlock.of(Blocks.DECORATED_POT).set(editor, origin)) return;
 		
@@ -41,17 +43,17 @@ public class DecoratedPot {
 		
 		IWeighted<Item> faceroll = getFaceRoller();
 		
-		Sherds sherds = new Sherds(faceroll.get(rand), faceroll.get(rand), faceroll.get(rand), faceroll.get(rand));
+		PotDecorations sherds = new PotDecorations(faceroll.get(rand), faceroll.get(rand), faceroll.get(rand), faceroll.get(rand));
 		
-		ComponentChanges.Builder changes = ComponentChanges.builder();
-		changes.add(DataComponentTypes.POT_DECORATIONS, sherds);
+		DataComponentPatch.Builder changes = DataComponentPatch.builder();
+		changes.set(DataComponents.POT_DECORATIONS, sherds);
 		
-		potEntity.readComponents(potEntity.getComponents(), changes.build());		
+		potEntity.applyComponents(potEntity.components(), changes.build());		
 
 		ItemStack loot = Loot.getLootItem(editor, type, rand, Difficulty.fromY(origin.getY()));
-		potEntity.setStack(loot);
+		potEntity.setTheItem(loot);
 		
-		potEntity.markDirty();
+		potEntity.setChanged();
 		
 	}
 	

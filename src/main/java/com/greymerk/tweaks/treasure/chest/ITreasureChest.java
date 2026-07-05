@@ -6,15 +6,17 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.treasure.Treasure;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+
+
 
 public interface ITreasureChest {
 	
-	public ITreasureChest generate(IWorldEditor editor, Random rand, Coord pos, ChestType type) throws ChestPlacementException;
+	public ITreasureChest generate(IWorldEditor editor, RandomSource rand, Coord pos, ChestType type) throws ChestPlacementException;
 	
-	public ITreasureChest generate(IWorldEditor editor, Random rand, Coord pos, Cardinal dir, ChestType type) throws ChestPlacementException;
+	public ITreasureChest generate(IWorldEditor editor, RandomSource rand, Coord pos, Cardinal dir, ChestType type) throws ChestPlacementException;
 	
 	public boolean setSlot(int slot, ItemStack item);
 	

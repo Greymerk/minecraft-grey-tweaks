@@ -3,8 +3,10 @@ package com.greymerk.tweaks.treasure.loot.books;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+
 
 public class BookBase implements IBook{
 

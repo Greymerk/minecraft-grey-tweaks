@@ -7,7 +7,7 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IBlockFactory;
 import com.greymerk.tweaks.editor.IWorldEditor;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 
 public class BlockJumble extends BlockBase {
 
@@ -23,7 +23,7 @@ public class BlockJumble extends BlockBase {
 	}
 
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord origin, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord origin, boolean fillAir, boolean replaceSolid) {
 		IBlockFactory block = blocks.get(rand.nextInt(blocks.size()));
 		return block.set(editor, rand, origin, fillAir, replaceSolid);
 	}

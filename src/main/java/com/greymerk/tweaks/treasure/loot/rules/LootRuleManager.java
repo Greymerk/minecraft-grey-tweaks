@@ -10,8 +10,10 @@ import com.greymerk.tweaks.treasure.chest.ITreasureChest;
 import com.greymerk.tweaks.util.IWeighted;
 import com.greymerk.tweaks.util.WeightedChoice;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+
+
 
 public class LootRuleManager {
 
@@ -39,13 +41,13 @@ public class LootRuleManager {
 		this.rules.addAll(other.rules);
 	}
 	
-	public void process(Random rand, TreasureManager treasure){
+	public void process(RandomSource rand, TreasureManager treasure){
 		for(LootRule rule : this.rules){
 			rule.process(rand, treasure);
 		}
 	}
 	
-	public void process(Random rand, ITreasureChest chest) {
+	public void process(RandomSource rand, ITreasureChest chest) {
 		for(LootRule rule : this.rules) {
 			rule.process(rand, chest);
 		}

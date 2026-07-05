@@ -4,9 +4,11 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.MetaBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.enums.SlabType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.properties.SlabType;
+
+
 
 public class MetaSlab implements ISlab {
 

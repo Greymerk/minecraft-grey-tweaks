@@ -8,24 +8,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.util.MoonHelper;
 
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
 
-@Mixin(MobEntity.class)
+
+
+@Mixin(Mob.class)
 public class EquipMobMixin{
 
-	@Inject(at = @At("HEAD"), method = "initEquipment(Lnet/minecraft/util/math/random/Random;Lnet/minecraft/world/LocalDifficulty;)V", cancellable = true)
-	protected void initEquipment(Random random, LocalDifficulty localDifficulty, CallbackInfo cir) {
+	@Inject(at = @At("HEAD"), method = "populateDefaultEquipmentSlots", cancellable = true)
+	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance localDifficulty, CallbackInfo cir) {
 		
-		MobEntity entity = (MobEntity)(Object)this;
-		World world = entity.getEntityWorld();
+		Mob entity = (Mob)(Object)this;
+		Level world = entity.level();
 		
 		Difficulty diff = MoonHelper.getDiff(world);
 		
@@ -41,7 +42,7 @@ public class EquipMobMixin{
 		this.setRoguelike(entity, diff);
 	}
 	
-	private boolean doEquip(Random rand, Difficulty diff) {		
+	private boolean doEquip(RandomSource rand, Difficulty diff) {		
 		if(diff == Difficulty.HARDEST) return true;
 		if(diff == Difficulty.HARD) return rand.nextInt(3) != 0;
 		if(diff == Difficulty.MEDIUM) return rand.nextBoolean();
@@ -50,13 +51,12 @@ public class EquipMobMixin{
 		return false;
 	}
 	
-	private void setRoguelike(MobEntity mob, Difficulty diff) {
+	private void setRoguelike(Mob mob, Difficulty diff) {
+		Holder<MobEffect> ref = MobEffects.MINING_FATIGUE;
 		int level = diff.value;
-		
 		final int DURATION = 10;
-		StatusEffect type = StatusEffects.MINING_FATIGUE.value();
-		RegistryEntry<StatusEffect> ref = Registries.STATUS_EFFECT.getEntry(type);
-		StatusEffectInstance effect = new StatusEffectInstance(ref, DURATION, level, false, false, false);
-		mob.addStatusEffect(effect);
+		
+		MobEffectInstance effect = new MobEffectInstance(ref, DURATION, level, false, false, false);
+		mob.addEffect(effect);
 	}
 }

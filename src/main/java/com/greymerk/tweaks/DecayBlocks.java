@@ -4,18 +4,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+
+
 
 public enum DecayBlocks {
 
 	STONEBRICK, CRACKEDBRICK, MOSSYBRICK, COBBLESTONE, MOSSYCOBBLE, GRAVEL;
-	
-	
 	
 	public static DecayBlocks[] decayable = {	STONEBRICK, CRACKEDBRICK,
 												MOSSYBRICK, COBBLESTONE,
@@ -46,13 +46,13 @@ public enum DecayBlocks {
 	
 	public static BlockState getBlock(DecayBlocks type) {
 		switch(type) {
-		case STONEBRICK: return Blocks.STONE_BRICKS.getDefaultState();
-		case CRACKEDBRICK: return Blocks.CRACKED_STONE_BRICKS.getDefaultState();
-		case MOSSYBRICK: return Blocks.MOSSY_STONE_BRICKS.getDefaultState();
-		case COBBLESTONE: return Blocks.COBBLESTONE.getDefaultState();
-		case MOSSYCOBBLE: return Blocks.MOSSY_COBBLESTONE.getDefaultState();
-		case GRAVEL: return Blocks.GRAVEL.getDefaultState();
-		default: return Blocks.STONE_BRICKS.getDefaultState();
+		case STONEBRICK: return Blocks.STONE_BRICKS.defaultBlockState();
+		case CRACKEDBRICK: return Blocks.CRACKED_STONE_BRICKS.defaultBlockState();
+		case MOSSYBRICK: return Blocks.MOSSY_STONE_BRICKS.defaultBlockState();
+		case COBBLESTONE: return Blocks.COBBLESTONE.defaultBlockState();
+		case MOSSYCOBBLE: return Blocks.MOSSY_COBBLESTONE.defaultBlockState();
+		case GRAVEL: return Blocks.GRAVEL.defaultBlockState();
+		default: return Blocks.STONE_BRICKS.defaultBlockState();
 		}
 	}
 	
@@ -68,7 +68,7 @@ public enum DecayBlocks {
 		return decayWeights.get(block);
 	}
 	
-	public static int measureAreaDecay(World world, BlockPos pos, int range) {
+	public static int measureAreaDecay(Level world, BlockPos pos, int range) {
 		BlockPos start = new BlockPos(pos.getX() - range, pos.getY() - range, pos.getZ() - range);
 		
 		int countBlocks = 0;
@@ -90,7 +90,7 @@ public enum DecayBlocks {
 		return totalDecay / countBlocks;
 	}
 	
-	public static void decay(World world, Random rand, BlockPos pos) {
+	public static void decay(Level world, RandomSource rand, BlockPos pos) {
 		if(pos.getY() < -60) return;
 		
 		Block toReplace = world.getBlockState(pos).getBlock();
@@ -98,9 +98,9 @@ public enum DecayBlocks {
 		DecayBlocks type = decayMap.get(toReplace);
 		if(type == STONEBRICK) {
 			if(rand.nextInt(3) == 0) {
-				world.setBlockState(pos, getBlock(MOSSYBRICK));
+				world.setBlock(pos, getBlock(MOSSYBRICK), Block.UPDATE_ALL);
 			} else {
-				world.setBlockState(pos, getBlock(CRACKEDBRICK));
+				world.setBlock(pos, getBlock(CRACKEDBRICK), Block.UPDATE_ALL);
 			}
 		}
 	}

@@ -6,15 +6,17 @@ import com.greymerk.tweaks.monster.IMonsterProfile;
 import com.greymerk.tweaks.monster.MonsterProfile;
 import com.greymerk.tweaks.treasure.loot.provider.ItemTool;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
+
 
 public class ProfileZombie implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
+	public void addEquipment(Level world, RandomSource rand, Difficulty diff, IEntity mob) {
 		
 		if(diff.lt(Difficulty.HARD) && rand.nextInt(20) == 0){
 			MonsterProfile.get(MonsterProfile.VILLAGER).addEquipment(world, rand, diff, mob);
@@ -26,7 +28,7 @@ public class ProfileZombie implements IMonsterProfile {
 			return;
 		}
 		
-		ItemStack weapon = ItemTool.getRandom(world.getRegistryManager(), world.getEnabledFeatures(), rand, diff, mob.canEnchant(rand, diff));
+		ItemStack weapon = ItemTool.getRandom(world.registryAccess(), world.enabledFeatures(), rand, diff, mob.canEnchant(rand, diff));
 		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
 		MonsterProfile.get(MonsterProfile.TALLMOB).addEquipment(world, rand, diff, mob);
 	}

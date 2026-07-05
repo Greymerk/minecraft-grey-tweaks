@@ -8,19 +8,21 @@ import com.greymerk.tweaks.monster.MonsterProfile;
 import com.greymerk.tweaks.treasure.loot.items.Shield;
 import com.greymerk.tweaks.treasure.loot.provider.ItemWeapon;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
+
 
 public class ProfilePigman implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
+	public void addEquipment(Level world, RandomSource rand, Difficulty diff, IEntity mob) {
 		mob.setMobClass(MobType.PIGZOMBIE, true);
-		ItemStack weapon = ItemWeapon.getSword(world.getRegistryManager(), world.getEnabledFeatures(), rand, diff, true);
+		ItemStack weapon = ItemWeapon.getSword(world.registryAccess(), world.enabledFeatures(), rand, diff, true);
 		mob.setSlot(EquipmentSlot.MAINHAND, weapon);
-		mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(world.getRegistryManager(), rand));
+		mob.setSlot(EquipmentSlot.OFFHAND, Shield.get(world.registryAccess(), rand));
 		MonsterProfile.get(MonsterProfile.TALLMOB).addEquipment(world, rand, diff, mob);
 	}
 

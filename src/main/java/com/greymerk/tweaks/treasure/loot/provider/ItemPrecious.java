@@ -8,9 +8,11 @@ import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.treasure.loot.WeightedRandomLoot;
 import com.greymerk.tweaks.util.WeightedRandomizer;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+
 
 public class ItemPrecious extends ItemBase{
 	
@@ -37,7 +39,7 @@ public class ItemPrecious extends ItemBase{
 	}
 
 	@Override
-	public ItemStack getLootItem(Random rand, Difficulty diff){
+	public ItemStack getLootItem(RandomSource rand, Difficulty diff){
 		return this.loot.get(diff).get(rand);
 	}
 

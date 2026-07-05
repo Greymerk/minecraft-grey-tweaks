@@ -5,9 +5,11 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.MetaBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ButtonBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ButtonBlock;
+
+
 
 public enum Button {
 

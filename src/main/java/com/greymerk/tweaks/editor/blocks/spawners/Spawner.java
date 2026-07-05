@@ -4,8 +4,10 @@ import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+
+
 
 
 public enum Spawner {
@@ -62,12 +64,12 @@ public enum Spawner {
 	
 	
 
-	public static void generate(IWorldEditor editor, Random rand, Coord pos){
+	public static void generate(IWorldEditor editor, RandomSource rand, Coord pos){
 		Spawner type = common[rand.nextInt(common.length)];
 		generate(editor, rand, pos, type);
 	}
 	
-	public static void generate(IWorldEditor editor, Random rand, Coord pos, Spawner type) {
+	public static void generate(IWorldEditor editor, RandomSource rand, Coord pos, Spawner type) {
 		
 		Difficulty diff = Difficulty.fromY(pos.getY());
 		new Spawnable(type).generate(editor, rand, pos, diff);

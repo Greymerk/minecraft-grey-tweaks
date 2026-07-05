@@ -8,7 +8,9 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.util.WeightedRandomizer;
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+
+
 
 
 public class SpawnerSettings {
@@ -49,7 +51,7 @@ public class SpawnerSettings {
 	
 
 
-	public void generate(IWorldEditor editor, Random rand, Coord cursor, Spawner type, Difficulty diff){
+	public void generate(IWorldEditor editor, RandomSource rand, Coord cursor, Spawner type, Difficulty diff){
 		Spawnable toSpawn = spawners.containsKey(type) ? spawners.get(type).get(rand) : new Spawnable(type);
 		toSpawn.generate(editor, rand, cursor, diff);
 	}

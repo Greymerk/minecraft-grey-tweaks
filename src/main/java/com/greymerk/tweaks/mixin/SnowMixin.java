@@ -10,89 +10,73 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SnowBlock;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.biome.Biome;
+import com.greymerk.tweaks.util.Season;
 
-@Mixin(SnowBlock.class)
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.state.BlockState;
+
+
+
+@Mixin(SnowLayerBlock.class)
 public class SnowMixin {
 	
-	private static float FREEZING = 0.15f;
-	
 	@Inject(at = @At("HEAD"), method = "randomTick")
-	public void injectRandomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo info) {
-		if (!world.isSkyVisible(pos)) return;
+	public void injectRandomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random, CallbackInfo info) {
+		if(!world.canSeeSky(pos)) return;
 		
-		if(!isColdBiome(world, pos)) {
-			if(isSummer()) {
-				meltNeighbours(world, random, pos, 4);
-			} else if(world.isRaining()){
-				meltNeighbours(world, random, pos, 2);
-			} else if(random.nextInt(10) != 0){
-				melt(state, world, random, pos);
+		boolean cold = world.getBiome(pos).value().coldEnoughToSnow(pos, world.getSeaLevel());
+		
+		if(cold) {
+			if(world.isRaining()) {
+				accumulate(state, world, random, pos);
+				return;
+			} else {
+				return;	
 			}
 		}
-		
-		if(isColdBiome(world, pos) && world.isRaining()) {
-			accumulate(state, world, random, pos);
+				
+		if(isSummer() || world.isRaining() || random.nextInt(16) != 0){
+			melt(state, world, random, pos);
 		}
 	}
 	
-	public void melt(BlockState state, ServerWorld world, Random rand, BlockPos pos) {
-		if(!state.contains(SnowBlock.LAYERS)) return;
+	private void melt(BlockState state, ServerLevel world, RandomSource rand, BlockPos pos) {
+		if(!state.hasProperty(SnowLayerBlock.LAYERS)) return;
 		
-		int layers = state.get(SnowBlock.LAYERS);
+		int layers = state.getValue(SnowLayerBlock.LAYERS);
+		
 		if(layers > 1) {
-			BlockState meltedSnow = state.with(SnowBlock.LAYERS, layers - 1);
+			BlockState meltedSnow = state.setValue(SnowLayerBlock.LAYERS, layers - 1);
 			world.removeBlock(pos, false);
-			world.setBlockState(pos, meltedSnow);
+			world.setBlock(pos, meltedSnow, Block.UPDATE_ALL);
 			return;
 		}
 		
-        SnowBlock.dropStacks(state, world, pos);
+        SnowLayerBlock.dropResources(state, world, pos);
         world.removeBlock(pos, false);
 	}
 	
-	public void meltNeighbours(ServerWorld world, Random rand, BlockPos pos, int range) {
-
-		if (!world.isSkyVisible(pos)) return;
-		if(range <= 0) return;
-		
-		for(int x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
-			for(int y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
-				for (int z = pos.getZ() - 1; z <= pos.getZ() + 1; z++){
-					if(rand.nextBoolean()) continue;
-					BlockPos p = new BlockPos(x, y, z);
-					if(p.equals(pos)) continue;
-					BlockState bs = world.getBlockState(p);
-					if(!bs.contains(SnowBlock.LAYERS)) continue;
-					meltNeighbours(world, rand, pos, range - 1);
-				}
-			}
-		}
-		melt(world.getBlockState(pos), world, rand, pos);
-	}
-	
-	public void accumulate(BlockState state, ServerWorld world, Random rand, BlockPos pos) {
+	private void accumulate(BlockState state, ServerLevel world, RandomSource rand, BlockPos pos) {
 		if(!validSnowBank(state, world, pos)) return;
 		
-		int layers = state.get(SnowBlock.LAYERS);
+		int layers = state.getValue(SnowLayerBlock.LAYERS);
 		if(layers >= 7) return;
 		
-		BlockState accumulatedSnow = state.with(SnowBlock.LAYERS, layers + 1);
+		BlockState accumulatedSnow = state.setValue(SnowLayerBlock.LAYERS, layers + 1);
 		world.removeBlock(pos, false);
-		world.setBlockState(pos, accumulatedSnow);
+		world.setBlock(pos, accumulatedSnow, Block.UPDATE_ALL);
 	}
 
-	public boolean validSnowBank(BlockState state, ServerWorld world, BlockPos pos) {
-		if(!world.getBlockState(pos.down()).isOpaque()) return false;
+	private boolean validSnowBank(BlockState state, ServerLevel world, BlockPos pos) {
+		if(!world.getBlockState(pos.below()).canOcclude()) return false;
 		
 		int lowest = lowestNeighbour(state, world, pos);
 		if(lowest == 0) return false;
-		int layers = state.get(SnowBlock.LAYERS);
+		int layers = state.getValue(SnowLayerBlock.LAYERS);
 		if(layers - lowest > 3) return false;
 		
 		int highest = highestNeighbour(state, world, pos);
@@ -100,7 +84,7 @@ public class SnowMixin {
 		return false;
 	}
 
-	public int highestNeighbour(BlockState state, ServerWorld world, BlockPos pos) {
+	private int highestNeighbour(BlockState state, ServerLevel world, BlockPos pos) {
 		
 		List<Integer> heights = new ArrayList<Integer>();
 		
@@ -113,7 +97,7 @@ public class SnowMixin {
 	}
 
 	
-	public int lowestNeighbour(BlockState state, ServerWorld world, BlockPos pos) {
+	private int lowestNeighbour(BlockState state, ServerLevel world, BlockPos pos) {
 		
 		List<Integer> heights = new ArrayList<Integer>();
 		
@@ -125,43 +109,23 @@ public class SnowMixin {
 		return Collections.min(heights);
 	}
 	
-	public int getHeight(ServerWorld world, BlockPos pos) {
+	private int getHeight(ServerLevel world, BlockPos pos) {
 		BlockState block = world.getBlockState(pos); 
 		
-		if(block.contains(SnowBlock.LAYERS)) {
-			return block.get(SnowBlock.LAYERS);
+		if(block.hasProperty(SnowLayerBlock.LAYERS)) {
+			return block.getValue(SnowLayerBlock.LAYERS);
 		}
 		
-		if(block.isFullCube(world, pos)) return 8;
+		if(block.isCollisionShapeFullBlock(world, pos)) return 8;
+
 		
 		return 0;
-	}
-	
-	public boolean isHigher(BlockState state, ServerWorld world, BlockPos pos) {
-		int layers = state.get(SnowBlock.LAYERS);
-		if(layers >= 7) return false;
-		
-		BlockState otherBlock = world.getBlockState(pos);
-		
-		if(otherBlock.isFullCube(world, pos)) return true;
-		if(otherBlock.contains(SnowBlock.LAYERS)) {
-			int otherLayers = otherBlock.get(SnowBlock.LAYERS);
-			if (otherLayers - layers > 1) return true;	
-		}
-		
-		return false;
-	}
-	
-	public boolean isColdBiome(ServerWorld world, BlockPos pos) {
-		Biome biome = world.getBiome(pos).value();
-		float temp = biome.getTemperature();
-		return temp <= FREEZING;
 	}
 	
 	private boolean isSummer() {
 		Calendar c = Calendar.getInstance();
 		int month = c.get(Calendar.MONTH);
-		return month >= Calendar.MAY && month < Calendar.OCTOBER;
+		return Season.getSeason(month) == Season.SUMMER;
 	}
 }
  

@@ -8,9 +8,9 @@ import com.greymerk.tweaks.editor.MetaBlock;
 import com.greymerk.tweaks.editor.factories.BlockWeightedRandom;
 import com.greymerk.tweaks.editor.shapes.IShape;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PaneBlock;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.IronBarsBlock;
 
 public class IronBar implements IBlockFactory{
 
@@ -45,33 +45,33 @@ public class IronBar implements IBlockFactory{
 	
 	private void setConnection(IWorldEditor editor, Coord origin, Cardinal dir, boolean connects) {
 		switch(dir) {
-		case EAST: this.bar.with(PaneBlock.EAST, connects); return;
-		case NORTH: this.bar.with(PaneBlock.NORTH, connects); return;
-		case SOUTH: this.bar.with(PaneBlock.SOUTH, connects); return;
-		case WEST: this.bar.with(PaneBlock.WEST, connects); return;
+		case EAST: this.bar.with(IronBarsBlock.EAST, connects); return;
+		case NORTH: this.bar.with(IronBarsBlock.NORTH, connects); return;
+		case SOUTH: this.bar.with(IronBarsBlock.SOUTH, connects); return;
+		case WEST: this.bar.with(IronBarsBlock.WEST, connects); return;
 		default: return;
 		}
 	}
 
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord pos){
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos){
 		this.setShape(editor, pos);
 		return bar.set(editor, rand, pos);
 	}
 	
 	@Override
-	public boolean set(IWorldEditor editor, Random rand, Coord pos, boolean fillAir, boolean replaceSolid) {
+	public boolean set(IWorldEditor editor, RandomSource rand, Coord pos, boolean fillAir, boolean replaceSolid) {
 		this.setShape(editor, pos);
 		return bar.set(editor, rand, pos, fillAir, replaceSolid);
 	}
 	
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IShape shape, boolean fillAir, boolean replaceSolid) {
+	public void fill(IWorldEditor editor, RandomSource rand, IShape shape, boolean fillAir, boolean replaceSolid) {
 		this.bar.fill(editor, rand, shape, fillAir, replaceSolid);
 	}
 
 	@Override
-	public void fill(IWorldEditor editor, Random rand, IShape shape) {
+	public void fill(IWorldEditor editor, RandomSource rand, IShape shape) {
 		this.bar.fill(editor, rand, shape);
 	}
 }

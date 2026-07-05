@@ -5,19 +5,21 @@ import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.MetaBlock;
 import com.greymerk.tweaks.util.Color;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CandleBlock;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CandleBlock;
+
+
 
 public class Candle {
 
-	public static void generate(IWorldEditor editor, Random rand, Coord origin) {
+	public static void generate(IWorldEditor editor, RandomSource rand, Coord origin) {
 		generate(editor, rand, origin, Color.get(rand));
 	}
 	
-	public static void generate(IWorldEditor editor, Random rand, Coord origin, Color color) {
-		generate(editor, origin, color, rand.nextBetween(1, 4), true);
+	public static void generate(IWorldEditor editor, RandomSource rand, Coord origin, Color color) {
+		generate(editor, origin, color, rand.nextIntBetweenInclusive(1, 4), true);
 	}
 	
 	public static void generate(IWorldEditor editor, Coord origin, Color color, int count, boolean lit) {

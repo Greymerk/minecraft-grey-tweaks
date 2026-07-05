@@ -4,9 +4,11 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.MetaBlock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LanternBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LanternBlock;
+
+
 
 public enum Lantern {
 
@@ -18,7 +20,7 @@ public enum Lantern {
 	
 	public static void set(IWorldEditor editor, Coord origin, Lantern type, boolean hang) {
 		if(!editor.getBlock(origin).isReplaceable()) return;
-		MetaBlock.of(fromType(type).getDefaultState())
+		MetaBlock.of(fromType(type).defaultBlockState())
 			.with(LanternBlock.HANGING, hang)
 			.set(editor, origin);
 	}

@@ -6,8 +6,10 @@ import com.greymerk.tweaks.treasure.TreasureManager;
 import com.greymerk.tweaks.treasure.chest.ITreasureChest;
 import com.greymerk.tweaks.util.IWeighted;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+
+
 
 public class LootRule {
 
@@ -23,17 +25,17 @@ public class LootRule {
 		this.amount = amount;
 	}
 	
-	public void process(Random rand, TreasureManager treasure){
+	public void process(RandomSource rand, TreasureManager treasure){
 		treasure.addItemToAll(rand, type, diff, item, amount);	
 	}
 
-	public void process(Random rand, ITreasureChest chest) {
+	public void process(RandomSource rand, ITreasureChest chest) {
 		if(chest.getLevel() != this.diff) return;
 		if(this.type == Treasure.ALL) addItems(rand, chest);
 		if(this.type == chest.getType()) addItems(rand, chest);
 	}
 	
-	public void addItems(Random rand, ITreasureChest chest) {
+	public void addItems(RandomSource rand, ITreasureChest chest) {
 		for(int i = 0; i < amount; ++i) {
 			chest.setRandomEmptySlot(item.get(rand));
 		}

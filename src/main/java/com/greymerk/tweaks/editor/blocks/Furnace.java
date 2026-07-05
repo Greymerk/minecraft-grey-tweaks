@@ -5,11 +5,13 @@ import com.greymerk.tweaks.editor.Coord;
 import com.greymerk.tweaks.editor.IWorldEditor;
 import com.greymerk.tweaks.editor.MetaBlock;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FurnaceBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.FurnaceBlockEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FurnaceBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
+
+
 
 public class Furnace {
 
@@ -34,6 +36,6 @@ public class Furnace {
 		if(te == null) return;
 		if(!(te instanceof FurnaceBlockEntity)) return;
 		FurnaceBlockEntity teFurnace = (FurnaceBlockEntity)te;
-		teFurnace.setStack(FUEL_SLOT, fuel);
+		teFurnace.setItem(FUEL_SLOT, fuel);
 	}
 }

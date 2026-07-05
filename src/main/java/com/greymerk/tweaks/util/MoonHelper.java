@@ -2,16 +2,16 @@ package com.greymerk.tweaks.util;
 
 import com.greymerk.tweaks.Difficulty;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public class MoonHelper {
 
-	public static Difficulty getDiff(World world) {
+	public static Difficulty getDiff(Level world) {
 		return getDiff(getPhase(world));
 	}
 	
-	public static int getPhase(World world) {
-		long time = world.getTime();
+	public static int getPhase(Level world) {
+		long time = world.getGameTime();
 		return getPhase(time);
 	}
 	

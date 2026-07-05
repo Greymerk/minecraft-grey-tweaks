@@ -1,13 +1,19 @@
 package com.greymerk.tweaks.editor;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.resource.featuretoggle.FeatureSet;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.rule.GameRules;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.gamerules.GameRules;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+
+
 
 public interface IWorldEditor {
 	
@@ -21,9 +27,11 @@ public interface IWorldEditor {
 	
 	public BlockEntity getBlockEntity(Coord pos);
 	
+	public <T> Optional<T> setBlockEntity(Coord pos, MetaBlock block, Class<T> beClass);
+	
 	public long getSeed();
 	
-	public Random getRandom(Coord pos);
+	public RandomSource getRandom(Coord pos);
 			
 	public Coord findSurface(Coord pos);
 	
@@ -41,17 +49,19 @@ public interface IWorldEditor {
 	
 	public int getMaxDepth();
 	
-	public DynamicRegistryManager getRegistryManager();
+	public RegistryAccess getRegistryManager();
 	
-	public FeatureSet getFeatureSet();
+	public FeatureFlagSet getFeatureSet();
 	
 	public Path getWorldDirectory();
 	
 	public GameRules getGameRules();
 	
-	public ServerWorld getServerWorld();
+	public ServerLevel getServerWorld();
 	
 	//public RoguelikeState getState();
 
 	boolean isAir(Coord pos);
+	
+	public Optional<Coord> getStructureLocation(ResourceKey<StructureSet> key, ChunkPos cpos);
 }

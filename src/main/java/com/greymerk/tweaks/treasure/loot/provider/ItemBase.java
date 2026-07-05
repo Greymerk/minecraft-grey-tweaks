@@ -3,8 +3,8 @@ package com.greymerk.tweaks.treasure.loot.provider;
 import com.greymerk.tweaks.Difficulty;
 import com.greymerk.tweaks.util.IWeighted;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class ItemBase implements IWeighted<ItemStack> {
 
@@ -21,7 +21,7 @@ public abstract class ItemBase implements IWeighted<ItemStack> {
 		this.diff = diff;
 	}
 	
-	public abstract ItemStack getLootItem(Random rand, Difficulty diff);
+	public abstract ItemStack getLootItem(RandomSource rand, Difficulty diff);
 
 	@Override
 	public int getWeight() {
@@ -29,7 +29,7 @@ public abstract class ItemBase implements IWeighted<ItemStack> {
 	}
 	
 	@Override
-	public ItemStack get(Random rand) {
+	public ItemStack get(RandomSource rand) {
 		return getLootItem(rand, diff);
 	}
 }

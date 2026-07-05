@@ -11,24 +11,26 @@ import com.greymerk.tweaks.treasure.loot.items.TippedArrow;
 import com.greymerk.tweaks.treasure.loot.provider.ItemArmour;
 import com.greymerk.tweaks.treasure.loot.provider.ItemWeapon;
 import com.greymerk.tweaks.treasure.loot.trim.Trim;
-import com.greymerk.tweaks.treasure.loot.trim.TrimMaterial;
-import com.greymerk.tweaks.treasure.loot.trim.TrimPattern;
+import com.greymerk.tweaks.treasure.loot.trim.TrimMaterialEnum;
+import com.greymerk.tweaks.treasure.loot.trim.TrimPatternEnum;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
+
+
 
 public class ProfilePoisonArcher implements IMonsterProfile {
 
 	@Override
-	public void addEquipment(World world, Random rand, Difficulty diff, IEntity mob) {
+	public void addEquipment(Level world, RandomSource rand, Difficulty diff, IEntity mob) {
 		
 		mob.setMobClass(MobType.STRAY, false);
 		
 		mob.setSlot(EquipmentSlot.OFFHAND, TippedArrow.get(Potions.STRONG_POISON));
-		mob.setSlot(EquipmentSlot.MAINHAND, ItemWeapon.getBow(world.getRegistryManager(), world.getEnabledFeatures(), rand, diff, mob.canEnchant(rand, diff)));
+		mob.setSlot(EquipmentSlot.MAINHAND, ItemWeapon.getBow(world.registryAccess(), world.enabledFeatures(), rand, diff, mob.canEnchant(rand, diff)));
 		
 		for(EquipmentSlot slot : new EquipmentSlot[]{
 				EquipmentSlot.HEAD,
@@ -37,9 +39,9 @@ public class ProfilePoisonArcher implements IMonsterProfile {
 				EquipmentSlot.FEET
 				}){
 			ItemStack item = ItemArmour.get(rand, Slot.getSlot(slot), Quality.WOOD);
-			Enchant.enchantItem(world.getRegistryManager(), world.getEnabledFeatures(), rand, item, 20);
+			Enchant.enchantItem(world.registryAccess(), world.enabledFeatures(), rand, item, 20);
 			ItemArmour.dyeArmor(item, 178, 255, 102); //bright lime green
-			Trim.set(world.getRegistryManager(), item, TrimPattern.WILD, TrimMaterial.REDSTONE);
+			Trim.set(world.registryAccess(), item, TrimPatternEnum.WILD, TrimMaterialEnum.REDSTONE);
 			mob.setSlot(slot, item);
 		}
 	}

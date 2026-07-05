@@ -21,10 +21,10 @@ import com.greymerk.tweaks.monster.profiles.ProfileWitch;
 import com.greymerk.tweaks.monster.profiles.ProfileWither;
 import com.greymerk.tweaks.monster.profiles.ProfileZombie;
 
-import net.minecraft.entity.mob.AbstractSkeletonEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.level.Level;
 
 public enum MonsterProfile {
 
@@ -57,13 +57,13 @@ public enum MonsterProfile {
 		}
 	}
 	
-	public static void equip(World world, Random rand, Difficulty diff, IEntity mob){
+	public static void equip(Level world, RandomSource rand, Difficulty diff, IEntity mob){
 		
 		IMonsterProfile profile = null;
 		
-		if(mob.instance(ZombieEntity.class)) profile = get(ZOMBIE);
+		if(mob.instance(Zombie.class)) profile = get(ZOMBIE);
 		
-		if(mob.instance(AbstractSkeletonEntity.class)) profile = get(SKELETON);
+		if(mob.instance(AbstractSkeleton.class)) profile = get(SKELETON);
 		
 		if(profile == null) return;
 		

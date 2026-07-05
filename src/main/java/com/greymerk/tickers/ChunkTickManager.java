@@ -3,7 +3,8 @@ package com.greymerk.tickers;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.world.level.chunk.LevelChunk;
+
 
 public class ChunkTickManager {
 
@@ -27,7 +28,7 @@ public class ChunkTickManager {
 		this.tickers.add(toAdd);
 	}
 	
-	public void run(WorldChunk chunk, int randomTickSpeed) {
+	public void run(LevelChunk chunk, int randomTickSpeed) {
 		this.tickers.forEach(ticker -> {
 			ticker.tick(chunk, randomTickSpeed);
 		});
